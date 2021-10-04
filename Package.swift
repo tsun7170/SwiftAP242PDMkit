@@ -25,7 +25,7 @@ let package = Package(
 		// Targets can depend on other targets in this package, and on products in packages this package depends on.
 		.target(
 			name: "SwiftAP242PDMkit",
-			dependencies: []),
+			dependencies: ["SwiftSDAIcore", "SwiftSDAIap242"]),
 		.testTarget(
 			name: "SwiftAP242PDMkitTests",
 			dependencies: ["SwiftAP242PDMkit"]),
