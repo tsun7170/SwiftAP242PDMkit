@@ -133,6 +133,81 @@ public func documentFile(as document: ap242.eDOCUMENT) -> ap242.eDOCUMENT_FILE? 
 	return docFile
 }
 
+
+/// obtains the gateway document references equivalenced to document products from a given document file
+/// - Parameter documentFile: document file
+/// - Returns: gateway document references
+/// 
+/// # Reference
+/// 8.1 Product Definition with associated documents;
+/// 10.1 Document Reference;
+/// 10.1.1 document_product_equivalence;
+/// 10.2 External File Reference;
+/// 
+/// Usage Guide for the STEP PDM Schema V1.2;
+/// Release 4.3, Jan. 2002;
+/// PDM Implementor Forum 
+public func equivalentDocuments(of documentFile: ap242.eDOCUMENT_FILE) -> Set<ap242.eDOCUMENT> {
+	var result:Set<ap242.eDOCUMENT> = [documentFile.super_eDOCUMENT]
+	
+	if let usedin = SDAI.USEDIN(
+			T: documentFile, 
+			ROLE: \ap242.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS.DOCUMENTATION_IDS) {
+		
+		for definition in usedin {
+			if let usedin = SDAI.USEDIN(T: definition, ROLE: \ap242.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATED_PRODUCT) 
+					+ SDAI.USEDIN(T: definition.FORMATION, ROLE: \ap242.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATED_PRODUCT)
+					+ SDAI.USEDIN(T: definition.FORMATION.OF_PRODUCT, ROLE: \ap242.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATED_PRODUCT) {
+				result.formUnion(usedin.map({$0.RELATING_DOCUMENT}))
+			}
+			
+		}
+	}
+	return result
+}
+
+
+/// obtains applications of given document references
+/// - Parameter documentReferences: document references
+/// - Returns: all applications
+/// 
+/// # Reference
+/// 10.1 Document Reference;
+/// 10.1.4 applied_document_reference;
+/// 
+/// Usage Guide for the STEP PDM Schema V1.2;
+/// Release 4.3, Jan. 2002;
+/// PDM Implementor Forum 
+public func applications(of documentReferences:Set<ap242.eDOCUMENT>) -> Set<ap242.eAPPLIED_DOCUMENT_REFERENCE> {
+	var result:Set<ap242.eAPPLIED_DOCUMENT_REFERENCE> = []
+	for document in documentReferences {
+		if let usedin = SDAI.USEDIN(
+				T: document, 
+				ROLE: \ap242.eAPPLIED_DOCUMENT_REFERENCE.ASSIGNED_DOCUMENT) {
+			result.formUnion(usedin)
+		}
+	}
+	return result
+}
+
+public func definitionalShapeApplications(of documentReferences:Set<ap242.eDOCUMENT>) -> Set<ap242.ePROPERTY_DEFINITION_REPRESENTATION> {
+	var result:Set<ap242.ePROPERTY_DEFINITION_REPRESENTATION> = []
+	for document in documentReferences {
+		if let usedin = SDAI.USEDIN(
+				T: document, 
+				ROLE: \ap242.ePROPERTY_DEFINITION.DEFINITION) {
+			for externalDefinition in usedin.filter({ $0.NAME.asSwiftType == "external definition" }) {
+				if let usedin = SDAI.USEDIN(
+						T: externalDefinition, 
+						ROLE: \ap242.ePROPERTY_DEFINITION_REPRESENTATION.DEFINITION) {
+					result.formUnion(usedin)
+				}
+			}
+		}		
+	}
+	return result
+}
+
 //MARK: - Constrained Document or File Reference
 
 

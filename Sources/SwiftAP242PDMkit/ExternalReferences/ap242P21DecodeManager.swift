@@ -1,6 +1,5 @@
 //
 //  ap242P21DecodeManager.swift
-//  MultiP21reads
 //
 //  Created by Yoshida on 2021/08/14.
 //  Copyright © 2021 Tsutomu Yoshida, Minokamo, Japan. All rights reserved.
@@ -22,13 +21,13 @@ public class AP242P21DecodeManager: SDAI.Object {
 	}
 	
 	public class P21Entry: SDAI.Object {
-		var status: P21Status = .notLoadedYet
-		var p21URL: URL
-		var fileName: String { p21URL.lastPathComponent }
-		var prefix: String
-		var entryName: String { prefix + fileName }
-		var exchangeStructure: P21Decode.ExchangeStructure?
-		var sdaiModels: [SDAIPopulationSchema.SdaiModel]?
+		public var status: P21Status = .notLoadedYet
+		public var p21URL: URL
+		public var fileName: String { p21URL.lastPathComponent }
+		public var prefix: String
+		public var entryName: String { prefix + fileName }
+		public var exchangeStructure: P21Decode.ExchangeStructure?
+		public var sdaiModels: [SDAIPopulationSchema.SdaiModel]?
 		
 		init(url: URL, prefix: String) {
 			self.p21URL = url
@@ -97,6 +96,7 @@ public class AP242P21DecodeManager: SDAI.Object {
 		super.init()
 	}
 	
+	/// decode master file and its all external references
 	public func decode() {
 		var needToLoad = true
 		var round = 0
@@ -160,20 +160,10 @@ public class AP242P21DecodeManager: SDAI.Object {
 		schemaInstance.mode = .readOnly
 		
 		// document file
-		for documentFile in schemaInstance.entityExtent(type: ap242.eDOCUMENT_FILE.self) {
-			// file name
-			var filename = ""
-			if let usedin = SDAI.USEDIN(T: documentFile, ROLE: \ap242.eAPPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT.ITEMS), 
-				 !usedin.isEmpty, let AEIA = usedin[1] {
-				filename = AEIA.ASSIGNED_ID.asSwiftType
-				if filename.isEmpty {
-					filename = AEIA.SOURCE.SOURCE_ID.asSwiftString
-				}
-			}
-			else {
-				filename = documentFile.ID.asSwiftType
-			}
-			if filename.isEmpty { continue }
+		for documentFile in documentFiles(in: schemaInstance) {
+			// document source property
+			let docSources = fileLocations(of: documentFile)
+			if docSources.isEmpty { continue }
 			
 			//shape representation
 			guard let extdefProp = SDAI.USEDIN(T: documentFile, 
@@ -222,6 +212,7 @@ public class AP242P21DecodeManager: SDAI.Object {
 			else { continue }
 			
 			//external reference
+			let filename = docSources[0].fileName
 			let url = URL(fileURLWithPath: p21entry.p21URL.deletingLastPathComponent().path + "/" + filename )
 			let format = descRepItem[0].DESCRIPTION
 			let ident = ExternalReferenceIdentity(shapeRepresentationID: shapeRep.ID, 

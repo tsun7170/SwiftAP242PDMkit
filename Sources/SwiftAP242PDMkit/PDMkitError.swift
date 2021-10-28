@@ -45,5 +45,5 @@ public enum PDMkitError: Error {
 
 	case multipleActionStatus([ap242.eACTION_STATUS])
 
-	
+	case multiplePropertyDefinitions([ap242.ePROPERTY_DEFINITION])
 }

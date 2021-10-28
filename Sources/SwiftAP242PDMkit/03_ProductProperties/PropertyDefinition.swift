@@ -62,7 +62,7 @@ public func properties(of documentFile: ap242.eDOCUMENT_FILE) -> Set<ap242.ePROP
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func representation(of propertyDefinition: ap242.ePROPERTY_DEFINITION) throws -> ap242.eREPRESENTATION? {
+public func representation(of propertyDefinition: ap242.ePROPERTY_DEFINITION?) throws -> ap242.eREPRESENTATION? {
 	if let usedin = SDAI.USEDIN(
 			T: propertyDefinition, 
 			ROLE: \ap242.ePROPERTY_DEFINITION_REPRESENTATION.DEFINITION) {

@@ -219,11 +219,11 @@ public func definitionalShapeDefinitions(of shapeRepresentation: ap242.eSHAPE_RE
 	if let usedin = SDAI.USEDIN(
 			T: shapeRepresentation, 
 			ROLE: \ap242.ePROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION) {
-		let extDef = usedin.filter{ $0.DEFINITION.NAME?.asSwiftType == "external definition" }
-		guard extDef.count <= 1 else {
-			throw PDMkitError.multipleDefinitionalShapes(extDef)
+		let externalDefinition = usedin.filter{ $0.DEFINITION.NAME?.asSwiftType == "external definition" }
+		guard externalDefinition.count <= 1 else {
+			throw PDMkitError.multipleDefinitionalShapes(externalDefinition)
 		}
-		let docFile = ap242.eDOCUMENT_FILE(extDef.first?.DEFINITION.DEFINITION)
+		let docFile = ap242.eDOCUMENT_FILE(externalDefinition.first?.DEFINITION.DEFINITION)
 		return docFile
 	}
 	return nil

@@ -11,6 +11,22 @@ import SwiftSDAIcore
 import SwiftSDAIap242
 
 
+/// obtains document files contained in a given schema instance
+/// - Parameter domain: schema instance
+/// - Returns: all document files found
+/// 
+/// # Reference
+/// 7.1 External File Identification;
+/// 7.1.1 document_file;
+/// 
+/// Usage Guide for the STEP PDM Schema V1.2;
+/// Release 4.3, Jan. 2002;
+/// PDM Implementor Forum 
+public func documentFiles(in domain: SDAIPopulationSchema.SchemaInstance) -> Set<ap242.eDOCUMENT_FILE> {
+	let instances = domain.entityExtent(type: ap242.eDOCUMENT_FILE.self)
+	return Set(instances)
+}
+
 /// obtains document files associated with a given product definition
 /// - Parameter documentProductDefinition: document product definition
 /// - Returns: document files
