@@ -27,12 +27,10 @@ import SwiftSDAIap242
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func usageEffectivities(in productConfiguration: ap242.eCONFIGURATION_DESIGN) -> Set<ap242.eCONFIGURATION_EFFECTIVITY> {
-	if let usedin = SDAI.USEDIN(
-			T: productConfiguration, 
-			ROLE: \ap242.eCONFIGURATION_EFFECTIVITY.CONFIGURATION) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: productConfiguration, 
+		ROLE: \ap242.eCONFIGURATION_EFFECTIVITY.CONFIGURATION) 
+	return Set(usedin)
 }
 
 //MARK: - Product Definition Effectivity
@@ -51,12 +49,10 @@ public func usageEffectivities(in productConfiguration: ap242.eCONFIGURATION_DES
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func usageEffectivities(of subAssembly: ap242.ePRODUCT_DEFINITION_RELATIONSHIP) -> Set<ap242.ePRODUCT_DEFINITION_EFFECTIVITY> {
-	if let usedin = SDAI.USEDIN(
-			T: subAssembly, 
-			ROLE: \ap242.ePRODUCT_DEFINITION_EFFECTIVITY.USAGE) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: subAssembly, 
+		ROLE: \ap242.ePRODUCT_DEFINITION_EFFECTIVITY.USAGE) 
+	return Set(usedin)
 }
 
 //MARK: - General Validity Period Efectivity
@@ -74,12 +70,10 @@ public func usageEffectivities(of subAssembly: ap242.ePRODUCT_DEFINITION_RELATIO
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func generalValidityEfectivities(for item:ap242.sEFFECTIVITY_ITEM) -> Set<ap242.eAPPLIED_EFFECTIVITY_ASSIGNMENT> {
-	if let usedin = SDAI.USEDIN(
-			T: item, 
-			ROLE: \ap242.eAPPLIED_EFFECTIVITY_ASSIGNMENT.ITEMS) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: item, 
+		ROLE: \ap242.eAPPLIED_EFFECTIVITY_ASSIGNMENT.ITEMS)
+	return Set(usedin)
 }
 
 //MARK: - Effectivity Relationship
@@ -96,10 +90,8 @@ public func generalValidityEfectivities(for item:ap242.sEFFECTIVITY_ITEM) -> Set
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func relatedEffectivities(of effectivity: ap242.eEFFECTIVITY) -> Set<ap242.eEFFECTIVITY_RELATIONSHIP> {
-	if let usedin = SDAI.USEDIN(T: effectivity, ROLE: \ap242.eEFFECTIVITY_RELATIONSHIP.RELATING_EFFECTIVITY) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(T: effectivity, ROLE: \ap242.eEFFECTIVITY_RELATIONSHIP.RELATING_EFFECTIVITY) 
+	return Set(usedin)
 }
 
 /// obtains relating effectivity objects to a given effectivity object
@@ -113,8 +105,7 @@ public func relatedEffectivities(of effectivity: ap242.eEFFECTIVITY) -> Set<ap24
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func relatingEffectivities(of effectivity: ap242.eEFFECTIVITY) -> Set<ap242.eEFFECTIVITY_RELATIONSHIP> {
-	if let usedin = SDAI.USEDIN(T: effectivity, ROLE: \ap242.eEFFECTIVITY_RELATIONSHIP.RELATED_EFFECTIVITY) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(T: effectivity, ROLE: \ap242.eEFFECTIVITY_RELATIONSHIP.RELATED_EFFECTIVITY) 
+	return Set(usedin)
 }
+

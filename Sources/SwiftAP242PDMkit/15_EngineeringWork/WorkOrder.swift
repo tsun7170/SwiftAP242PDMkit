@@ -42,12 +42,10 @@ public func workOrders(in domain: SDAIPopulationSchema.SchemaInstance) -> Set<ap
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func workOrders(for workRequest: ap242.eVERSIONED_ACTION_REQUEST) -> Set<ap242.eACTION_DIRECTIVE> {
-	if let usedin = SDAI.USEDIN(
-			T: workRequest, 
-			ROLE: \ap242.eACTION_DIRECTIVE.REQUESTS) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: workRequest, 
+		ROLE: \ap242.eACTION_DIRECTIVE.REQUESTS)
+	return Set(usedin)
 }
 
 
@@ -67,16 +65,14 @@ public func workOrders(for workRequest: ap242.eVERSIONED_ACTION_REQUEST) -> Set<
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func directedAction(for workOrder: ap242.eACTION_DIRECTIVE) throws -> ap242.eDIRECTED_ACTION? {
-	if let usedin = SDAI.USEDIN(
-			T: workOrder, 
-			ROLE: \ap242.eDIRECTED_ACTION.DIRECTIVE) {
-		guard usedin.size <= 1 else {
-			throw PDMkitError.multipleDirectedActions(usedin.asSwiftType)
-		}
-		let action = usedin[1]
-		return action
+	let usedin = SDAI.USEDIN(
+		T: workOrder, 
+		ROLE: \ap242.eDIRECTED_ACTION.DIRECTIVE)
+	guard usedin.size <= 1 else {
+		throw PDMkitError.multipleDirectedActions(usedin.asSwiftType)
 	}
-	return nil
+	let action = usedin[1]
+	return action
 }
 
 
@@ -92,13 +88,11 @@ public func directedAction(for workOrder: ap242.eACTION_DIRECTIVE) throws -> ap2
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func inputItems(for action: ap242.eACTION) -> Set<ap242.eAPPLIED_ACTION_ASSIGNMENT> {
-	if let usedin = SDAI.USEDIN(
-			T: action, 
-			ROLE: \ap242.eAPPLIED_ACTION_ASSIGNMENT.ASSIGNED_ACTION) {
-		let inputs = Set(usedin.lazy.filter{ $0.ROLE?.NAME == "input" })
-		return inputs
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: action, 
+		ROLE: \ap242.eAPPLIED_ACTION_ASSIGNMENT.ASSIGNED_ACTION)
+	let inputs = Set(usedin.lazy.filter{ $0.ROLE?.NAME == "input" })
+	return inputs
 }
 
 
@@ -114,13 +108,11 @@ public func inputItems(for action: ap242.eACTION) -> Set<ap242.eAPPLIED_ACTION_A
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func affectedItems(by action: ap242.eACTION) -> Set<ap242.eAPPLIED_ACTION_ASSIGNMENT> {
-	if let usedin = SDAI.USEDIN(
-			T: action, 
-			ROLE: \ap242.eAPPLIED_ACTION_ASSIGNMENT.ASSIGNED_ACTION) {
-		let affected = Set(usedin.lazy.filter{ $0.ROLE?.NAME != "input" })
-		return affected
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: action, 
+		ROLE: \ap242.eAPPLIED_ACTION_ASSIGNMENT.ASSIGNED_ACTION) 
+	let affected = Set(usedin.lazy.filter{ $0.ROLE?.NAME != "input" })
+	return affected
 }
 
 
@@ -138,16 +130,14 @@ public func affectedItems(by action: ap242.eACTION) -> Set<ap242.eAPPLIED_ACTION
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func status(for action: ap242.eEXECUTED_ACTION) throws -> ap242.eACTION_STATUS? {
-	if let usedin = SDAI.USEDIN(
-			T: action, 
-			ROLE: \ap242.eACTION_STATUS.ASSIGNED_ACTION) {
-		guard usedin.size <= 1 else {
-			throw PDMkitError.multipleActionStatus(usedin.asSwiftType)
-		}
-		let status = usedin[1]
-		return status
+	let usedin = SDAI.USEDIN(
+		T: action, 
+		ROLE: \ap242.eACTION_STATUS.ASSIGNED_ACTION) 
+	guard usedin.size <= 1 else {
+		throw PDMkitError.multipleActionStatus(usedin.asSwiftType)
 	}
-	return nil
+	let status = usedin[1]
+	return status
 }
 
 
@@ -164,12 +154,10 @@ public func status(for action: ap242.eEXECUTED_ACTION) throws -> ap242.eACTION_S
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func relatedActions(for action: ap242.eACTION) -> Set<ap242.eACTION_RELATIONSHIP> {
-	if let usedin = SDAI.USEDIN(
-			T: action, 
-			ROLE: \ap242.eACTION_RELATIONSHIP.RELATING_ACTION) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: action, 
+		ROLE: \ap242.eACTION_RELATIONSHIP.RELATING_ACTION) 
+	return Set(usedin)
 }
 
 /// obtains the relating actions for a given work order action
@@ -185,10 +173,9 @@ public func relatedActions(for action: ap242.eACTION) -> Set<ap242.eACTION_RELAT
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func relatingActions(for action: ap242.eACTION) -> Set<ap242.eACTION_RELATIONSHIP> {
-	if let usedin = SDAI.USEDIN(
-			T: action, 
-			ROLE: \ap242.eACTION_RELATIONSHIP.RELATED_ACTION) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: action, 
+		ROLE: \ap242.eACTION_RELATIONSHIP.RELATED_ACTION) 
+	return Set(usedin)
 }
+

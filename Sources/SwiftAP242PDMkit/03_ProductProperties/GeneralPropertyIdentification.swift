@@ -40,12 +40,10 @@ public func generalProperties(in domain: SDAIPopulationSchema.SchemaInstance) ->
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func associations(of generalPropertyType: ap242.eGENERAL_PROPERTY) -> Set<ap242.eGENERAL_PROPERTY_ASSOCIATION> {
-	if let usedin = SDAI.USEDIN(
-			T: generalPropertyType, 
-			ROLE: \ap242.eGENERAL_PROPERTY_ASSOCIATION.BASE_DEFINITION) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: generalPropertyType, 
+		ROLE: \ap242.eGENERAL_PROPERTY_ASSOCIATION.BASE_DEFINITION) 
+	return Set(usedin)
 }
 
 
@@ -78,12 +76,10 @@ public func propertyDefinition(of generalPropertyAssociation: ap242.eGENERAL_PRO
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func relatedGeneralProperties(of generalPropertyType: ap242.eGENERAL_PROPERTY) -> Set<ap242.eGENERAL_PROPERTY_RELATIONSHIP> {
-	if let usedin = SDAI.USEDIN(
-			T: generalPropertyType, 
-			ROLE: \ap242.eGENERAL_PROPERTY_RELATIONSHIP.RELATING_PROPERTY) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: generalPropertyType, 
+		ROLE: \ap242.eGENERAL_PROPERTY_RELATIONSHIP.RELATING_PROPERTY) 
+	return Set(usedin)
 }
 
 
@@ -99,10 +95,9 @@ public func relatedGeneralProperties(of generalPropertyType: ap242.eGENERAL_PROP
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func relatingGeneralProperties(of generalPropertyType: ap242.eGENERAL_PROPERTY) -> Set<ap242.eGENERAL_PROPERTY_RELATIONSHIP> {
-	if let usedin = SDAI.USEDIN(
-			T: generalPropertyType, 
-			ROLE: \ap242.eGENERAL_PROPERTY_RELATIONSHIP.RELATED_PROPERTY) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: generalPropertyType, 
+		ROLE: \ap242.eGENERAL_PROPERTY_RELATIONSHIP.RELATED_PROPERTY)
+	return Set(usedin)
 }
+

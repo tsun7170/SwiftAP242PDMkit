@@ -46,11 +46,10 @@ public func categories(in domain: SDAIPopulationSchema.SchemaInstance) throws ->
 public func topLevelCategories(in domain: SDAIPopulationSchema.SchemaInstance) throws -> [String:ap242.ePRODUCT_CATEGORY] {
 	var dict = try categories(in: domain)
 	for (name,cat) in dict {
-		if let _ = SDAI.USEDIN(
-				T: cat, 
-				ROLE: \ap242.ePRODUCT_CATEGORY_RELATIONSHIP.SUB_CATEGORY) {
-			dict[name] = nil
-		}
+		let _ = SDAI.USEDIN(
+			T: cat, 
+			ROLE: \ap242.ePRODUCT_CATEGORY_RELATIONSHIP.SUB_CATEGORY) 
+		dict[name] = nil
 	}
 	return dict
 }
@@ -69,17 +68,14 @@ public func topLevelCategories(in domain: SDAIPopulationSchema.SchemaInstance) t
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func superCategory(of category: ap242.ePRODUCT_CATEGORY) throws -> ap242.ePRODUCT_CATEGORY? {
-	if let usedin = SDAI.USEDIN(
-			T: category, 
-			ROLE: \ap242.ePRODUCT_CATEGORY_RELATIONSHIP.SUB_CATEGORY)?
-			.asSwiftType {
-		guard usedin.count <= 1 else {
-			throw PDMkitError.multipleSuperCategories(usedin)
+	let usedin = SDAI.USEDIN(
+		T: category, 
+		ROLE: \ap242.ePRODUCT_CATEGORY_RELATIONSHIP.SUB_CATEGORY) 
+		guard usedin.size <= 1 else {
+			throw PDMkitError.multipleSuperCategories(usedin.asSwiftType)
 		}
-		return usedin.first?.CATEGORY
+		return usedin[1]?.CATEGORY
 	}
-	return nil
-}
 
 /// obtains all immediate sub categories of a given category
 /// - Parameter category: product category
@@ -93,15 +89,12 @@ public func superCategory(of category: ap242.ePRODUCT_CATEGORY) throws -> ap242.
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func subCategories(of category: ap242.ePRODUCT_CATEGORY) -> Set<ap242.ePRODUCT_CATEGORY> {
-	if let usedin = SDAI.USEDIN(
+	public func subCategories(of category: ap242.ePRODUCT_CATEGORY) -> Set<ap242.ePRODUCT_CATEGORY> {
+		let usedin = SDAI.USEDIN(
 			T: category, 
-			ROLE: \ap242.ePRODUCT_CATEGORY_RELATIONSHIP.CATEGORY)?
-			.asSwiftType {
+			ROLE: \ap242.ePRODUCT_CATEGORY_RELATIONSHIP.CATEGORY)
 		return Set(usedin.map{ $0.SUB_CATEGORY })
 	}
-	return []
-}
 
 public typealias HierarchyLevel = Int
 public let topLevel: HierarchyLevel = 0
@@ -142,15 +135,12 @@ public func categoryLevel(of category: ap242.ePRODUCT_CATEGORY) throws -> Hierar
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func categories(of productMaster: ap242.ePRODUCT) -> Set<ap242.ePRODUCT_RELATED_PRODUCT_CATEGORY> {
-	if let usedin = SDAI.USEDIN(
+	public func categories(of productMaster: ap242.ePRODUCT) -> Set<ap242.ePRODUCT_RELATED_PRODUCT_CATEGORY> {
+		let usedin = SDAI.USEDIN(
 			T: productMaster, 
-			ROLE: \ap242.ePRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS)?
-			.asSwiftType {
+			ROLE: \ap242.ePRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS)
 		return Set(usedin)
 	}
-	return []
-}
 
 /// check to see if a given product master belongs to a category
 /// - Parameters:

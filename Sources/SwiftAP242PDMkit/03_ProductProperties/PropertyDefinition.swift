@@ -22,12 +22,10 @@ import SwiftSDAIap242
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func properties(of productDefinition: ap242.ePRODUCT_DEFINITION) -> Set<ap242.ePROPERTY_DEFINITION> {
-	if let usedin = SDAI.USEDIN(
-			T: productDefinition, 
-			ROLE: \ap242.ePROPERTY_DEFINITION.DEFINITION) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: productDefinition, 
+		ROLE: \ap242.ePROPERTY_DEFINITION.DEFINITION) 
+	return Set(usedin)
 }
 
 
@@ -42,12 +40,10 @@ public func properties(of productDefinition: ap242.ePRODUCT_DEFINITION) -> Set<a
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func properties(of documentFile: ap242.eDOCUMENT_FILE) -> Set<ap242.ePROPERTY_DEFINITION> {
-	if let usedin = SDAI.USEDIN(
-			T: documentFile, 
-			ROLE: \ap242.ePROPERTY_DEFINITION.DEFINITION) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: documentFile, 
+		ROLE: \ap242.ePROPERTY_DEFINITION.DEFINITION) 
+	return Set(usedin)
 }
 
 
@@ -63,16 +59,14 @@ public func properties(of documentFile: ap242.eDOCUMENT_FILE) -> Set<ap242.ePROP
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func representation(of propertyDefinition: ap242.ePROPERTY_DEFINITION?) throws -> ap242.eREPRESENTATION? {
-	if let usedin = SDAI.USEDIN(
-			T: propertyDefinition, 
-			ROLE: \ap242.ePROPERTY_DEFINITION_REPRESENTATION.DEFINITION) {
-		guard usedin.size <= 1 else {
-			throw PDMkitError.multiplePropertyRepresentations(usedin.asSwiftType)
-		}
-		let rep = usedin[1]?.USED_REPRESENTATION
-		return rep
+	let usedin = SDAI.USEDIN(
+		T: propertyDefinition, 
+		ROLE: \ap242.ePROPERTY_DEFINITION_REPRESENTATION.DEFINITION) 
+	guard usedin.size <= 1 else {
+		throw PDMkitError.multiplePropertyRepresentations(usedin.asSwiftType)
 	}
-	return nil
+	let rep = usedin[1]?.USED_REPRESENTATION
+	return rep
 }
 
 

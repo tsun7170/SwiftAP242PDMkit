@@ -166,50 +166,50 @@ public class AP242P21DecodeManager: SDAI.Object {
 			if docSources.isEmpty { continue }
 			
 			//shape representation
-			guard let extdefProp = SDAI.USEDIN(T: documentFile, 
-																			ROLE: \ap242.ePROPERTY_DEFINITION.DEFINITION)?
-							.asSwiftType
-							.filter({$0.NAME.asSwiftType == "external definition"}),
-						extdefProp.count == 1
+			let extdefProp = SDAI.USEDIN(
+				T: documentFile, 
+				ROLE: \ap242.ePROPERTY_DEFINITION.DEFINITION)
+				.filter({$0.NAME.asSwiftType == "external definition"})
+			guard	extdefProp.count == 1 else { continue }
+			
+			let extdefPropRep = SDAI.USEDIN(
+				T: extdefProp[0], 
+				ROLE: \ap242.ePROPERTY_DEFINITION_REPRESENTATION.DEFINITION)
+			guard 
+				extdefPropRep.size == 1, 
+				let shapeRep = extdefPropRep[1]?.USED_REPRESENTATION 
 			else { continue }
-			
-			guard let extdefPropRep = SDAI.USEDIN(T: extdefProp[0], 
-																				 ROLE: \ap242.ePROPERTY_DEFINITION_REPRESENTATION.DEFINITION)?
-							.asSwiftType,
-						extdefPropRep.count == 1
-			else { continue }
-			
-			let shapeRep = extdefPropRep[0].USED_REPRESENTATION
-			
+						
 			//product
-			guard let shapeDefRep = SDAI.USEDIN(T: shapeRep, 
-																					ROLE: \ap242.eSHAPE_DEFINITION_REPRESENTATION.USED_REPRESENTATION)?
-							.asSwiftType,
-						shapeDefRep.count == 1
-			else { continue }
-			
-			guard let product = shapeDefRep[0].DEFINITION.DEFINITION.FORMATION?.OF_PRODUCT
+			let shapeDefRep = SDAI.USEDIN(
+				T: shapeRep, 
+				ROLE: \ap242.eSHAPE_DEFINITION_REPRESENTATION.USED_REPRESENTATION)
+			guard	
+				shapeDefRep.size == 1,
+				let product = shapeDefRep[1]?.DEFINITION.DEFINITION.FORMATION?.OF_PRODUCT
 			else { continue }
 			
 			//descritive representation item
-			guard let docpropProp = SDAI.USEDIN(T: documentFile, 
-																			ROLE: \ap242.ePROPERTY_DEFINITION.DEFINITION)?
-							.asSwiftType
-							.filter({$0.NAME.asSwiftType == "document property"}),
-						docpropProp.count == 1
-			else { continue }
+			let docpropProp = SDAI.USEDIN(
+				T: documentFile, 
+				ROLE: \ap242.ePROPERTY_DEFINITION.DEFINITION)	
+				.filter({$0.NAME.asSwiftType == "document property"})
+			guard	docpropProp.count == 1 else { continue }
 			
-			guard let docpropPropRep = SDAI.USEDIN(T: docpropProp[0], 
-																				 ROLE: \ap242.ePROPERTY_DEFINITION_REPRESENTATION.DEFINITION)?
-							.asSwiftType,
-						docpropPropRep.count == 1
+			let docpropPropRep = SDAI.USEDIN(
+				T: docpropProp[0], 
+				ROLE: \ap242.ePROPERTY_DEFINITION_REPRESENTATION.DEFINITION)
+			
+			guard	
+				docpropPropRep.size == 1, 			
+				let descRepItems = 
+					docpropPropRep[1]?.USED_REPRESENTATION.ITEMS
+					.lazy
+					.compactMap({$0.GROUP_REF(ap242.eDESCRIPTIVE_REPRESENTATION_ITEM.self)})
+					.filter({$0.NAME.asSwiftType == "data format"})
 			else { continue }
-		
-			let descRepItem = docpropPropRep[0].USED_REPRESENTATION.ITEMS
-				.asSwiftType.compactMap({$0.GROUP_REF(ap242.eDESCRIPTIVE_REPRESENTATION_ITEM.self)})
-				.filter({$0.NAME.asSwiftType == "data format"})
-			guard descRepItem.count == 1 
-			else { continue }
+			let descRepItem = Array(descRepItems)
+			guard descRepItem.count == 1 else {continue} 
 			
 			//external reference
 			let filename = docSources[0].fileName
@@ -226,7 +226,7 @@ public class AP242P21DecodeManager: SDAI.Object {
 																					expected: ident)
 			result.append(extref)
 		}
-
+		
 		repository.deleteSchemaInstance(instance: schemaInstance)
 		return result
 	}

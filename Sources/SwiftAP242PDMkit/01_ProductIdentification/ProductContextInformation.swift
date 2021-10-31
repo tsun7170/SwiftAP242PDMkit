@@ -76,16 +76,14 @@ public func applicationContext(of productDefinitionContext: ap242.ePRODUCT_DEFIN
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func applicationProtocol(of applicationContext: ap242.eAPPLICATION_CONTEXT) throws -> ap242.eAPPLICATION_PROTOCOL_DEFINITION? {
-	if let usedin = SDAI.USEDIN(
-			T: applicationContext, 
-			ROLE: \ap242.eAPPLICATION_PROTOCOL_DEFINITION.APPLICATION) {
-		guard usedin.size == 1 else {
-			throw PDMkitError.multipleApplicationProtocols(usedin.asSwiftType)
-		}
-		let ap = usedin[1]
-		return ap
+	let usedin = SDAI.USEDIN(
+		T: applicationContext, 
+		ROLE: \ap242.eAPPLICATION_PROTOCOL_DEFINITION.APPLICATION) 
+	guard usedin.size == 1 else {
+		throw PDMkitError.multipleApplicationProtocols(usedin.asSwiftType)
 	}
-	return nil
+	let ap = usedin[1]
+	return ap
 }
 
 
@@ -118,12 +116,10 @@ public func primaryContext(of productDefinition: ap242.ePRODUCT_DEFINITION) -> a
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func additionalContexts(of productDefinition: ap242.ePRODUCT_DEFINITION) -> Set<ap242.ePRODUCT_DEFINITION_CONTEXT_ASSOCIATION> {
-	if let usedin = SDAI.USEDIN(
-			T: productDefinition, 
-			ROLE: \ap242.ePRODUCT_DEFINITION_CONTEXT_ASSOCIATION.DEFINITION) {
-		let contexts = Set(usedin.asSwiftType)
-		return contexts
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: productDefinition, 
+		ROLE: \ap242.ePRODUCT_DEFINITION_CONTEXT_ASSOCIATION.DEFINITION)
+	let contexts = Set(usedin.asSwiftType)
+	return contexts
 }
 

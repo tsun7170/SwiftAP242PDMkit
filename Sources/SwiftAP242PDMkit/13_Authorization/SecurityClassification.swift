@@ -23,8 +23,7 @@ import SwiftSDAIap242
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func securityClassifications(for item: ap242.sSECURITY_CLASSIFICATION_ITEM) -> Set<ap242.eAPPLIED_SECURITY_CLASSIFICATION_ASSIGNMENT> {
-	if let usedin = SDAI.USEDIN(T: item, ROLE: \ap242.eAPPLIED_SECURITY_CLASSIFICATION_ASSIGNMENT.ITEMS) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(T: item, ROLE: \ap242.eAPPLIED_SECURITY_CLASSIFICATION_ASSIGNMENT.ITEMS)
+	return Set(usedin)
 }
+

@@ -24,12 +24,10 @@ import SwiftSDAIap242
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func parentAssemblies(of productDefinition: ap242.ePRODUCT_DEFINITION) -> Set<ap242.eNEXT_ASSEMBLY_USAGE_OCCURRENCE> {
-	if let usedin = SDAI.USEDIN(
-			T: productDefinition, 
-			ROLE: \ap242.eNEXT_ASSEMBLY_USAGE_OCCURRENCE.RELATED_PRODUCT_DEFINITION) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: productDefinition, 
+		ROLE: \ap242.eNEXT_ASSEMBLY_USAGE_OCCURRENCE.RELATED_PRODUCT_DEFINITION) 
+	return Set(usedin)
 }
 
 /// obtains direct sub-assembly components of a given assenbly product definition
@@ -45,12 +43,10 @@ public func parentAssemblies(of productDefinition: ap242.ePRODUCT_DEFINITION) ->
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func subComponents(of productDefinition: ap242.ePRODUCT_DEFINITION) -> Set<ap242.eNEXT_ASSEMBLY_USAGE_OCCURRENCE> {
-	if let usedin = SDAI.USEDIN(
-			T: productDefinition, 
-			ROLE: \ap242.eNEXT_ASSEMBLY_USAGE_OCCURRENCE.RELATING_PRODUCT_DEFINITION) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: productDefinition, 
+		ROLE: \ap242.eNEXT_ASSEMBLY_USAGE_OCCURRENCE.RELATING_PRODUCT_DEFINITION) 
+	return Set(usedin)
 }
 
 /// obtains all top level assemblies contained in a given schema instance
@@ -86,12 +82,10 @@ public func topLevelProducts(in domain: SDAIPopulationSchema.SchemaInstance) -> 
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func primissoryUsingAssemblies(of productDefinition: ap242.ePRODUCT_DEFINITION) -> Set<ap242.ePROMISSORY_USAGE_OCCURRENCE> {
-	if let usedin = SDAI.USEDIN(
-			T: productDefinition, 
-			ROLE: \ap242.ePROMISSORY_USAGE_OCCURRENCE.RELATED_PRODUCT_DEFINITION) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: productDefinition, 
+		ROLE: \ap242.ePROMISSORY_USAGE_OCCURRENCE.RELATED_PRODUCT_DEFINITION)
+	return Set(usedin)
 }
 
 /// obtains all the promissory usages of a given assembly product
@@ -106,12 +100,10 @@ public func primissoryUsingAssemblies(of productDefinition: ap242.ePRODUCT_DEFIN
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func promissoryUsedComponents(of productDefinition: ap242.ePRODUCT_DEFINITION) -> Set<ap242.ePROMISSORY_USAGE_OCCURRENCE> {
-	if let usedin = SDAI.USEDIN(
-			T: productDefinition, 
-			ROLE: \ap242.ePROMISSORY_USAGE_OCCURRENCE.RELATING_PRODUCT_DEFINITION) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: productDefinition, 
+		ROLE: \ap242.ePROMISSORY_USAGE_OCCURRENCE.RELATING_PRODUCT_DEFINITION) 
+	return Set(usedin)
 }
 
 //MARK: - Multi-Level Assembly Digital Mock Up
@@ -130,12 +122,10 @@ public func promissoryUsedComponents(of productDefinition: ap242.ePRODUCT_DEFINI
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func specificHigherUsages(of productDefinition: ap242.ePRODUCT_DEFINITION) -> Set<ap242.eSPECIFIED_HIGHER_USAGE_OCCURRENCE> {
-	if let usedin = SDAI.USEDIN(
-			T: productDefinition, 
-			ROLE: \ap242.eSPECIFIED_HIGHER_USAGE_OCCURRENCE.RELATED_PRODUCT_DEFINITION) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: productDefinition, 
+		ROLE: \ap242.eSPECIFIED_HIGHER_USAGE_OCCURRENCE.RELATED_PRODUCT_DEFINITION)
+	return Set(usedin)
 }
 
 /// obtains all specified higher usages under a given assembly product
@@ -150,12 +140,10 @@ public func specificHigherUsages(of productDefinition: ap242.ePRODUCT_DEFINITION
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func specificUseOccurences(within higherLevelAssembly: ap242.ePRODUCT_DEFINITION) -> Set<ap242.eSPECIFIED_HIGHER_USAGE_OCCURRENCE> {
-	if let usedin = SDAI.USEDIN(
-			T: higherLevelAssembly, 
-			ROLE: \ap242.eSPECIFIED_HIGHER_USAGE_OCCURRENCE.RELATING_PRODUCT_DEFINITION) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: higherLevelAssembly, 
+		ROLE: \ap242.eSPECIFIED_HIGHER_USAGE_OCCURRENCE.RELATING_PRODUCT_DEFINITION) 
+	return Set(usedin)
 }
 
 /// obtains all specified higher usages associated with a given component usage
@@ -170,12 +158,10 @@ public func specificUseOccurences(within higherLevelAssembly: ap242.ePRODUCT_DEF
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func specificUsages(for componentUsage: ap242.eNEXT_ASSEMBLY_USAGE_OCCURRENCE) -> Set<ap242.eSPECIFIED_HIGHER_USAGE_OCCURRENCE> {
-	if let usedin = SDAI.USEDIN(
-			T: componentUsage, 
-			ROLE: \ap242.eSPECIFIED_HIGHER_USAGE_OCCURRENCE.NEXT_USAGE) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: componentUsage, 
+		ROLE: \ap242.eSPECIFIED_HIGHER_USAGE_OCCURRENCE.NEXT_USAGE) 
+	return Set(usedin)
 }
 
 
@@ -195,23 +181,21 @@ public func specificUsages(for componentUsage: ap242.eNEXT_ASSEMBLY_USAGE_OCCURR
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func assemblyComponentTransformationRelationship(of componentUsage: ap242.eNEXT_ASSEMBLY_USAGE_OCCURRENCE) throws -> ap242.eCONTEXT_DEPENDENT_SHAPE_REPRESENTATION? {
-	if let usedin = SDAI.USEDIN(
-			T: componentUsage, 
-			ROLE: \ap242.ePRODUCT_DEFINITION_SHAPE.DEFINITION) {
+	let usedin = SDAI.USEDIN(
+		T: componentUsage, 
+		ROLE: \ap242.ePRODUCT_DEFINITION_SHAPE.DEFINITION) 
+	guard usedin.size <= 1 else {
+		throw PDMkitError.multipleProductDefinitionShapes(usedin.asSwiftType)
+	}
+	if let pdShape = usedin[1] {
+		let usedin = SDAI.USEDIN(
+			T: pdShape, 
+			ROLE: \ap242.eCONTEXT_DEPENDENT_SHAPE_REPRESENTATION.REPRESENTED_PRODUCT_RELATION) 
 		guard usedin.size <= 1 else {
-			throw PDMkitError.multipleProductDefinitionShapes(usedin.asSwiftType)
+			throw PDMkitError.multipleContextDependentShapeRepresentations(usedin.asSwiftType)
 		}
-		if let pdShape = usedin[1] {
-			if let usedin = SDAI.USEDIN(
-					T: pdShape, 
-					ROLE: \ap242.eCONTEXT_DEPENDENT_SHAPE_REPRESENTATION.REPRESENTED_PRODUCT_RELATION) {
-				guard usedin.size <= 1 else {
-					throw PDMkitError.multipleContextDependentShapeRepresentations(usedin.asSwiftType)
-				}
-				let cdShapeRep = usedin[1]
-				return cdShapeRep
-			}
-		}
+		let cdShapeRep = usedin[1]
+		return cdShapeRep
 	}
 	return nil
 }
@@ -229,23 +213,21 @@ public func assemblyComponentTransformationRelationship(of componentUsage: ap242
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func asAssembledShape(of componentUsage: ap242.eNEXT_ASSEMBLY_USAGE_OCCURRENCE) throws -> ap242.eSHAPE_REPRESENTATION? {
-	if let usedin = SDAI.USEDIN(
-			T: componentUsage, 
-			ROLE: \ap242.ePRODUCT_DEFINITION_SHAPE.DEFINITION) {
+	let usedin = SDAI.USEDIN(
+		T: componentUsage, 
+		ROLE: \ap242.ePRODUCT_DEFINITION_SHAPE.DEFINITION) 
+	guard usedin.size <= 1 else {
+		throw PDMkitError.multipleProductDefinitionShapes(usedin.asSwiftType)
+	}
+	if let pdShape = usedin[1] {
+		let usedin = SDAI.USEDIN(
+			T: pdShape, 
+			ROLE: \ap242.eSHAPE_DEFINITION_REPRESENTATION.DEFINITION) 
 		guard usedin.size <= 1 else {
-			throw PDMkitError.multipleProductDefinitionShapes(usedin.asSwiftType)
+			throw PDMkitError.multipleShapeDefinitionRepresentations(usedin.asSwiftType)
 		}
-		if let pdShape = usedin[1] {
-			if let usedin = SDAI.USEDIN(
-					T: pdShape, 
-					ROLE: \ap242.eSHAPE_DEFINITION_REPRESENTATION.DEFINITION) {
-				guard usedin.size <= 1 else {
-					throw PDMkitError.multipleShapeDefinitionRepresentations(usedin.asSwiftType)
-				}
-				let shapeRep = usedin[1]?.USED_REPRESENTATION
-				return shapeRep
-			}
-		}
+		let shapeRep = usedin[1]?.USED_REPRESENTATION
+		return shapeRep
 	}
 	return nil
 }
@@ -289,12 +271,10 @@ public func explicitShape(of componentUsage: ap242.eNEXT_ASSEMBLY_USAGE_OCCURREN
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func alternateProducts(for primaryBaseProductMaster: ap242.ePRODUCT) -> Set<ap242.eALTERNATE_PRODUCT_RELATIONSHIP> {
-	if let usedin = SDAI.USEDIN(
-			T: primaryBaseProductMaster, 
-			ROLE: \ap242.eALTERNATE_PRODUCT_RELATIONSHIP.BASE) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: primaryBaseProductMaster, 
+		ROLE: \ap242.eALTERNATE_PRODUCT_RELATIONSHIP.BASE) 
+	return Set(usedin)
 }
 
 //MARK: - Substitute Components in an Assembly
@@ -312,17 +292,14 @@ public func alternateProducts(for primaryBaseProductMaster: ap242.ePRODUCT) -> S
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func substituteComponents(for primaryBaseComponentUsage: ap242.eASSEMBLY_COMPONENT_USAGE) -> Set<ap242.eASSEMBLY_COMPONENT_USAGE_SUBSTITUTE> {
-	if let usedin = SDAI.USEDIN(
-			T: primaryBaseComponentUsage, 
-			ROLE: \ap242.eASSEMBLY_COMPONENT_USAGE_SUBSTITUTE.BASE) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: primaryBaseComponentUsage, 
+		ROLE: \ap242.eASSEMBLY_COMPONENT_USAGE_SUBSTITUTE.BASE) 
+	return Set(usedin)
 }
 
+
 //MARK: - Make From Relationships
-
-
 
 /// obtains make-from source parts of a given resultant part
 /// - Parameter resultantProduct: resultant part definition
@@ -336,12 +313,10 @@ public func substituteComponents(for primaryBaseComponentUsage: ap242.eASSEMBLY_
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func makeFroms(of resultantProduct: ap242.ePRODUCT_DEFINITION) -> Set<ap242.eMAKE_FROM_USAGE_OPTION> {
-	if let usedin = SDAI.USEDIN(
-			T: resultantProduct, 
-			ROLE: \ap242.eMAKE_FROM_USAGE_OPTION.RELATING_PRODUCT_DEFINITION) {
-		return Set(usedin)
-	}	
-	return []
+	let usedin = SDAI.USEDIN(
+		T: resultantProduct, 
+		ROLE: \ap242.eMAKE_FROM_USAGE_OPTION.RELATING_PRODUCT_DEFINITION) 
+	return Set(usedin)
 }
 
 //MARK: - Supplied Part Identification
@@ -359,13 +334,11 @@ public func makeFroms(of resultantProduct: ap242.ePRODUCT_DEFINITION) -> Set<ap2
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func venderPartIdentifications(for internalPartVersion: ap242.ePRODUCT_DEFINITION_FORMATION) -> Set<ap242.ePRODUCT_DEFINITION_FORMATION_RELATIONSHIP> {
-	if let usedin = SDAI.USEDIN(
-			T: internalPartVersion, 
-			ROLE: \ap242.ePRODUCT_DEFINITION_FORMATION_RELATIONSHIP.RELATING_PRODUCT_DEFINITION_FORMATION) {
-		let suppliedItems = usedin.filter{ $0.NAME == "supplied item" } 
-		return Set(suppliedItems)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: internalPartVersion, 
+		ROLE: \ap242.ePRODUCT_DEFINITION_FORMATION_RELATIONSHIP.RELATING_PRODUCT_DEFINITION_FORMATION) 
+	let suppliedItems = usedin.filter{ $0.NAME == "supplied item" } 
+	return Set(suppliedItems)
 }
 
 /// obtains internal part identifications for a given vender part
@@ -380,13 +353,11 @@ public func venderPartIdentifications(for internalPartVersion: ap242.ePRODUCT_DE
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func internalPartIdentifications(for venderPartVersion: ap242.ePRODUCT_DEFINITION_FORMATION) -> Set<ap242.ePRODUCT_DEFINITION_FORMATION_RELATIONSHIP> {
-	if let usedin = SDAI.USEDIN(
-			T: venderPartVersion, 
-			ROLE: \ap242.ePRODUCT_DEFINITION_FORMATION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION_FORMATION) {
-		let suppliedItems = usedin.filter{ $0.NAME == "supplied item" } 
-		return Set(suppliedItems)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: venderPartVersion, 
+		ROLE: \ap242.ePRODUCT_DEFINITION_FORMATION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION_FORMATION) 
+	let suppliedItems = usedin.filter{ $0.NAME == "supplied item" } 
+	return Set(suppliedItems)
 }
 
 //MARK: - Version History Relationship
@@ -404,13 +375,11 @@ public func internalPartIdentifications(for venderPartVersion: ap242.ePRODUCT_DE
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func successorVersions(of productVersion: ap242.ePRODUCT_DEFINITION_FORMATION) -> Set<ap242.ePRODUCT_DEFINITION_FORMATION_RELATIONSHIP> {
-	if let usedin = SDAI.USEDIN(
-			T: productVersion, 
-			ROLE: \ap242.ePRODUCT_DEFINITION_FORMATION_RELATIONSHIP.RELATING_PRODUCT_DEFINITION_FORMATION) {
-		let successors = usedin.filter{ $0.NAME == "sequence" || $0.NAME == "hierarchy" } 
-		return Set(successors)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: productVersion, 
+		ROLE: \ap242.ePRODUCT_DEFINITION_FORMATION_RELATIONSHIP.RELATING_PRODUCT_DEFINITION_FORMATION) 
+	let successors = usedin.filter{ $0.NAME == "sequence" || $0.NAME == "hierarchy" } 
+	return Set(successors)
 }
 
 /// obtains the preceding version of a given product version
@@ -426,16 +395,14 @@ public func successorVersions(of productVersion: ap242.ePRODUCT_DEFINITION_FORMA
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func precedingVersion(of productVersion: ap242.ePRODUCT_DEFINITION_FORMATION) throws -> ap242.ePRODUCT_DEFINITION_FORMATION_RELATIONSHIP? {
-	if let usedin = SDAI.USEDIN(
-			T: productVersion, 
-			ROLE: \ap242.ePRODUCT_DEFINITION_FORMATION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION_FORMATION) {
-		let precedings = usedin.filter{ $0.NAME == "sequence" || $0.NAME == "hierarchy" } 
-		guard precedings.count <= 1 else {
-			throw PDMkitError.multiplePrecedingVersions(precedings)
-		}
-		return precedings.first
+	let usedin = SDAI.USEDIN(
+		T: productVersion, 
+		ROLE: \ap242.ePRODUCT_DEFINITION_FORMATION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION_FORMATION) 
+	let precedings = usedin.filter{ $0.NAME == "sequence" || $0.NAME == "hierarchy" } 
+	guard precedings.count <= 1 else {
+		throw PDMkitError.multiplePrecedingVersions(precedings)
 	}
-	return nil
+	return precedings.first
 }
 
 

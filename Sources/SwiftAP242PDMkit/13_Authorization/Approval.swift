@@ -24,12 +24,10 @@ import SwiftSDAIap242
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func approvals(on item: ap242.sAPPROVAL_ITEM) -> Set<ap242.eAPPLIED_APPROVAL_ASSIGNMENT> {
-	if let usedin = SDAI.USEDIN(
-			T: item, 
-			ROLE: \ap242.eAPPLIED_APPROVAL_ASSIGNMENT.ITEMS) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: item, 
+		ROLE: \ap242.eAPPLIED_APPROVAL_ASSIGNMENT.ITEMS) 
+	return Set(usedin)
 }
 
 
@@ -45,12 +43,10 @@ public func approvals(on item: ap242.sAPPROVAL_ITEM) -> Set<ap242.eAPPLIED_APPRO
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func responsibles(for approval: ap242.eAPPROVAL) -> Set<ap242.eAPPROVAL_PERSON_ORGANIZATION> {
-	if let usedin = SDAI.USEDIN(
-			T: approval, 
-			ROLE: \ap242.eAPPROVAL_PERSON_ORGANIZATION.AUTHORIZED_APPROVAL) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: approval, 
+		ROLE: \ap242.eAPPROVAL_PERSON_ORGANIZATION.AUTHORIZED_APPROVAL) 
+	return Set(usedin)
 }
 
 
@@ -66,12 +62,10 @@ public func responsibles(for approval: ap242.eAPPROVAL) -> Set<ap242.eAPPROVAL_P
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func approvalDates(for approval: ap242.eAPPROVAL) -> Set<ap242.eAPPROVAL_DATE_TIME> {
-	if let usedin = SDAI.USEDIN(
-			T: approval, 
-			ROLE: \ap242.eAPPROVAL_DATE_TIME.DATED_APPROVAL) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: approval, 
+		ROLE: \ap242.eAPPROVAL_DATE_TIME.DATED_APPROVAL) 
+	return Set(usedin)
 }
 
 
@@ -87,10 +81,8 @@ public func approvalDates(for approval: ap242.eAPPROVAL) -> Set<ap242.eAPPROVAL_
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func relatedApprovals(to approval: ap242.eAPPROVAL) -> Set<ap242.eAPPROVAL_RELATIONSHIP> {
-	if let usedin = SDAI.USEDIN(T: approval, ROLE: \ap242.eAPPROVAL_RELATIONSHIP.RELATING_APPROVAL) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(T: approval, ROLE: \ap242.eAPPROVAL_RELATIONSHIP.RELATING_APPROVAL) 
+	return Set(usedin)
 }
 
 /// obtains the master-approvals relating to a given sub-approval
@@ -105,8 +97,7 @@ public func relatedApprovals(to approval: ap242.eAPPROVAL) -> Set<ap242.eAPPROVA
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func relatingApprovals(to approval: ap242.eAPPROVAL) -> Set<ap242.eAPPROVAL_RELATIONSHIP> {
-	if let usedin = SDAI.USEDIN(T: approval, ROLE: \ap242.eAPPROVAL_RELATIONSHIP.RELATED_APPROVAL) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(T: approval, ROLE: \ap242.eAPPROVAL_RELATIONSHIP.RELATED_APPROVAL) 
+	return Set(usedin)
 }
+

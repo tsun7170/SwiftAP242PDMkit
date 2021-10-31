@@ -61,12 +61,10 @@ public func projects(assignedTo productConcept: ap242.ePRODUCT_CONCEPT) -> Set<a
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func projects(assignedTo item: ap242.sPROJECT_ITEM) -> Set<ap242.eAPPLIED_ORGANIZATIONAL_PROJECT_ASSIGNMENT> {
-	if let udedin = SDAI.USEDIN(
-			T: item, 
-			ROLE: \ap242.eAPPLIED_ORGANIZATIONAL_PROJECT_ASSIGNMENT.ITEMS) {
-		return Set(udedin)
-	}
-	return []
+	let udedin = SDAI.USEDIN(
+		T: item, 
+		ROLE: \ap242.eAPPLIED_ORGANIZATIONAL_PROJECT_ASSIGNMENT.ITEMS) 
+	return Set(udedin)
 }
 
 
@@ -106,12 +104,10 @@ public func productConcepts(relatedTo project: ap242.eORGANIZATIONAL_PROJECT) ->
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func productData(relatedTo project: ap242.eORGANIZATIONAL_PROJECT) -> Set<ap242.eAPPLIED_ORGANIZATIONAL_PROJECT_ASSIGNMENT> {
-	if let usedin = SDAI.USEDIN(
-			T: project, 
-			ROLE: \ap242.eAPPLIED_ORGANIZATIONAL_PROJECT_ASSIGNMENT.ASSIGNED_ORGANIZATIONAL_PROJECT) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: project, 
+		ROLE: \ap242.eAPPLIED_ORGANIZATIONAL_PROJECT_ASSIGNMENT.ASSIGNED_ORGANIZATIONAL_PROJECT) 
+	return Set(usedin)
 }
 
 
@@ -128,12 +124,10 @@ public func productData(relatedTo project: ap242.eORGANIZATIONAL_PROJECT) -> Set
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func relatedPorjects(for project: ap242.eORGANIZATIONAL_PROJECT) -> Set<ap242.eORGANIZATIONAL_PROJECT_RELATIONSHIP> {
-	if let usedin = SDAI.USEDIN(
-			T: project, 
-			ROLE: \ap242.eORGANIZATIONAL_PROJECT_RELATIONSHIP.RELATING_ORGANIZATIONAL_PROJECT) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: project, 
+		ROLE: \ap242.eORGANIZATIONAL_PROJECT_RELATIONSHIP.RELATING_ORGANIZATIONAL_PROJECT)
+	return Set(usedin)
 }
 
 /// obtains projects relating to a given project
@@ -149,12 +143,10 @@ public func relatedPorjects(for project: ap242.eORGANIZATIONAL_PROJECT) -> Set<a
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func relatingPorjects(for project: ap242.eORGANIZATIONAL_PROJECT) -> Set<ap242.eORGANIZATIONAL_PROJECT_RELATIONSHIP> {
-	if let usedin = SDAI.USEDIN(
-			T: project, 
-			ROLE: \ap242.eORGANIZATIONAL_PROJECT_RELATIONSHIP.RELATED_ORGANIZATIONAL_PROJECT) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: project, 
+		ROLE: \ap242.eORGANIZATIONAL_PROJECT_RELATIONSHIP.RELATED_ORGANIZATIONAL_PROJECT)
+	return Set(usedin)
 }
 
 
@@ -208,12 +200,10 @@ public func definedDateEvents(for project: ap242.eORGANIZATIONAL_PROJECT) -> Set
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func definedDateEvents(for item: ap242.sDATE_ITEM) -> Set<ap242.eAPPLIED_DATE_ASSIGNMENT> {
-	if let usedin = SDAI.USEDIN(
-			T: item, 
-			ROLE: \ap242.eAPPLIED_DATE_ASSIGNMENT.ITEMS) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: item, 
+		ROLE: \ap242.eAPPLIED_DATE_ASSIGNMENT.ITEMS)
+	return Set(usedin)
 }
 
 
@@ -249,10 +239,10 @@ public func definedDateTimeEvents(for project: ap242.eORGANIZATIONAL_PROJECT) ->
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func definedDateTimeEvents(for item: ap242.sDATE_TIME_ITEM) -> Set<ap242.eAPPLIED_DATE_AND_TIME_ASSIGNMENT> {
-	if let usedin = SDAI.USEDIN(
-			T: item, 
-			ROLE: \ap242.eAPPLIED_DATE_AND_TIME_ASSIGNMENT.ITEMS) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: item, 
+		ROLE: \ap242.eAPPLIED_DATE_AND_TIME_ASSIGNMENT.ITEMS)
+	return Set(usedin)
 }
+
+

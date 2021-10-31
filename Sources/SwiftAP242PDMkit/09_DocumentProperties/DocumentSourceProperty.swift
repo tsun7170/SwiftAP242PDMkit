@@ -60,12 +60,10 @@ public func sourceProperties(of productDefinition: ap242.ePRODUCT_DEFINITION)-> 
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func sourceProperties(of externalIdentificationItem: ap242.sEXTERNAL_IDENTIFICATION_ITEM)-> Set<ap242.eAPPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT> {
-	if let usedin = SDAI.USEDIN(
-			T: externalIdentificationItem, 
-			ROLE: \ap242.eAPPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT.ITEMS) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: externalIdentificationItem, 
+		ROLE: \ap242.eAPPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT.ITEMS) 
+	return Set(usedin)
 }
 
 
@@ -121,9 +119,9 @@ public func fileLocations(of documentFile: ap242.eDOCUMENT_FILE) -> [DocumentSou
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public struct DocumentSourceProperty: Equatable {
-	var fileName: String
-	var path: String?
-	var mechanism: String?
+	public var fileName: String
+	public var path: String?
+	public var mechanism: String?
 	
 	public init(fileName: String, path: String?, mechanism: String?) {
 		self.fileName = fileName

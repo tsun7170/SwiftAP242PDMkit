@@ -43,12 +43,10 @@ public func associatedDocuments(of productDefinition: ap242.ePRODUCT_DEFINITION)
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func associatedDocuments(of item: ap242.sDOCUMENT_REFERENCE_ITEM) -> Set<ap242.eAPPLIED_DOCUMENT_REFERENCE> {
-	if let usedin = SDAI.USEDIN(
-			T: item.entityReference, 
-			ROLE: \ap242.eAPPLIED_DOCUMENT_REFERENCE.ITEMS) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: item.entityReference, 
+		ROLE: \ap242.eAPPLIED_DOCUMENT_REFERENCE.ITEMS) 
+	return Set(usedin)
 }
 
 
@@ -86,16 +84,14 @@ public func managedDocument(of documentReference: ap242.eAPPLIED_DOCUMENT_REFERE
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func managedDocument(of document: ap242.eDOCUMENT) throws -> ap242.sPRODUCT_OR_FORMATION_OR_DEFINITION? {
-	if let usedin = SDAI.USEDIN(
-			T: document, 
-			ROLE: \ap242.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATING_DOCUMENT) {
-		guard usedin.size <= 1 else {
-			throw PDMkitError.multipleDocumentProductEquivalences(usedin.asSwiftType)
-		}
-		let managedDoc = usedin[1]?.RELATED_PRODUCT
-		return managedDoc
+	let usedin = SDAI.USEDIN(
+		T: document, 
+		ROLE: \ap242.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATING_DOCUMENT)
+	guard usedin.size <= 1 else {
+		throw PDMkitError.multipleDocumentProductEquivalences(usedin.asSwiftType)
 	}
-	return nil
+	let managedDoc = usedin[1]?.RELATED_PRODUCT
+	return managedDoc
 }
 
 
@@ -150,18 +146,21 @@ public func documentFile(as document: ap242.eDOCUMENT) -> ap242.eDOCUMENT_FILE? 
 public func equivalentDocuments(of documentFile: ap242.eDOCUMENT_FILE) -> Set<ap242.eDOCUMENT> {
 	var result:Set<ap242.eDOCUMENT> = [documentFile.super_eDOCUMENT]
 	
-	if let usedin = SDAI.USEDIN(
-			T: documentFile, 
-			ROLE: \ap242.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS.DOCUMENTATION_IDS) {
-		
-		for definition in usedin {
-			if let usedin = SDAI.USEDIN(T: definition, ROLE: \ap242.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATED_PRODUCT) 
-					+ SDAI.USEDIN(T: definition.FORMATION, ROLE: \ap242.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATED_PRODUCT)
-					+ SDAI.USEDIN(T: definition.FORMATION.OF_PRODUCT, ROLE: \ap242.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATED_PRODUCT) {
-				result.formUnion(usedin.map({$0.RELATING_DOCUMENT}))
-			}
-			
-		}
+	let usedin = SDAI.USEDIN(
+		T: documentFile, 
+		ROLE: \ap242.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS.DOCUMENTATION_IDS) 
+	
+	for definition in usedin {
+		let usedin = SDAI.USEDIN(
+			T: definition, 
+			ROLE: \ap242.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATED_PRODUCT).asSwiftType 
+			+ SDAI.USEDIN(
+				T: definition.FORMATION, 
+				ROLE: \ap242.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATED_PRODUCT).asSwiftType
+			+ SDAI.USEDIN(
+				T: definition.FORMATION.OF_PRODUCT, 
+				ROLE: \ap242.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATED_PRODUCT).asSwiftType
+		result.formUnion(usedin.map({$0.RELATING_DOCUMENT}))		
 	}
 	return result
 }
@@ -181,11 +180,10 @@ public func equivalentDocuments(of documentFile: ap242.eDOCUMENT_FILE) -> Set<ap
 public func applications(of documentReferences:Set<ap242.eDOCUMENT>) -> Set<ap242.eAPPLIED_DOCUMENT_REFERENCE> {
 	var result:Set<ap242.eAPPLIED_DOCUMENT_REFERENCE> = []
 	for document in documentReferences {
-		if let usedin = SDAI.USEDIN(
-				T: document, 
-				ROLE: \ap242.eAPPLIED_DOCUMENT_REFERENCE.ASSIGNED_DOCUMENT) {
-			result.formUnion(usedin)
-		}
+		let usedin = SDAI.USEDIN(
+			T: document, 
+			ROLE: \ap242.eAPPLIED_DOCUMENT_REFERENCE.ASSIGNED_DOCUMENT)
+		result.formUnion(usedin)
 	}
 	return result
 }
@@ -193,17 +191,17 @@ public func applications(of documentReferences:Set<ap242.eDOCUMENT>) -> Set<ap24
 public func definitionalShapeApplications(of documentReferences:Set<ap242.eDOCUMENT>) -> Set<ap242.ePROPERTY_DEFINITION_REPRESENTATION> {
 	var result:Set<ap242.ePROPERTY_DEFINITION_REPRESENTATION> = []
 	for document in documentReferences {
-		if let usedin = SDAI.USEDIN(
-				T: document, 
-				ROLE: \ap242.ePROPERTY_DEFINITION.DEFINITION) {
-			for externalDefinition in usedin.filter({ $0.NAME.asSwiftType == "external definition" }) {
-				if let usedin = SDAI.USEDIN(
-						T: externalDefinition, 
-						ROLE: \ap242.ePROPERTY_DEFINITION_REPRESENTATION.DEFINITION) {
-					result.formUnion(usedin)
-				}
-			}
-		}		
+		let usedin = SDAI.USEDIN(
+			T: document, 
+			ROLE: \ap242.ePROPERTY_DEFINITION.DEFINITION) 
+		
+		for externalDefinition in usedin
+			.filter({ $0.NAME.asSwiftType == "external definition" }) {
+			let usedin = SDAI.USEDIN(
+				T: externalDefinition, 
+				ROLE: \ap242.ePROPERTY_DEFINITION_REPRESENTATION.DEFINITION) 
+			result.formUnion(usedin)
+		}
 	}
 	return result
 }
@@ -241,12 +239,10 @@ public func associatedDocumentPortions(of productDefinition: ap242.ePRODUCT_DEFI
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func associatedDocumentPortions(of item: ap242.sDOCUMENT_REFERENCE_ITEM) -> Set<ap242.eAPPLIED_DOCUMENT_USAGE_CONSTRAINT_ASSIGNMENT> {
-	if let usedin = SDAI.USEDIN(
-			T: item.entityReference, 
-			ROLE: \ap242.eAPPLIED_DOCUMENT_USAGE_CONSTRAINT_ASSIGNMENT.ITEMS) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: item.entityReference, 
+		ROLE: \ap242.eAPPLIED_DOCUMENT_USAGE_CONSTRAINT_ASSIGNMENT.ITEMS)
+	return Set(usedin)
 }
 
 

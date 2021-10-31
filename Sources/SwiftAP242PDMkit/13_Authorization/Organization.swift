@@ -42,12 +42,10 @@ public func orgainizations(in domain: SDAIPopulationSchema.SchemaInstance) -> Se
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func items(assignedTo organization: ap242.eORGANIZATION) -> Set<ap242.eAPPLIED_ORGANIZATION_ASSIGNMENT> {
-	if let usedin = SDAI.USEDIN(
-			T: organization, 
-			ROLE: \ap242.eAPPLIED_ORGANIZATION_ASSIGNMENT.ASSIGNED_ORGANIZATION) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: organization, 
+		ROLE: \ap242.eAPPLIED_ORGANIZATION_ASSIGNMENT.ASSIGNED_ORGANIZATION) 
+	return Set(usedin)
 }
 
 /// obtains organizations assigned to a given item
@@ -63,10 +61,9 @@ public func items(assignedTo organization: ap242.eORGANIZATION) -> Set<ap242.eAP
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func organizations(assignedTo item: ap242.sORGANIZATION_ITEM) -> Set<ap242.eAPPLIED_ORGANIZATION_ASSIGNMENT> {
-	if let usedin = SDAI.USEDIN(
-			T: item, 
-			ROLE: \ap242.eAPPLIED_ORGANIZATION_ASSIGNMENT.ITEMS) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: item, 
+		ROLE: \ap242.eAPPLIED_ORGANIZATION_ASSIGNMENT.ITEMS)
+	return Set(usedin)
 }
+

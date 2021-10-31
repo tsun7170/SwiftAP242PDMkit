@@ -23,11 +23,9 @@ import SwiftSDAIap242
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func aliases(for item:ap242.sIDENTIFICATION_ITEM) -> Set<ap242.eAPPLIED_IDENTIFICATION_ASSIGNMENT> {
-	if let usedin = SDAI.USEDIN(
-			T: item, 
-			ROLE: \ap242.eAPPLIED_IDENTIFICATION_ASSIGNMENT.ITEMS) {
-		let aliaes = usedin.filter{ $0.ROLE.NAME == "alias" }
-		return Set(aliaes)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: item, 
+		ROLE: \ap242.eAPPLIED_IDENTIFICATION_ASSIGNMENT.ITEMS) 
+	let aliaes = usedin.filter{ $0.ROLE.NAME == "alias" }
+	return Set(aliaes)
 }

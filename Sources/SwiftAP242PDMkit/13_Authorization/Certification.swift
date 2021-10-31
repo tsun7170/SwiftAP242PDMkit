@@ -41,12 +41,10 @@ public func certifications(in domain: SDAIPopulationSchema.SchemaInstance) -> Se
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func certifiedItems(by certificaiton: ap242.eCERTIFICATION) -> Set<ap242.eAPPLIED_CERTIFICATION_ASSIGNMENT> {
-	if let usedin = SDAI.USEDIN(
-			T: certificaiton, 
-			ROLE: \ap242.eAPPLIED_CERTIFICATION_ASSIGNMENT.ASSIGNED_CERTIFICATION) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: certificaiton, 
+		ROLE: \ap242.eAPPLIED_CERTIFICATION_ASSIGNMENT.ASSIGNED_CERTIFICATION) 
+	return Set(usedin)
 }
 
 /// obtains certifications given to an certified item
@@ -61,11 +59,9 @@ public func certifiedItems(by certificaiton: ap242.eCERTIFICATION) -> Set<ap242.
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func certifications(for item: ap242.sCERTIFIED_ITEM) -> Set<ap242.eAPPLIED_CERTIFICATION_ASSIGNMENT> {
-	if let usedin = SDAI.USEDIN(
-			T: item, 
-			ROLE: \ap242.eAPPLIED_CERTIFICATION_ASSIGNMENT.ITEMS) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: item, 
+		ROLE: \ap242.eAPPLIED_CERTIFICATION_ASSIGNMENT.ITEMS) 
+	return Set(usedin)
 }
 

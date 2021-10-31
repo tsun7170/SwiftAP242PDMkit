@@ -63,13 +63,10 @@ public func products(under category: ap242.ePRODUCT_CATEGORY) -> Set<ap242.ePROD
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func versions(of productMaster: ap242.ePRODUCT) -> Set<ap242.ePRODUCT_DEFINITION_FORMATION> {
-	if let usedin = SDAI.USEDIN(
-			T: productMaster, 
-			ROLE: \ap242.ePRODUCT_DEFINITION_FORMATION.OF_PRODUCT)?
-			.asSwiftType {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: productMaster, 
+		ROLE: \ap242.ePRODUCT_DEFINITION_FORMATION.OF_PRODUCT)
+	return Set(usedin)
 }
 
 //MARK: - product definition formation related
@@ -86,13 +83,10 @@ public func versions(of productMaster: ap242.ePRODUCT) -> Set<ap242.ePRODUCT_DEF
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func views(of productVersion: ap242.ePRODUCT_DEFINITION_FORMATION) -> Set<ap242.ePRODUCT_DEFINITION> {
-	if let usedin = SDAI.USEDIN(
-			T: productVersion, 
-			ROLE: \ap242.ePRODUCT_DEFINITION.FORMATION)?
-			.asSwiftType {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: productVersion, 
+		ROLE: \ap242.ePRODUCT_DEFINITION.FORMATION)
+	return Set(usedin)
 }
 
 /// obtains all views of a version of a document product
@@ -107,13 +101,10 @@ public func views(of productVersion: ap242.ePRODUCT_DEFINITION_FORMATION) -> Set
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func documentViews(of documentProductVersion: ap242.ePRODUCT_DEFINITION_FORMATION) -> Set<ap242.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS> {
-	if let usedin = SDAI.USEDIN(
-			T: documentProductVersion, 
-			ROLE: \ap242.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS.FORMATION)?
-			.asSwiftType {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: documentProductVersion, 
+		ROLE: \ap242.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS.FORMATION)
+	return Set(usedin)
 }
 
 

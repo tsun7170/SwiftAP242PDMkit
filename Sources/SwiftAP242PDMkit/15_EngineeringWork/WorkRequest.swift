@@ -82,12 +82,10 @@ public func designChangeWorkRequests(in domain: SDAIPopulationSchema.SchemaInsta
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func potentialSolutions(for workRequest: ap242.eVERSIONED_ACTION_REQUEST) -> Set<ap242.eACTION_REQUEST_SOLUTION> {
-	if let usedin = SDAI.USEDIN(
-			T: workRequest, 
-			ROLE: \ap242.eACTION_REQUEST_SOLUTION.REQUEST) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: workRequest, 
+		ROLE: \ap242.eACTION_REQUEST_SOLUTION.REQUEST)
+	return Set(usedin)
 }
 
 
@@ -104,12 +102,10 @@ public func potentialSolutions(for workRequest: ap242.eVERSIONED_ACTION_REQUEST)
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func assignedChangeItems(to workRequest: ap242.eVERSIONED_ACTION_REQUEST) -> Set<ap242.eAPPLIED_ACTION_REQUEST_ASSIGNMENT> {
-	if let usedin = SDAI.USEDIN(
-			T: workRequest, 
-			ROLE: \ap242.eAPPLIED_ACTION_REQUEST_ASSIGNMENT.ASSIGNED_ACTION_REQUEST) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: workRequest, 
+		ROLE: \ap242.eAPPLIED_ACTION_REQUEST_ASSIGNMENT.ASSIGNED_ACTION_REQUEST)
+	return Set(usedin)
 }
 
 
@@ -127,16 +123,14 @@ public func assignedChangeItems(to workRequest: ap242.eVERSIONED_ACTION_REQUEST)
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func status(of workRequest: ap242.eVERSIONED_ACTION_REQUEST) throws -> ap242.eACTION_REQUEST_STATUS? {
-	if let usedin = SDAI.USEDIN(
-			T: workRequest, 
-			ROLE: \ap242.eACTION_REQUEST_STATUS.ASSIGNED_REQUEST) {
-		guard usedin.size <= 1 else {
-			throw PDMkitError.multipleActionRequestStatus(usedin.asSwiftType)
-		}
-		let status = usedin[1]
-		return status
+	let usedin = SDAI.USEDIN(
+		T: workRequest, 
+		ROLE: \ap242.eACTION_REQUEST_STATUS.ASSIGNED_REQUEST)
+	guard usedin.size <= 1 else {
+		throw PDMkitError.multipleActionRequestStatus(usedin.asSwiftType)
 	}
-	return nil
+	let status = usedin[1]
+	return status
 }
 
 
@@ -153,10 +147,9 @@ public func status(of workRequest: ap242.eVERSIONED_ACTION_REQUEST) throws -> ap
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func workRequests(raisedAgainst item: ap242.sACTION_REQUEST_ITEM) -> Set<ap242.eAPPLIED_ACTION_REQUEST_ASSIGNMENT> {
-	if let usedin = SDAI.USEDIN(
-			T: item, 
-			ROLE: \ap242.eAPPLIED_ACTION_REQUEST_ASSIGNMENT.ITEMS) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: item, 
+		ROLE: \ap242.eAPPLIED_ACTION_REQUEST_ASSIGNMENT.ITEMS)
+	return Set(usedin)
 }
+

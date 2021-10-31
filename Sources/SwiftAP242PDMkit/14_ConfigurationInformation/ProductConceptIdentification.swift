@@ -45,12 +45,10 @@ public func productConcepts(in domain: SDAIPopulationSchema.SchemaInstance) -> S
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func productConfigurations(for productConcept: ap242.ePRODUCT_CONCEPT) -> Set<ap242.eCONFIGURATION_ITEM> {
-	if let usedin = SDAI.USEDIN(
-			T: productConcept, 
-			ROLE: \ap242.eCONFIGURATION_ITEM.ITEM_CONCEPT) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: productConcept, 
+		ROLE: \ap242.eCONFIGURATION_ITEM.ITEM_CONCEPT) 
+	return Set(usedin)
 }
 
 
@@ -67,12 +65,10 @@ public func productConfigurations(for productConcept: ap242.ePRODUCT_CONCEPT) ->
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func configurationDesigns(for productConfiguration: ap242.eCONFIGURATION_ITEM) -> Set<ap242.eCONFIGURATION_DESIGN> {
-	if let usedin = SDAI.USEDIN(
-			T: productConfiguration, 
-			ROLE: \ap242.eCONFIGURATION_DESIGN.CONFIGURATION) {
-		return Set(usedin)
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: productConfiguration, 
+		ROLE: \ap242.eCONFIGURATION_DESIGN.CONFIGURATION) 
+	return Set(usedin)
 }
 
 

@@ -24,16 +24,14 @@ import SwiftSDAIap242
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func shape(of productDefinition: ap242.ePRODUCT_DEFINITION) throws -> ap242.ePRODUCT_DEFINITION_SHAPE? {
-	if let usedin = SDAI.USEDIN(
-			T: productDefinition, 
-			ROLE: \ap242.ePRODUCT_DEFINITION_SHAPE.DEFINITION) {
-		guard usedin.size <= 1 else {
-			throw PDMkitError.multipleProductDefinitionShapes(usedin.asSwiftType)
-		}
-		let shape = usedin[1]
-		return shape
+	let usedin = SDAI.USEDIN(
+		T: productDefinition, 
+		ROLE: \ap242.ePRODUCT_DEFINITION_SHAPE.DEFINITION) 
+	guard usedin.size <= 1 else {
+		throw PDMkitError.multipleProductDefinitionShapes(usedin.asSwiftType)
 	}
-	return nil
+	let shape = usedin[1]
+	return shape
 }
 
 
@@ -50,13 +48,11 @@ public func shape(of productDefinition: ap242.ePRODUCT_DEFINITION) throws -> ap2
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func representations(of productDefinitionShape: ap242.ePRODUCT_DEFINITION_SHAPE) -> Set<ap242.eSHAPE_REPRESENTATION> {
-	if let usedin = SDAI.USEDIN(
-			T: productDefinitionShape, 
-			ROLE: \ap242.eSHAPE_DEFINITION_REPRESENTATION.DEFINITION) {
-		let reps = Set(usedin.lazy.map{ $0.USED_REPRESENTATION })
-		return reps
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: productDefinitionShape, 
+		ROLE: \ap242.eSHAPE_DEFINITION_REPRESENTATION.DEFINITION) 
+	let reps = Set(usedin.lazy.map{ $0.USED_REPRESENTATION })
+	return reps
 }
 
 
@@ -114,13 +110,11 @@ public func geometricItems(of shapeRepresentation: ap242.eSHAPE_REPRESENTATION) 
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func shapeAspects(of productDefinitionShape: ap242.ePRODUCT_DEFINITION_SHAPE) -> Set<ap242.eSHAPE_ASPECT> {
-	if let usedin = SDAI.USEDIN(
-			T: productDefinitionShape, 
-			ROLE: \ap242.eSHAPE_ASPECT.OF_SHAPE) {
-		let aspects = Set( usedin )
-		return aspects
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: productDefinitionShape, 
+		ROLE: \ap242.eSHAPE_ASPECT.OF_SHAPE) 
+	let aspects = Set( usedin )
+	return aspects
 }
 
 
@@ -136,17 +130,15 @@ public func shapeAspects(of productDefinitionShape: ap242.ePRODUCT_DEFINITION_SH
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func representations(of shapeAspect: ap242.eSHAPE_ASPECT) -> Set<ap242.eSHAPE_REPRESENTATION> {
-	if let usedin = SDAI.USEDIN(
-			T: shapeAspect, 
-			ROLE: \ap242.ePROPERTY_DEFINITION.DEFINITION) {
-		let sdreps = usedin.lazy.compactMap{
-			SDAI.USEDIN(T: $0, ROLE: \ap242.eSHAPE_DEFINITION_REPRESENTATION.DEFINITION)
-		}.joined()
-		
-		let shapeReps = Set(sdreps.map{ $0.USED_REPRESENTATION })
-		return shapeReps
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: shapeAspect, 
+		ROLE: \ap242.ePROPERTY_DEFINITION.DEFINITION) 
+	let sdreps = usedin.lazy.compactMap{
+		SDAI.USEDIN(T: $0, ROLE: \ap242.eSHAPE_DEFINITION_REPRESENTATION.DEFINITION)
+	}.joined()
+	
+	let shapeReps = Set(sdreps.map{ $0.USED_REPRESENTATION })
+	return shapeReps
 }
 
 
@@ -166,13 +158,11 @@ public func representations(of shapeAspect: ap242.eSHAPE_ASPECT) -> Set<ap242.eS
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func relatedShapeRep1s(to shapeRep2: ap242.eSHAPE_REPRESENTATION) -> Set<ap242.eSHAPE_REPRESENTATION_RELATIONSHIP> {
-	if let usedin = SDAI.USEDIN(
-			T: shapeRep2, 
-			ROLE: \ap242.eSHAPE_REPRESENTATION_RELATIONSHIP.REP_2) {
-		let rep1s = Set(usedin)
-		return rep1s
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: shapeRep2, 
+		ROLE: \ap242.eSHAPE_REPRESENTATION_RELATIONSHIP.REP_2) 
+	let rep1s = Set(usedin)
+	return rep1s
 }
 
 /// obtains the shape representations related as rep2 to a given rep1 shape representation
@@ -187,13 +177,11 @@ public func relatedShapeRep1s(to shapeRep2: ap242.eSHAPE_REPRESENTATION) -> Set<
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func relatedShapeRep2s(to shapeRep1: ap242.eSHAPE_REPRESENTATION) -> Set<ap242.eSHAPE_REPRESENTATION_RELATIONSHIP> {
-	if let usedin = SDAI.USEDIN(
-			T: shapeRep1, 
-			ROLE: \ap242.eSHAPE_REPRESENTATION_RELATIONSHIP.REP_1) {
-		let rep2s = Set(usedin)
-		return rep2s
-	}
-	return []
+	let usedin = SDAI.USEDIN(
+		T: shapeRep1, 
+		ROLE: \ap242.eSHAPE_REPRESENTATION_RELATIONSHIP.REP_1) 
+	let rep2s = Set(usedin)
+	return rep2s
 }
 
 
@@ -216,17 +204,15 @@ public func relatedShapeRep2s(to shapeRep1: ap242.eSHAPE_REPRESENTATION) -> Set<
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func definitionalShapeDefinitions(of shapeRepresentation: ap242.eSHAPE_REPRESENTATION) throws -> ap242.eDOCUMENT_FILE? {
-	if let usedin = SDAI.USEDIN(
-			T: shapeRepresentation, 
-			ROLE: \ap242.ePROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION) {
-		let externalDefinition = usedin.filter{ $0.DEFINITION.NAME?.asSwiftType == "external definition" }
-		guard externalDefinition.count <= 1 else {
-			throw PDMkitError.multipleDefinitionalShapes(externalDefinition)
-		}
-		let docFile = ap242.eDOCUMENT_FILE(externalDefinition.first?.DEFINITION.DEFINITION)
-		return docFile
+	let usedin = SDAI.USEDIN(
+		T: shapeRepresentation, 
+		ROLE: \ap242.ePROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION) 
+	let externalDefinition = usedin.filter{ $0.DEFINITION.NAME?.asSwiftType == "external definition" }
+	guard externalDefinition.count <= 1 else {
+		throw PDMkitError.multipleDefinitionalShapes(externalDefinition)
 	}
-	return nil
+	let docFile = ap242.eDOCUMENT_FILE(externalDefinition.first?.DEFINITION.DEFINITION)
+	return docFile
 }
 
 
