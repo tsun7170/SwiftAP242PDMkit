@@ -10,6 +10,21 @@ import Foundation
 import SwiftSDAIcore
 import SwiftSDAIap242
 
+/// obtains all shape definition representations in a schema instance
+/// - Parameter domain: schema instance
+/// - Returns: all shape definition representations found
+///
+/// # Reference
+/// 3.2.1 Geometric Shape Property;
+/// 3.2.1.2 shape_definition_representation;
+/// 
+/// Usage Guide for the STEP PDM Schema V1.2;
+/// Release 4.3, Jan. 2002;
+/// PDM Implementor Forum 
+public func shapeDefinitionRepresentations(in domain: SDAIPopulationSchema.SchemaInstance) -> Set<ap242.eSHAPE_DEFINITION_REPRESENTATION> {
+	let instances = domain.entityExtent(type: ap242.eSHAPE_DEFINITION_REPRESENTATION.self)
+	return Set(instances)
+}
 
 /// obtains the shape of a given product definition
 /// - Parameter productDefinition: product definition
@@ -23,7 +38,7 @@ import SwiftSDAIap242
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func shape(of productDefinition: ap242.ePRODUCT_DEFINITION) throws -> ap242.ePRODUCT_DEFINITION_SHAPE? {
+public func shape(of productDefinition: ap242.ePRODUCT_DEFINITION?) throws -> ap242.ePRODUCT_DEFINITION_SHAPE? {
 	let usedin = SDAI.USEDIN(
 		T: productDefinition, 
 		ROLE: \ap242.ePRODUCT_DEFINITION_SHAPE.DEFINITION) 
@@ -37,7 +52,7 @@ public func shape(of productDefinition: ap242.ePRODUCT_DEFINITION) throws -> ap2
 
 /// obtains the representations product definition shape
 /// - Parameter productDefinitionShape: product definition shape
-/// - Returns: shape representations
+/// - Returns: shape definition representations
 /// 
 /// # Reference
 /// 3.2.1 Geometric Shape Property;
@@ -47,14 +62,34 @@ public func shape(of productDefinition: ap242.ePRODUCT_DEFINITION) throws -> ap2
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func representations(of productDefinitionShape: ap242.ePRODUCT_DEFINITION_SHAPE) -> Set<ap242.eSHAPE_REPRESENTATION> {
+public func representations(of productDefinitionShape: ap242.ePRODUCT_DEFINITION_SHAPE?) -> Set<ap242.eSHAPE_DEFINITION_REPRESENTATION> {
 	let usedin = SDAI.USEDIN(
 		T: productDefinitionShape, 
 		ROLE: \ap242.eSHAPE_DEFINITION_REPRESENTATION.DEFINITION) 
-	let reps = Set(usedin.lazy.map{ $0.USED_REPRESENTATION })
-	return reps
+	return Set(usedin)
 }
 
+/// obtains the shape definition representation of a given shape representation
+/// - Parameter shapeRepresentation: shape representation
+/// - Throws: multipleShapeDefinitionRepresentations
+/// - Returns: shape definition representation
+/// 
+/// # Reference
+/// 3.2.1 Geometric Shape Property;
+/// 3.2.1.2 shape_definition_representation;
+/// 3.2.1.3 shape_representation;
+/// 
+/// Usage Guide for the STEP PDM Schema V1.2;
+/// Release 4.3, Jan. 2002;
+/// PDM Implementor Forum 
+public func shapeDefinition(of shapeRepresentation: ap242.eSHAPE_REPRESENTATION?) throws -> ap242.eSHAPE_DEFINITION_REPRESENTATION? {
+	let usedin = SDAI.USEDIN(T: shapeRepresentation, ROLE: \ap242.eSHAPE_DEFINITION_REPRESENTATION.USED_REPRESENTATION)
+	guard usedin.size <= 1 else {
+		throw PDMkitError.multipleShapeDefinitionRepresentations(usedin.asSwiftType)
+	}
+	let shapedef = usedin[1]
+	return shapedef
+}
 
 /// obtains the geometric context of a given shape representation
 /// - Parameter shapeRepresentation: shape representation
@@ -70,7 +105,8 @@ public func representations(of productDefinitionShape: ap242.ePRODUCT_DEFINITION
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func context(of shapeRepresentation: ap242.eSHAPE_REPRESENTATION) throws -> ap242.eGEOMETRIC_REPRESENTATION_CONTEXT {
-	guard let context = ap242.eGEOMETRIC_REPRESENTATION_CONTEXT.cast(from: shapeRepresentation.CONTEXT_OF_ITEMS) else {
+	guard let context = shapeRepresentation.CONTEXT_OF_ITEMS
+					.sub_eGEOMETRIC_REPRESENTATION_CONTEXT else {
 		throw PDMkitError.noGeometricRepresentationContext(shapeRepresentation)
 	}
 	return context
@@ -91,7 +127,7 @@ public func context(of shapeRepresentation: ap242.eSHAPE_REPRESENTATION) throws 
 /// PDM Implementor Forum 
 public func geometricItems(of shapeRepresentation: ap242.eSHAPE_REPRESENTATION) -> Set<ap242.eGEOMETRIC_REPRESENTATION_ITEM> {
 	let items = Set(shapeRepresentation.ITEMS.lazy
-										.compactMap{ ap242.eGEOMETRIC_REPRESENTATION_ITEM.cast(from: $0) })
+										.compactMap{ $0.sub_eGEOMETRIC_REPRESENTATION_ITEM })
 	return items
 }
 
@@ -109,7 +145,7 @@ public func geometricItems(of shapeRepresentation: ap242.eSHAPE_REPRESENTATION) 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func shapeAspects(of productDefinitionShape: ap242.ePRODUCT_DEFINITION_SHAPE) -> Set<ap242.eSHAPE_ASPECT> {
+public func shapeAspects(of productDefinitionShape: ap242.ePRODUCT_DEFINITION_SHAPE?) -> Set<ap242.eSHAPE_ASPECT> {
 	let usedin = SDAI.USEDIN(
 		T: productDefinitionShape, 
 		ROLE: \ap242.eSHAPE_ASPECT.OF_SHAPE) 
@@ -120,7 +156,7 @@ public func shapeAspects(of productDefinitionShape: ap242.ePRODUCT_DEFINITION_SH
 
 /// obtains the representations of a portion of product definition shape
 /// - Parameter shapeAspect: a portion of product definition shape
-/// - Returns: shape representations
+/// - Returns: shape definition representations
 /// 
 /// # Reference
 /// 3.2.2 Portions of the Part Shape;
@@ -129,16 +165,15 @@ public func shapeAspects(of productDefinitionShape: ap242.ePRODUCT_DEFINITION_SH
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func representations(of shapeAspect: ap242.eSHAPE_ASPECT) -> Set<ap242.eSHAPE_REPRESENTATION> {
+public func representations(of shapeAspect: ap242.eSHAPE_ASPECT?) -> Set<ap242.eSHAPE_DEFINITION_REPRESENTATION> {
 	let usedin = SDAI.USEDIN(
 		T: shapeAspect, 
 		ROLE: \ap242.ePROPERTY_DEFINITION.DEFINITION) 
-	let sdreps = usedin.lazy.compactMap{
+	let sdreps = usedin.lazy.map{
 		SDAI.USEDIN(T: $0, ROLE: \ap242.eSHAPE_DEFINITION_REPRESENTATION.DEFINITION)
 	}.joined()
 	
-	let shapeReps = Set(sdreps.map{ $0.USED_REPRESENTATION })
-	return shapeReps
+	return Set(sdreps)
 }
 
 
@@ -157,7 +192,7 @@ public func representations(of shapeAspect: ap242.eSHAPE_ASPECT) -> Set<ap242.eS
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func relatedShapeRep1s(to shapeRep2: ap242.eSHAPE_REPRESENTATION) -> Set<ap242.eSHAPE_REPRESENTATION_RELATIONSHIP> {
+public func relatedShapeRep1s(to shapeRep2: ap242.eSHAPE_REPRESENTATION?) -> Set<ap242.eSHAPE_REPRESENTATION_RELATIONSHIP> {
 	let usedin = SDAI.USEDIN(
 		T: shapeRep2, 
 		ROLE: \ap242.eSHAPE_REPRESENTATION_RELATIONSHIP.REP_2) 
@@ -176,7 +211,7 @@ public func relatedShapeRep1s(to shapeRep2: ap242.eSHAPE_REPRESENTATION) -> Set<
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func relatedShapeRep2s(to shapeRep1: ap242.eSHAPE_REPRESENTATION) -> Set<ap242.eSHAPE_REPRESENTATION_RELATIONSHIP> {
+public func relatedShapeRep2s(to shapeRep1: ap242.eSHAPE_REPRESENTATION?) -> Set<ap242.eSHAPE_REPRESENTATION_RELATIONSHIP> {
 	let usedin = SDAI.USEDIN(
 		T: shapeRep1, 
 		ROLE: \ap242.eSHAPE_REPRESENTATION_RELATIONSHIP.REP_1) 
@@ -203,7 +238,7 @@ public func relatedShapeRep2s(to shapeRep1: ap242.eSHAPE_REPRESENTATION) -> Set<
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func definitionalShapeDefinitions(of shapeRepresentation: ap242.eSHAPE_REPRESENTATION) throws -> ap242.eDOCUMENT_FILE? {
+public func definitionalShapeDefinitions(of shapeRepresentation: ap242.eSHAPE_REPRESENTATION?) throws -> ap242.eDOCUMENT_FILE? {
 	let usedin = SDAI.USEDIN(
 		T: shapeRepresentation, 
 		ROLE: \ap242.ePROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION) 

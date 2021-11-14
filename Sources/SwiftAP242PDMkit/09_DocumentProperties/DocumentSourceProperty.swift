@@ -23,7 +23,7 @@ import SwiftSDAIap242
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func sourceProperties(of documentFile: ap242.eDOCUMENT_FILE) -> Set<ap242.eAPPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT> {
+public func sourceProperties(of documentFile: ap242.eDOCUMENT_FILE?) -> Set<ap242.eAPPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT> {
 	if let extItem = ap242.sEXTERNAL_IDENTIFICATION_ITEM(documentFile) {
 		return sourceProperties(of: extItem)
 	}
@@ -41,7 +41,7 @@ public func sourceProperties(of documentFile: ap242.eDOCUMENT_FILE) -> Set<ap242
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func sourceProperties(of productDefinition: ap242.ePRODUCT_DEFINITION)-> Set<ap242.eAPPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT> {
+public func sourceProperties(of productDefinition: ap242.ePRODUCT_DEFINITION?)-> Set<ap242.eAPPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT> {
 	if let extItem = ap242.sEXTERNAL_IDENTIFICATION_ITEM(productDefinition) {
 		return sourceProperties(of: extItem)
 	}
@@ -59,7 +59,7 @@ public func sourceProperties(of productDefinition: ap242.ePRODUCT_DEFINITION)-> 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func sourceProperties(of externalIdentificationItem: ap242.sEXTERNAL_IDENTIFICATION_ITEM)-> Set<ap242.eAPPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT> {
+public func sourceProperties(of externalIdentificationItem: ap242.sEXTERNAL_IDENTIFICATION_ITEM?)-> Set<ap242.eAPPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT> {
 	let usedin = SDAI.USEDIN(
 		T: externalIdentificationItem, 
 		ROLE: \ap242.eAPPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT.ITEMS) 
@@ -149,7 +149,7 @@ public struct DocumentSourceProperty: Equatable {
 /// with References to the PDM Schema Usage Guide; 
 /// Release 2.1, Jan. 19, 2005;
 /// PDM Implementor Forum 
-public func documentFormat(of documentFile: ap242.eDOCUMENT_FILE) throws -> ap242.eREPRESENTATION? {
+public func documentFormat(of documentFile: ap242.eDOCUMENT_FILE?) throws -> ap242.eREPRESENTATION? {
 	let documentProperties = properties(of: documentFile)
 		.filter{ $0.NAME == "document property" }
 	

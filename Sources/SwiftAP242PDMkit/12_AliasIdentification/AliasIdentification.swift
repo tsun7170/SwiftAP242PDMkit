@@ -22,7 +22,7 @@ import SwiftSDAIap242
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func aliases(for item:ap242.sIDENTIFICATION_ITEM) -> Set<ap242.eAPPLIED_IDENTIFICATION_ASSIGNMENT> {
+public func aliases(for item:ap242.sIDENTIFICATION_ITEM?) -> Set<ap242.eAPPLIED_IDENTIFICATION_ASSIGNMENT> {
 	let usedin = SDAI.USEDIN(
 		T: item, 
 		ROLE: \ap242.eAPPLIED_IDENTIFICATION_ASSIGNMENT.ITEMS) 

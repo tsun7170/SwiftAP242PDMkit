@@ -22,7 +22,7 @@ import SwiftSDAIap242
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func relatedDocuments(of document: ap242.eDOCUMENT) -> Set<ap242.eDOCUMENT_RELATIONSHIP> {
+public func relatedDocuments(of document: ap242.eDOCUMENT?) -> Set<ap242.eDOCUMENT_RELATIONSHIP> {
 	let usedin = SDAI.USEDIN(
 		T: document, 
 		ROLE: \ap242.eDOCUMENT_RELATIONSHIP.RELATING_DOCUMENT) 
@@ -40,7 +40,7 @@ public func relatedDocuments(of document: ap242.eDOCUMENT) -> Set<ap242.eDOCUMEN
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func relatingDocuments(of document: ap242.eDOCUMENT) -> Set<ap242.eDOCUMENT_RELATIONSHIP> {
+public func relatingDocuments(of document: ap242.eDOCUMENT?) -> Set<ap242.eDOCUMENT_RELATIONSHIP> {
 	let usedin = SDAI.USEDIN(
 		T: document, 
 		ROLE: \ap242.eDOCUMENT_RELATIONSHIP.RELATED_DOCUMENT)

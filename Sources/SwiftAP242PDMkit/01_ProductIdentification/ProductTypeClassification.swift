@@ -67,7 +67,7 @@ public func topLevelCategories(in domain: SDAIPopulationSchema.SchemaInstance) t
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func superCategory(of category: ap242.ePRODUCT_CATEGORY) throws -> ap242.ePRODUCT_CATEGORY? {
+public func superCategory(of category: ap242.ePRODUCT_CATEGORY?) throws -> ap242.ePRODUCT_CATEGORY? {
 	let usedin = SDAI.USEDIN(
 		T: category, 
 		ROLE: \ap242.ePRODUCT_CATEGORY_RELATIONSHIP.SUB_CATEGORY) 
@@ -89,7 +89,7 @@ public func superCategory(of category: ap242.ePRODUCT_CATEGORY) throws -> ap242.
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-	public func subCategories(of category: ap242.ePRODUCT_CATEGORY) -> Set<ap242.ePRODUCT_CATEGORY> {
+	public func subCategories(of category: ap242.ePRODUCT_CATEGORY?) -> Set<ap242.ePRODUCT_CATEGORY> {
 		let usedin = SDAI.USEDIN(
 			T: category, 
 			ROLE: \ap242.ePRODUCT_CATEGORY_RELATIONSHIP.CATEGORY)
@@ -113,7 +113,7 @@ public let topLevel: HierarchyLevel = 0
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func categoryLevel(of category: ap242.ePRODUCT_CATEGORY) throws -> HierarchyLevel {
+public func categoryLevel(of category: ap242.ePRODUCT_CATEGORY?) throws -> HierarchyLevel {
 	if let superCategory = try superCategory(of: category) {
 		let level = try categoryLevel(of: superCategory) + 1
 		return level
@@ -135,7 +135,7 @@ public func categoryLevel(of category: ap242.ePRODUCT_CATEGORY) throws -> Hierar
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-	public func categories(of productMaster: ap242.ePRODUCT) -> Set<ap242.ePRODUCT_RELATED_PRODUCT_CATEGORY> {
+	public func categories(of productMaster: ap242.ePRODUCT?) -> Set<ap242.ePRODUCT_RELATED_PRODUCT_CATEGORY> {
 		let usedin = SDAI.USEDIN(
 			T: productMaster, 
 			ROLE: \ap242.ePRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS)
@@ -157,7 +157,7 @@ public func categoryLevel(of category: ap242.ePRODUCT_CATEGORY) throws -> Hierar
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func product(_ productMaster: ap242.ePRODUCT, belongsTo category: ap242.ePRODUCT_CATEGORY) -> Bool {
-	if let cat = ap242.ePRODUCT_RELATED_PRODUCT_CATEGORY(category) {
+	if let cat = category.sub_ePRODUCT_RELATED_PRODUCT_CATEGORY {
 		if cat.PRODUCTS.contains(productMaster) {
 			return true
 		}

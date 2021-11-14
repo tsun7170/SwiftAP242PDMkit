@@ -21,7 +21,7 @@ import SwiftSDAIap242
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func properties(of productDefinition: ap242.ePRODUCT_DEFINITION) -> Set<ap242.ePROPERTY_DEFINITION> {
+public func properties(of productDefinition: ap242.ePRODUCT_DEFINITION?) -> Set<ap242.ePROPERTY_DEFINITION> {
 	let usedin = SDAI.USEDIN(
 		T: productDefinition, 
 		ROLE: \ap242.ePROPERTY_DEFINITION.DEFINITION) 
@@ -39,7 +39,7 @@ public func properties(of productDefinition: ap242.ePRODUCT_DEFINITION) -> Set<a
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func properties(of documentFile: ap242.eDOCUMENT_FILE) -> Set<ap242.ePROPERTY_DEFINITION> {
+public func properties(of documentFile: ap242.eDOCUMENT_FILE?) -> Set<ap242.ePROPERTY_DEFINITION> {
 	let usedin = SDAI.USEDIN(
 		T: documentFile, 
 		ROLE: \ap242.ePROPERTY_DEFINITION.DEFINITION) 

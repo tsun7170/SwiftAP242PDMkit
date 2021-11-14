@@ -44,7 +44,7 @@ public func productConcepts(in domain: SDAIPopulationSchema.SchemaInstance) -> S
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func productConfigurations(for productConcept: ap242.ePRODUCT_CONCEPT) -> Set<ap242.eCONFIGURATION_ITEM> {
+public func productConfigurations(for productConcept: ap242.ePRODUCT_CONCEPT?) -> Set<ap242.eCONFIGURATION_ITEM> {
 	let usedin = SDAI.USEDIN(
 		T: productConcept, 
 		ROLE: \ap242.eCONFIGURATION_ITEM.ITEM_CONCEPT) 
@@ -64,7 +64,7 @@ public func productConfigurations(for productConcept: ap242.ePRODUCT_CONCEPT) ->
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func configurationDesigns(for productConfiguration: ap242.eCONFIGURATION_ITEM) -> Set<ap242.eCONFIGURATION_DESIGN> {
+public func configurationDesigns(for productConfiguration: ap242.eCONFIGURATION_ITEM?) -> Set<ap242.eCONFIGURATION_DESIGN> {
 	let usedin = SDAI.USEDIN(
 		T: productConfiguration, 
 		ROLE: \ap242.eCONFIGURATION_DESIGN.CONFIGURATION) 

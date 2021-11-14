@@ -40,7 +40,7 @@ public func certifications(in domain: SDAIPopulationSchema.SchemaInstance) -> Se
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func certifiedItems(by certificaiton: ap242.eCERTIFICATION) -> Set<ap242.eAPPLIED_CERTIFICATION_ASSIGNMENT> {
+public func certifiedItems(by certificaiton: ap242.eCERTIFICATION?) -> Set<ap242.eAPPLIED_CERTIFICATION_ASSIGNMENT> {
 	let usedin = SDAI.USEDIN(
 		T: certificaiton, 
 		ROLE: \ap242.eAPPLIED_CERTIFICATION_ASSIGNMENT.ASSIGNED_CERTIFICATION) 
@@ -58,7 +58,7 @@ public func certifiedItems(by certificaiton: ap242.eCERTIFICATION) -> Set<ap242.
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func certifications(for item: ap242.sCERTIFIED_ITEM) -> Set<ap242.eAPPLIED_CERTIFICATION_ASSIGNMENT> {
+public func certifications(for item: ap242.sCERTIFIED_ITEM?) -> Set<ap242.eAPPLIED_CERTIFICATION_ASSIGNMENT> {
 	let usedin = SDAI.USEDIN(
 		T: item, 
 		ROLE: \ap242.eAPPLIED_CERTIFICATION_ASSIGNMENT.ITEMS) 

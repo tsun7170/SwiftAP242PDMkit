@@ -10,13 +10,35 @@ import Foundation
 import SwiftSDAIcore
 import SwiftSDAIap242
 
+
+/// obtains related product definitions
+/// - Parameter productDefinition: relating product definition
+/// - Returns: product definition relationships
+/// 
+/// # Reference
 /// 11.2 Relationship between document representations;
 /// 11.2.1 product_definition_relationship;
-
-public func relatedProductDefinitions(of productDefinition: ap242.ePRODUCT_DEFINITION) -> [ap242.ePRODUCT_DEFINITION_RELATIONSHIP] {
-	abstruct()
+/// 
+/// Usage Guide for the STEP PDM Schema V1.2;
+/// Release 4.3, Jan. 2002;
+/// PDM Implementor Forum 
+public func relatedProductDefinitions(of productDefinition: ap242.ePRODUCT_DEFINITION?) -> Set<ap242.ePRODUCT_DEFINITION_RELATIONSHIP> {
+	let usedin = SDAI.USEDIN(T: productDefinition, ROLE: \ap242.ePRODUCT_DEFINITION_RELATIONSHIP.RELATING_PRODUCT_DEFINITION)
+	return Set(usedin)
 }
 
-public func relatingProductDefinitions(of productDefinition: ap242.ePRODUCT_DEFINITION) -> [ap242.ePRODUCT_DEFINITION_RELATIONSHIP] {
-	abstruct()
+/// obtains relating product definitions
+/// - Parameter productDefinition: related product definition
+/// - Returns: product definition relationships
+/// 
+/// # Reference
+/// 11.2 Relationship between document representations;
+/// 11.2.1 product_definition_relationship;
+/// 
+/// Usage Guide for the STEP PDM Schema V1.2;
+/// Release 4.3, Jan. 2002;
+/// PDM Implementor Forum 
+public func relatingProductDefinitions(of productDefinition: ap242.ePRODUCT_DEFINITION?) -> Set<ap242.ePRODUCT_DEFINITION_RELATIONSHIP> {
+	let usedin = SDAI.USEDIN(T: productDefinition, ROLE: \ap242.ePRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION)
+	return Set(usedin)
 }

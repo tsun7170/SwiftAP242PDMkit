@@ -41,7 +41,7 @@ public func projects(in domain: SDAIPopulationSchema.SchemaInstance) -> Set<ap24
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func projects(assignedTo productConcept: ap242.ePRODUCT_CONCEPT) -> Set<ap242.eAPPLIED_ORGANIZATIONAL_PROJECT_ASSIGNMENT> {
+public func projects(assignedTo productConcept: ap242.ePRODUCT_CONCEPT?) -> Set<ap242.eAPPLIED_ORGANIZATIONAL_PROJECT_ASSIGNMENT> {
 	if let item = ap242.sPROJECT_ITEM(productConcept) {
 		return projects(assignedTo: item)
 	}
@@ -60,7 +60,7 @@ public func projects(assignedTo productConcept: ap242.ePRODUCT_CONCEPT) -> Set<a
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func projects(assignedTo item: ap242.sPROJECT_ITEM) -> Set<ap242.eAPPLIED_ORGANIZATIONAL_PROJECT_ASSIGNMENT> {
+public func projects(assignedTo item: ap242.sPROJECT_ITEM?) -> Set<ap242.eAPPLIED_ORGANIZATIONAL_PROJECT_ASSIGNMENT> {
 	let udedin = SDAI.USEDIN(
 		T: item, 
 		ROLE: \ap242.eAPPLIED_ORGANIZATIONAL_PROJECT_ASSIGNMENT.ITEMS) 
@@ -81,11 +81,10 @@ public func projects(assignedTo item: ap242.sPROJECT_ITEM) -> Set<ap242.eAPPLIED
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func productConcepts(relatedTo project: ap242.eORGANIZATIONAL_PROJECT) -> Set<ap242.ePRODUCT_CONCEPT> {
+public func productConcepts(relatedTo project: ap242.eORGANIZATIONAL_PROJECT?) -> Set<ap242.ePRODUCT_CONCEPT> {
 	let data = productData(relatedTo: project)
 	let concepts = Set(
-		data
-			.lazy
+		data.lazy
 			.map{ $0.ITEMS.compactMap{ ap242.ePRODUCT_CONCEPT.cast(from: $0.entityReference) } }
 			.joined() )
 	return concepts
@@ -103,7 +102,7 @@ public func productConcepts(relatedTo project: ap242.eORGANIZATIONAL_PROJECT) ->
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func productData(relatedTo project: ap242.eORGANIZATIONAL_PROJECT) -> Set<ap242.eAPPLIED_ORGANIZATIONAL_PROJECT_ASSIGNMENT> {
+public func productData(relatedTo project: ap242.eORGANIZATIONAL_PROJECT?) -> Set<ap242.eAPPLIED_ORGANIZATIONAL_PROJECT_ASSIGNMENT> {
 	let usedin = SDAI.USEDIN(
 		T: project, 
 		ROLE: \ap242.eAPPLIED_ORGANIZATIONAL_PROJECT_ASSIGNMENT.ASSIGNED_ORGANIZATIONAL_PROJECT) 
@@ -123,7 +122,7 @@ public func productData(relatedTo project: ap242.eORGANIZATIONAL_PROJECT) -> Set
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func relatedPorjects(for project: ap242.eORGANIZATIONAL_PROJECT) -> Set<ap242.eORGANIZATIONAL_PROJECT_RELATIONSHIP> {
+public func relatedPorjects(for project: ap242.eORGANIZATIONAL_PROJECT?) -> Set<ap242.eORGANIZATIONAL_PROJECT_RELATIONSHIP> {
 	let usedin = SDAI.USEDIN(
 		T: project, 
 		ROLE: \ap242.eORGANIZATIONAL_PROJECT_RELATIONSHIP.RELATING_ORGANIZATIONAL_PROJECT)
@@ -142,7 +141,7 @@ public func relatedPorjects(for project: ap242.eORGANIZATIONAL_PROJECT) -> Set<a
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func relatingPorjects(for project: ap242.eORGANIZATIONAL_PROJECT) -> Set<ap242.eORGANIZATIONAL_PROJECT_RELATIONSHIP> {
+public func relatingPorjects(for project: ap242.eORGANIZATIONAL_PROJECT?) -> Set<ap242.eORGANIZATIONAL_PROJECT_RELATIONSHIP> {
 	let usedin = SDAI.USEDIN(
 		T: project, 
 		ROLE: \ap242.eORGANIZATIONAL_PROJECT_RELATIONSHIP.RELATED_ORGANIZATIONAL_PROJECT)
@@ -163,7 +162,7 @@ public func relatingPorjects(for project: ap242.eORGANIZATIONAL_PROJECT) -> Set<
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func activities(assignedTo project: ap242.eORGANIZATIONAL_PROJECT) -> Set<ap242.eAPPLIED_ORGANIZATIONAL_PROJECT_ASSIGNMENT> {
+public func activities(assignedTo project: ap242.eORGANIZATIONAL_PROJECT?) -> Set<ap242.eAPPLIED_ORGANIZATIONAL_PROJECT_ASSIGNMENT> {
 	return productData(relatedTo: project)
 }
 
@@ -180,7 +179,7 @@ public func activities(assignedTo project: ap242.eORGANIZATIONAL_PROJECT) -> Set
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func definedDateEvents(for project: ap242.eORGANIZATIONAL_PROJECT) -> Set<ap242.eAPPLIED_DATE_ASSIGNMENT> {
+public func definedDateEvents(for project: ap242.eORGANIZATIONAL_PROJECT?) -> Set<ap242.eAPPLIED_DATE_ASSIGNMENT> {
 	if let item = ap242.sDATE_ITEM(project) {
 		return definedDateEvents(for: item)
 	}
@@ -199,7 +198,7 @@ public func definedDateEvents(for project: ap242.eORGANIZATIONAL_PROJECT) -> Set
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func definedDateEvents(for item: ap242.sDATE_ITEM) -> Set<ap242.eAPPLIED_DATE_ASSIGNMENT> {
+public func definedDateEvents(for item: ap242.sDATE_ITEM?) -> Set<ap242.eAPPLIED_DATE_ASSIGNMENT> {
 	let usedin = SDAI.USEDIN(
 		T: item, 
 		ROLE: \ap242.eAPPLIED_DATE_ASSIGNMENT.ITEMS)
@@ -219,7 +218,7 @@ public func definedDateEvents(for item: ap242.sDATE_ITEM) -> Set<ap242.eAPPLIED_
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func definedDateTimeEvents(for project: ap242.eORGANIZATIONAL_PROJECT) -> Set<ap242.eAPPLIED_DATE_AND_TIME_ASSIGNMENT> {
+public func definedDateTimeEvents(for project: ap242.eORGANIZATIONAL_PROJECT?) -> Set<ap242.eAPPLIED_DATE_AND_TIME_ASSIGNMENT> {
 	if let item = ap242.sDATE_TIME_ITEM(project) {
 		return definedDateTimeEvents(for: item)
 	}
@@ -238,7 +237,7 @@ public func definedDateTimeEvents(for project: ap242.eORGANIZATIONAL_PROJECT) ->
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func definedDateTimeEvents(for item: ap242.sDATE_TIME_ITEM) -> Set<ap242.eAPPLIED_DATE_AND_TIME_ASSIGNMENT> {
+public func definedDateTimeEvents(for item: ap242.sDATE_TIME_ITEM?) -> Set<ap242.eAPPLIED_DATE_AND_TIME_ASSIGNMENT> {
 	let usedin = SDAI.USEDIN(
 		T: item, 
 		ROLE: \ap242.eAPPLIED_DATE_AND_TIME_ASSIGNMENT.ITEMS)

@@ -41,7 +41,7 @@ public func orgainizations(in domain: SDAIPopulationSchema.SchemaInstance) -> Se
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func items(assignedTo organization: ap242.eORGANIZATION) -> Set<ap242.eAPPLIED_ORGANIZATION_ASSIGNMENT> {
+public func items(assignedTo organization: ap242.eORGANIZATION?) -> Set<ap242.eAPPLIED_ORGANIZATION_ASSIGNMENT> {
 	let usedin = SDAI.USEDIN(
 		T: organization, 
 		ROLE: \ap242.eAPPLIED_ORGANIZATION_ASSIGNMENT.ASSIGNED_ORGANIZATION) 
@@ -60,7 +60,7 @@ public func items(assignedTo organization: ap242.eORGANIZATION) -> Set<ap242.eAP
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func organizations(assignedTo item: ap242.sORGANIZATION_ITEM) -> Set<ap242.eAPPLIED_ORGANIZATION_ASSIGNMENT> {
+public func organizations(assignedTo item: ap242.sORGANIZATION_ITEM?) -> Set<ap242.eAPPLIED_ORGANIZATION_ASSIGNMENT> {
 	let usedin = SDAI.USEDIN(
 		T: item, 
 		ROLE: \ap242.eAPPLIED_ORGANIZATION_ASSIGNMENT.ITEMS)

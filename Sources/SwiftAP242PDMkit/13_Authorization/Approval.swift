@@ -23,7 +23,7 @@ import SwiftSDAIap242
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func approvals(on item: ap242.sAPPROVAL_ITEM) -> Set<ap242.eAPPLIED_APPROVAL_ASSIGNMENT> {
+public func approvals(on item: ap242.sAPPROVAL_ITEM?) -> Set<ap242.eAPPLIED_APPROVAL_ASSIGNMENT> {
 	let usedin = SDAI.USEDIN(
 		T: item, 
 		ROLE: \ap242.eAPPLIED_APPROVAL_ASSIGNMENT.ITEMS) 
@@ -42,7 +42,7 @@ public func approvals(on item: ap242.sAPPROVAL_ITEM) -> Set<ap242.eAPPLIED_APPRO
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func responsibles(for approval: ap242.eAPPROVAL) -> Set<ap242.eAPPROVAL_PERSON_ORGANIZATION> {
+public func responsibles(for approval: ap242.eAPPROVAL?) -> Set<ap242.eAPPROVAL_PERSON_ORGANIZATION> {
 	let usedin = SDAI.USEDIN(
 		T: approval, 
 		ROLE: \ap242.eAPPROVAL_PERSON_ORGANIZATION.AUTHORIZED_APPROVAL) 
@@ -61,7 +61,7 @@ public func responsibles(for approval: ap242.eAPPROVAL) -> Set<ap242.eAPPROVAL_P
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func approvalDates(for approval: ap242.eAPPROVAL) -> Set<ap242.eAPPROVAL_DATE_TIME> {
+public func approvalDates(for approval: ap242.eAPPROVAL?) -> Set<ap242.eAPPROVAL_DATE_TIME> {
 	let usedin = SDAI.USEDIN(
 		T: approval, 
 		ROLE: \ap242.eAPPROVAL_DATE_TIME.DATED_APPROVAL) 
@@ -80,7 +80,7 @@ public func approvalDates(for approval: ap242.eAPPROVAL) -> Set<ap242.eAPPROVAL_
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func relatedApprovals(to approval: ap242.eAPPROVAL) -> Set<ap242.eAPPROVAL_RELATIONSHIP> {
+public func relatedApprovals(to approval: ap242.eAPPROVAL?) -> Set<ap242.eAPPROVAL_RELATIONSHIP> {
 	let usedin = SDAI.USEDIN(T: approval, ROLE: \ap242.eAPPROVAL_RELATIONSHIP.RELATING_APPROVAL) 
 	return Set(usedin)
 }
@@ -96,7 +96,7 @@ public func relatedApprovals(to approval: ap242.eAPPROVAL) -> Set<ap242.eAPPROVA
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func relatingApprovals(to approval: ap242.eAPPROVAL) -> Set<ap242.eAPPROVAL_RELATIONSHIP> {
+public func relatingApprovals(to approval: ap242.eAPPROVAL?) -> Set<ap242.eAPPROVAL_RELATIONSHIP> {
 	let usedin = SDAI.USEDIN(T: approval, ROLE: \ap242.eAPPROVAL_RELATIONSHIP.RELATED_APPROVAL) 
 	return Set(usedin)
 }

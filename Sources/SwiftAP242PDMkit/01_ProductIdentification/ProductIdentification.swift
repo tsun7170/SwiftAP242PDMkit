@@ -42,7 +42,7 @@ public func products(in domain: SDAIPopulationSchema.SchemaInstance) -> Set<ap24
 /// PDM Implementor Forum 
 public func products(under category: ap242.ePRODUCT_CATEGORY) -> Set<ap242.ePRODUCT> {
 	var result: Set<ap242.ePRODUCT> = []
-	if let productRelated = ap242.ePRODUCT_RELATED_PRODUCT_CATEGORY(category) {
+	if let productRelated = category.sub_ePRODUCT_RELATED_PRODUCT_CATEGORY {
 		result = productRelated.PRODUCTS.asSwiftType
 	}	
 	for subcat in subCategories(of: category) {
@@ -62,7 +62,7 @@ public func products(under category: ap242.ePRODUCT_CATEGORY) -> Set<ap242.ePROD
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func versions(of productMaster: ap242.ePRODUCT) -> Set<ap242.ePRODUCT_DEFINITION_FORMATION> {
+public func versions(of productMaster: ap242.ePRODUCT?) -> Set<ap242.ePRODUCT_DEFINITION_FORMATION> {
 	let usedin = SDAI.USEDIN(
 		T: productMaster, 
 		ROLE: \ap242.ePRODUCT_DEFINITION_FORMATION.OF_PRODUCT)
@@ -82,7 +82,7 @@ public func versions(of productMaster: ap242.ePRODUCT) -> Set<ap242.ePRODUCT_DEF
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func views(of productVersion: ap242.ePRODUCT_DEFINITION_FORMATION) -> Set<ap242.ePRODUCT_DEFINITION> {
+public func views(of productVersion: ap242.ePRODUCT_DEFINITION_FORMATION?) -> Set<ap242.ePRODUCT_DEFINITION> {
 	let usedin = SDAI.USEDIN(
 		T: productVersion, 
 		ROLE: \ap242.ePRODUCT_DEFINITION.FORMATION)
@@ -100,7 +100,7 @@ public func views(of productVersion: ap242.ePRODUCT_DEFINITION_FORMATION) -> Set
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func documentViews(of documentProductVersion: ap242.ePRODUCT_DEFINITION_FORMATION) -> Set<ap242.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS> {
+public func documentViews(of documentProductVersion: ap242.ePRODUCT_DEFINITION_FORMATION?) -> Set<ap242.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS> {
 	let usedin = SDAI.USEDIN(
 		T: documentProductVersion, 
 		ROLE: \ap242.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS.FORMATION)

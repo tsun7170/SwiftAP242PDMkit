@@ -104,10 +104,7 @@ public class ExternalReferenceLoader: SDAI.Object {
 		let schemaInstance = repository.createSchemaInstance(
 			name: parent.name + ".TEMP", 
 			schema: ap242.schemaDefinition )
-		for model in models {
-			guard model.underlyingSchema == schemaInstance.nativeSchema else { continue }
-			schemaInstance.add(model: model)
-		}
+		schemaInstance.add(models: models)
 		schemaInstance.mode = .readOnly
 		
 		for documentFile in documentFiles(in: schemaInstance) {
@@ -123,18 +120,3 @@ public class ExternalReferenceLoader: SDAI.Object {
 }
 
 
-extension ExternalReferenceLoader {
-	public enum LoadingStatus: Equatable {
-		case notLoadedYet
-		case loadPending
-		case loaded(P21Decode.ExchangeStructure)
-		case foreignReference
-		case inError(LoadingError)
-	}
-	
-	public enum LoadingError: Equatable {
-		case referenceNotFound(DocumentSourceProperty)
-		case decoderError(P21Decode.Decoder.Error?)
-	}
-	
-}

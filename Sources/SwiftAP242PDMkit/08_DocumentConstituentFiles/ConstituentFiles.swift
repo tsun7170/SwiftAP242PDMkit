@@ -24,8 +24,7 @@ import SwiftSDAIap242
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func externalFiles(of documentProductDefinition: ap242.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS) -> Set<ap242.eDOCUMENT_FILE> {
-	let docFiles = documentProductDefinition.DOCUMENTATION_IDS
-		.lazy
+	let docFiles = documentProductDefinition.DOCUMENTATION_IDS.lazy
 		.compactMap{ ap242.eDOCUMENT_FILE.cast(from: $0) }
 	return Set(docFiles)
 }

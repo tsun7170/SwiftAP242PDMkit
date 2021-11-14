@@ -41,7 +41,7 @@ public func contracts(in domain: SDAIPopulationSchema.SchemaInstance) -> Set<ap2
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func contracts(binding item: ap242.sCONTRACT_ITEM) -> Set<ap242.eAPPLIED_CONTRACT_ASSIGNMENT> {
+public func contracts(binding item: ap242.sCONTRACT_ITEM?) -> Set<ap242.eAPPLIED_CONTRACT_ASSIGNMENT> {
 	let usedin = SDAI.USEDIN(
 		T: item, 
 		ROLE: \ap242.eAPPLIED_CONTRACT_ASSIGNMENT.ITEMS) 
@@ -64,7 +64,7 @@ public func contracts(binding item: ap242.sCONTRACT_ITEM) -> Set<ap242.eAPPLIED_
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func boundItems(by contract: ap242.eCONTRACT) -> Set<ap242.eAPPLIED_CONTRACT_ASSIGNMENT> {
+public func boundItems(by contract: ap242.eCONTRACT?) -> Set<ap242.eAPPLIED_CONTRACT_ASSIGNMENT> {
 	let usedin = SDAI.USEDIN(T: contract, ROLE: \ap242.eAPPLIED_CONTRACT_ASSIGNMENT.ASSIGNED_CONTRACT) 
 	return Set(usedin)
 }

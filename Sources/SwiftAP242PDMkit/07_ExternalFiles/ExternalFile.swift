@@ -60,7 +60,7 @@ public func documentFiles(for documentProductDefinition: ap242.ePRODUCT_DEFINITI
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func representationType(of documentFile: ap242.eDOCUMENT_FILE) throws -> ap242.eDOCUMENT_REPRESENTATION_TYPE? {
+public func representationType(of documentFile: ap242.eDOCUMENT_FILE?) throws -> ap242.eDOCUMENT_REPRESENTATION_TYPE? {
 	let usedin = SDAI.USEDIN(
 		T: documentFile, 
 		ROLE: \ap242.eDOCUMENT_REPRESENTATION_TYPE.REPRESENTED_DOCUMENT) 
@@ -104,7 +104,7 @@ public func type(of documentFile: ap242.eDOCUMENT_FILE) -> ap242.eDOCUMENT_TYPE 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func version(of documentFile: ap242.eDOCUMENT_FILE) throws -> ap242.eAPPLIED_IDENTIFICATION_ASSIGNMENT? {
+public func version(of documentFile: ap242.eDOCUMENT_FILE?) throws -> ap242.eAPPLIED_IDENTIFICATION_ASSIGNMENT? {
 	let usedin = SDAI.USEDIN(
 		T: documentFile, 
 		ROLE: \ap242.eAPPLIED_IDENTIFICATION_ASSIGNMENT.ITEMS) 

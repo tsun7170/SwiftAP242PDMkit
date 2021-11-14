@@ -81,7 +81,7 @@ public func designChangeWorkRequests(in domain: SDAIPopulationSchema.SchemaInsta
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func potentialSolutions(for workRequest: ap242.eVERSIONED_ACTION_REQUEST) -> Set<ap242.eACTION_REQUEST_SOLUTION> {
+public func potentialSolutions(for workRequest: ap242.eVERSIONED_ACTION_REQUEST?) -> Set<ap242.eACTION_REQUEST_SOLUTION> {
 	let usedin = SDAI.USEDIN(
 		T: workRequest, 
 		ROLE: \ap242.eACTION_REQUEST_SOLUTION.REQUEST)
@@ -101,7 +101,7 @@ public func potentialSolutions(for workRequest: ap242.eVERSIONED_ACTION_REQUEST)
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func assignedChangeItems(to workRequest: ap242.eVERSIONED_ACTION_REQUEST) -> Set<ap242.eAPPLIED_ACTION_REQUEST_ASSIGNMENT> {
+public func assignedChangeItems(to workRequest: ap242.eVERSIONED_ACTION_REQUEST?) -> Set<ap242.eAPPLIED_ACTION_REQUEST_ASSIGNMENT> {
 	let usedin = SDAI.USEDIN(
 		T: workRequest, 
 		ROLE: \ap242.eAPPLIED_ACTION_REQUEST_ASSIGNMENT.ASSIGNED_ACTION_REQUEST)
@@ -122,7 +122,7 @@ public func assignedChangeItems(to workRequest: ap242.eVERSIONED_ACTION_REQUEST)
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func status(of workRequest: ap242.eVERSIONED_ACTION_REQUEST) throws -> ap242.eACTION_REQUEST_STATUS? {
+public func status(of workRequest: ap242.eVERSIONED_ACTION_REQUEST?) throws -> ap242.eACTION_REQUEST_STATUS? {
 	let usedin = SDAI.USEDIN(
 		T: workRequest, 
 		ROLE: \ap242.eACTION_REQUEST_STATUS.ASSIGNED_REQUEST)
@@ -146,7 +146,7 @@ public func status(of workRequest: ap242.eVERSIONED_ACTION_REQUEST) throws -> ap
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
-public func workRequests(raisedAgainst item: ap242.sACTION_REQUEST_ITEM) -> Set<ap242.eAPPLIED_ACTION_REQUEST_ASSIGNMENT> {
+public func workRequests(raisedAgainst item: ap242.sACTION_REQUEST_ITEM?) -> Set<ap242.eAPPLIED_ACTION_REQUEST_ASSIGNMENT> {
 	let usedin = SDAI.USEDIN(
 		T: item, 
 		ROLE: \ap242.eAPPLIED_ACTION_REQUEST_ASSIGNMENT.ITEMS)
