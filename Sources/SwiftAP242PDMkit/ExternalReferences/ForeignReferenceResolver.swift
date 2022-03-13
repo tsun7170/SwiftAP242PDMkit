@@ -29,7 +29,7 @@ extension ExternalReferenceLoader {
 			return result
 		}
 		
-		open func dispositon(of externalReference: DocumentSourceProperty) -> ExternalReferenceDisposition {
+		open func disposition(of externalReference: DocumentSourceProperty) -> ExternalReferenceDisposition {
 			guard externalReference.mechanism == "URL" || externalReference.mechanism == "external document id and location" else { return .referenceUnknown }
 			
 			let url = URL(fileURLWithPath: (externalReference.path ?? ".") + "/" + externalReference.fileName)

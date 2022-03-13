@@ -12,8 +12,13 @@ import SwiftSDAIap242
 
 public class ExternalReferenceLoader: SDAI.Object {
 	
-	public var externalReferences: [String:ExternalReference] = [:]
-
+	public var externalReferenceList: [ExternalReference] = []
+	public var externalReferences: [String:ExternalReference] {
+		let pairs = zip(externalReferenceList.map{$0.name}, externalReferenceList)
+		return Dictionary(pairs) { (v1,v2) in return v1 }
+	}
+	private var exchangeStructures: [String:P21Decode.ExchangeStructure] = [:]
+	
 	public var sdaiModels: AnySequence<SDAIPopulationSchema.SdaiModel> {
 		let models = externalReferences.values.lazy.compactMap({$0.exchangeStructure?.sdaiModels}).joined()
 		return AnySequence(models)
@@ -40,7 +45,7 @@ public class ExternalReferenceLoader: SDAI.Object {
 		self.resolver = foreginReferenceResolver
 
 		let master = ExternalReference(asTopLevel: masterFile)
-		self.externalReferences[master.name] = master
+		self.externalReferenceList.append(master)
 		
 		super.init()
 	}
@@ -65,8 +70,13 @@ public class ExternalReferenceLoader: SDAI.Object {
 		defer{ monitor?.completedLoading(externalReference: externalReference) }
 		
 		for sourceProperty in externalReference.sourceProperties {
-			switch resolver.dispositon(of: sourceProperty) {
+			switch resolver.disposition(of: sourceProperty) {
 				case .load:
+					if let exchange = exchangeStructures[externalReference.name] {
+						externalReference.status = .loaded(exchange)
+						return false
+					}
+					
 					guard let stream = resolver.characterSteam(from: sourceProperty) else {
 						externalReference.status = .inError(.referenceNotFound(sourceProperty))
 						return false
@@ -76,12 +86,12 @@ public class ExternalReferenceLoader: SDAI.Object {
 						externalReference.status = .inError(.decoderError(decoder.error))
 						return false
 					}
+					
+					exchangeStructures[externalReference.name] = exchange
 					externalReference.status = .loaded(exchange)
 					externalReference.sourceProperties = [sourceProperty]
 					let children = identifyExternalReferences(parent: externalReference)
-					for child in children {
-						externalReferences[child.name] = child
-					}
+					externalReferenceList.append(contentsOf: children)
 					return true
 					
 				case .suspendLoading:
