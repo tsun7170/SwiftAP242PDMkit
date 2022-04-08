@@ -154,7 +154,7 @@ public func documentFormat(of documentFile: ap242.eDOCUMENT_FILE?) throws -> ap2
 		.filter{ $0.NAME == "document property" }
 	
 	guard documentProperties.count <= 1 else {
-		throw PDMkitError.multiplePropertyDefinitions(Array(documentProperties))
+		throw PDMkitError.multiplePropertyDefinitions(documentProperties)
 	}
 	
 	let rep = try representation(of: documentProperties.first)

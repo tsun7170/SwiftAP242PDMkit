@@ -39,13 +39,13 @@ public func shapeDefinitionRepresentations(in domain: SDAIPopulationSchema.Schem
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func shape(of productDefinition: ap242.ePRODUCT_DEFINITION?) throws -> ap242.ePRODUCT_DEFINITION_SHAPE? {
-	let usedin = SDAI.USEDIN(
+	let usedin = Set(SDAI.USEDIN(
 		T: productDefinition, 
-		ROLE: \ap242.ePRODUCT_DEFINITION_SHAPE.DEFINITION) 
-	guard usedin.size <= 1 else {
-		throw PDMkitError.multipleProductDefinitionShapes(usedin.asSwiftType)
+		ROLE: \ap242.ePRODUCT_DEFINITION_SHAPE.DEFINITION) )
+	guard usedin.count <= 1 else {
+		throw PDMkitError.multipleProductDefinitionShapes(usedin)
 	}
-	let shape = usedin[1]
+	let shape = usedin.first
 	return shape
 }
 
@@ -83,13 +83,32 @@ public func representations(of productDefinitionShape: ap242.ePRODUCT_DEFINITION
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func shapeDefinition(of shapeRepresentation: ap242.eSHAPE_REPRESENTATION?) throws -> ap242.eSHAPE_DEFINITION_REPRESENTATION? {
-	let usedin = SDAI.USEDIN(T: shapeRepresentation, ROLE: \ap242.eSHAPE_DEFINITION_REPRESENTATION.USED_REPRESENTATION)
-	guard usedin.size <= 1 else {
-		throw PDMkitError.multipleShapeDefinitionRepresentations(usedin.asSwiftType)
+	let usedin = Set(SDAI.USEDIN(T: shapeRepresentation, ROLE: \ap242.eSHAPE_DEFINITION_REPRESENTATION.USED_REPRESENTATION))
+	guard usedin.count <= 1 else {
+		throw PDMkitError.multipleShapeDefinitionRepresentations(usedin)
 	}
-	let shapedef = usedin[1]
+	let shapedef = usedin.first
 	return shapedef
 }
+
+/// obtains the product_definition which owns a given shape representation
+/// - Parameter shapeRepresentation: shape representation
+/// - Throws: multipleShapeDefinitionRepresentations
+/// - Returns: product definition owning the given shape representation
+/// 
+/// # Reference
+/// 3.2.1 Geometric Shape Property;
+/// 
+/// Usage Guide for the STEP PDM Schema V1.2;
+/// Release 4.3, Jan. 2002;
+/// PDM Implementor Forum 
+public func productDefinition(of shapeRepresentation: ap242.eSHAPE_REPRESENTATION?) throws -> ap242.ePRODUCT_DEFINITION? {
+	guard let shapeDefinitionRepresentation = try shapeDefinition(of: shapeRepresentation) else { return nil }
+	let productDefinitionShape = shapeDefinitionRepresentation.DEFINITION
+	let productDefinition = productDefinitionShape.DEFINITION.super_ePRODUCT_DEFINITION
+	return productDefinition	
+}
+
 
 /// obtains the geometric context of a given shape representation
 /// - Parameter shapeRepresentation: shape representation
@@ -180,10 +199,25 @@ public func representations(of shapeAspect: ap242.eSHAPE_ASPECT?) -> Set<ap242.e
 
 //MARK: - Relating Part Shape
 
+/// obtains all shape_representation_relationship contained in a shcema instance
+/// - Parameter domain: schema instance
+/// - Returns: all shape_representation_relationship found
+/// 
+/// # Reference
+/// 3.3.1 Relating Part Shape
+/// 3.3.1.1 shape_representation_relationship
+/// 
+/// Usage Guide for the STEP PDM Schema V1.2;
+/// Release 4.3, Jan. 2002;
+/// PDM Implementor Forum 
+public func shapeRepresentationRelationships(in domain: SDAIPopulationSchema.SchemaInstance) -> Set<ap242.eSHAPE_REPRESENTATION_RELATIONSHIP> {
+	let instances = domain.entityExtent(type: ap242.eSHAPE_REPRESENTATION_RELATIONSHIP.self)
+	return Set(instances)
+}
 
 /// obtains the shape representations related as rep1 to a given rep2 shape representation
 /// - Parameter shapeRep2: rep2 shape representation
-/// - Returns: shape representation relationships which contain related rep1 shape representaions
+/// - Returns: shape representation relationships which contain related rep1 shape representations
 /// 
 /// # Reference
 /// 3.3.1 Relating Part Shape
@@ -202,7 +236,7 @@ public func relatedShapeRep1s(to shapeRep2: ap242.eSHAPE_REPRESENTATION?) -> Set
 
 /// obtains the shape representations related as rep2 to a given rep1 shape representation
 /// - Parameter shapeRep1: rep1 shape representation
-/// - Returns: shape representation relationships which contain related rep2 shape representaions
+/// - Returns: shape representation relationships which contain related rep2 shape representations
 /// 
 /// # Reference
 /// 3.3.1 Relating Part Shape
@@ -239,9 +273,9 @@ public func relatedShapeRep2s(to shapeRep1: ap242.eSHAPE_REPRESENTATION?) -> Set
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func definitionalShapeDefinitions(of shapeRepresentation: ap242.eSHAPE_REPRESENTATION?) throws -> ap242.eDOCUMENT_FILE? {
-	let usedin = SDAI.USEDIN(
+	let usedin = Set(SDAI.USEDIN(
 		T: shapeRepresentation, 
-		ROLE: \ap242.ePROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION) 
+		ROLE: \ap242.ePROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION) )
 	let externalDefinition = usedin.filter{ $0.DEFINITION.NAME?.asSwiftType == "external definition" }
 	guard externalDefinition.count <= 1 else {
 		throw PDMkitError.multipleDefinitionalShapes(externalDefinition)

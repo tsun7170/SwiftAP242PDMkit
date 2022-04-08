@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  ForeignReferenceResolver.swift
 //  
 //
 //  Created by Yoshida on 2021/10/25.

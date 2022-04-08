@@ -59,13 +59,13 @@ public func properties(of documentFile: ap242.eDOCUMENT_FILE?) -> Set<ap242.ePRO
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func representation(of propertyDefinition: ap242.ePROPERTY_DEFINITION?) throws -> ap242.eREPRESENTATION? {
-	let usedin = SDAI.USEDIN(
+	let usedin = Set(SDAI.USEDIN(
 		T: propertyDefinition, 
-		ROLE: \ap242.ePROPERTY_DEFINITION_REPRESENTATION.DEFINITION) 
-	guard usedin.size <= 1 else {
-		throw PDMkitError.multiplePropertyRepresentations(usedin.asSwiftType)
+		ROLE: \ap242.ePROPERTY_DEFINITION_REPRESENTATION.DEFINITION) )
+	guard usedin.count <= 1 else {
+		throw PDMkitError.multiplePropertyRepresentations(usedin)
 	}
-	let rep = usedin[1]?.USED_REPRESENTATION
+	let rep = usedin.first?.USED_REPRESENTATION
 	return rep
 }
 

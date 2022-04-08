@@ -169,32 +169,32 @@ public func specificUsages(for componentUsage: ap242.eNEXT_ASSEMBLY_USAGE_OCCURR
 
 
 /// obtains the geometric shape transformation relationship of component and its assembly
-/// - Parameter componentUsage: compoment usage
+/// - Parameter componentUsage: component usage
 /// - Throws: multipleProductDefinitionShapes,multipleContextDependentShapeRepresentations
 /// - Returns: geometry transformation relationship
 /// 
 /// # Reference
 /// 4.4 Relating Part Shape Properties to Product Structure;
-/// 4.4.2 Impllicit Relationships Between Assembly Components;
+/// 4.4.2 Implicit Relationships Between Assembly Components;
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func assemblyComponentTransformationRelationship(of componentUsage: ap242.eNEXT_ASSEMBLY_USAGE_OCCURRENCE?) throws -> ap242.eCONTEXT_DEPENDENT_SHAPE_REPRESENTATION? {
-	let usedin = SDAI.USEDIN(
+	let usedin = Set(SDAI.USEDIN(
 		T: componentUsage, 
-		ROLE: \ap242.ePRODUCT_DEFINITION_SHAPE.DEFINITION) 
-	guard usedin.size <= 1 else {
-		throw PDMkitError.multipleProductDefinitionShapes(usedin.asSwiftType)
+		ROLE: \ap242.ePRODUCT_DEFINITION_SHAPE.DEFINITION) )
+	guard usedin.count <= 1 else {
+		throw PDMkitError.multipleProductDefinitionShapes(usedin)
 	}
-	if let pdShape = usedin[1] {
-		let usedin = SDAI.USEDIN(
+	if let pdShape = usedin.first {
+		let usedin = Set(SDAI.USEDIN(
 			T: pdShape, 
-			ROLE: \ap242.eCONTEXT_DEPENDENT_SHAPE_REPRESENTATION.REPRESENTED_PRODUCT_RELATION) 
-		guard usedin.size <= 1 else {
-			throw PDMkitError.multipleContextDependentShapeRepresentations(usedin.asSwiftType)
+			ROLE: \ap242.eCONTEXT_DEPENDENT_SHAPE_REPRESENTATION.REPRESENTED_PRODUCT_RELATION) )
+		guard usedin.count <= 1 else {
+			throw PDMkitError.multipleContextDependentShapeRepresentations(usedin)
 		}
-		let cdShapeRep = usedin[1]
+		let cdShapeRep = usedin.first
 		return cdShapeRep
 	}
 	return nil
@@ -213,20 +213,20 @@ public func assemblyComponentTransformationRelationship(of componentUsage: ap242
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func asAssembledShape(of componentUsage: ap242.eNEXT_ASSEMBLY_USAGE_OCCURRENCE?) throws -> ap242.eSHAPE_REPRESENTATION? {
-	let usedin = SDAI.USEDIN(
+	let usedin = Set(SDAI.USEDIN(
 		T: componentUsage, 
-		ROLE: \ap242.ePRODUCT_DEFINITION_SHAPE.DEFINITION) 
-	guard usedin.size <= 1 else {
-		throw PDMkitError.multipleProductDefinitionShapes(usedin.asSwiftType)
+		ROLE: \ap242.ePRODUCT_DEFINITION_SHAPE.DEFINITION) )
+	guard usedin.count <= 1 else {
+		throw PDMkitError.multipleProductDefinitionShapes(usedin)
 	}
-	if let pdShape = usedin[1] {
-		let usedin = SDAI.USEDIN(
+	if let pdShape = usedin.first {
+		let usedin = Set(SDAI.USEDIN(
 			T: pdShape, 
-			ROLE: \ap242.eSHAPE_DEFINITION_REPRESENTATION.DEFINITION) 
-		guard usedin.size <= 1 else {
-			throw PDMkitError.multipleShapeDefinitionRepresentations(usedin.asSwiftType)
+			ROLE: \ap242.eSHAPE_DEFINITION_REPRESENTATION.DEFINITION) )
+		guard usedin.count <= 1 else {
+			throw PDMkitError.multipleShapeDefinitionRepresentations(usedin)
 		}
-		let shapeRep = usedin[1]?.USED_REPRESENTATION
+		let shapeRep = usedin.first?.USED_REPRESENTATION
 		return shapeRep
 	}
 	return nil
@@ -247,7 +247,7 @@ public func asAssembledShape(of componentUsage: ap242.eNEXT_ASSEMBLY_USAGE_OCCUR
 /// PDM Implementor Forum 
 public func explicitShape(of componentUsage: ap242.eNEXT_ASSEMBLY_USAGE_OCCURRENCE?) throws -> ap242.eMAPPED_ITEM? {
 	if let shapeRep = try asAssembledShape(of: componentUsage) {
-		let mappedItems = shapeRep.ITEMS.compactMap{ ap242.eMAPPED_ITEM.cast(from: $0) }
+		let mappedItems = Set(shapeRep.ITEMS.lazy.compactMap{ ap242.eMAPPED_ITEM.cast(from: $0) })
 		guard mappedItems.count <= 1 else {
 			throw PDMkitError.multipleMappedItems(mappedItems)
 		}
@@ -395,9 +395,9 @@ public func successorVersions(of productVersion: ap242.ePRODUCT_DEFINITION_FORMA
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func precedingVersion(of productVersion: ap242.ePRODUCT_DEFINITION_FORMATION?) throws -> ap242.ePRODUCT_DEFINITION_FORMATION_RELATIONSHIP? {
-	let usedin = SDAI.USEDIN(
+	let usedin = Set(SDAI.USEDIN(
 		T: productVersion, 
-		ROLE: \ap242.ePRODUCT_DEFINITION_FORMATION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION_FORMATION) 
+		ROLE: \ap242.ePRODUCT_DEFINITION_FORMATION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION_FORMATION) )
 	let precedings = usedin.filter{ $0.NAME == "sequence" || $0.NAME == "hierarchy" } 
 	guard precedings.count <= 1 else {
 		throw PDMkitError.multiplePrecedingVersions(precedings)

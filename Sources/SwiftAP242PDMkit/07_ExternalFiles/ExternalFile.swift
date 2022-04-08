@@ -61,13 +61,13 @@ public func documentFiles(for documentProductDefinition: ap242.ePRODUCT_DEFINITI
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func representationType(of documentFile: ap242.eDOCUMENT_FILE?) throws -> ap242.eDOCUMENT_REPRESENTATION_TYPE? {
-	let usedin = SDAI.USEDIN(
+	let usedin = Set(SDAI.USEDIN(
 		T: documentFile, 
-		ROLE: \ap242.eDOCUMENT_REPRESENTATION_TYPE.REPRESENTED_DOCUMENT) 
-	guard usedin.size <= 1 else {
-		throw PDMkitError.multipleDocumentRepresentationTypes(usedin.asSwiftType)
+		ROLE: \ap242.eDOCUMENT_REPRESENTATION_TYPE.REPRESENTED_DOCUMENT) )
+	guard usedin.count <= 1 else {
+		throw PDMkitError.multipleDocumentRepresentationTypes(usedin)
 	}
-	return usedin[1]
+	return usedin.first
 }
 
 
@@ -105,12 +105,12 @@ public func type(of documentFile: ap242.eDOCUMENT_FILE) -> ap242.eDOCUMENT_TYPE 
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func version(of documentFile: ap242.eDOCUMENT_FILE?) throws -> ap242.eAPPLIED_IDENTIFICATION_ASSIGNMENT? {
-	let usedin = SDAI.USEDIN(
+	let usedin = Set(SDAI.USEDIN(
 		T: documentFile, 
-		ROLE: \ap242.eAPPLIED_IDENTIFICATION_ASSIGNMENT.ITEMS) 
+		ROLE: \ap242.eAPPLIED_IDENTIFICATION_ASSIGNMENT.ITEMS) )
 	let versions = usedin.filter{ $0.ROLE.NAME == "version" }
 	guard versions.count <= 1 else {
-		throw PDMkitError.multipleAssignedVersions(Array(versions))
+		throw PDMkitError.multipleAssignedVersions(versions)
 	}
 	return versions.first
 }

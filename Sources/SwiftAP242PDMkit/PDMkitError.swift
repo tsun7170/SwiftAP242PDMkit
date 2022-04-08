@@ -13,37 +13,37 @@ import SwiftSDAIap242
 public enum PDMkitError: Error {
 	case duplicatedCatrgoryName(ap242.ePRODUCT_CATEGORY, ap242.ePRODUCT_CATEGORY)
 	
-	case multipleSuperCategories([ap242.ePRODUCT_CATEGORY_RELATIONSHIP])
+	case multipleSuperCategories(Set<ap242.ePRODUCT_CATEGORY_RELATIONSHIP>)
 	
-	case multipleApplicationProtocols([ap242.eAPPLICATION_PROTOCOL_DEFINITION])
+	case multipleApplicationProtocols(Set<ap242.eAPPLICATION_PROTOCOL_DEFINITION>)
 	
-	case multiplePropertyRepresentations([ap242.ePROPERTY_DEFINITION_REPRESENTATION])
+	case multiplePropertyRepresentations(Set<ap242.ePROPERTY_DEFINITION_REPRESENTATION>)
 	
-	case multipleProductDefinitionShapes([ap242.ePRODUCT_DEFINITION_SHAPE])
+	case multipleProductDefinitionShapes(Set<ap242.ePRODUCT_DEFINITION_SHAPE>)
 	
-	case multipleDefinitionalShapes([ap242.ePROPERTY_DEFINITION_REPRESENTATION])
+	case multipleDefinitionalShapes(Set<ap242.ePROPERTY_DEFINITION_REPRESENTATION>)
 	
 	case noGeometricRepresentationContext(ap242.eSHAPE_REPRESENTATION)
 	
-	case multipleContextDependentShapeRepresentations([ap242.eCONTEXT_DEPENDENT_SHAPE_REPRESENTATION])
+	case multipleContextDependentShapeRepresentations(Set<ap242.eCONTEXT_DEPENDENT_SHAPE_REPRESENTATION>)
 	
-	case multipleShapeDefinitionRepresentations([ap242.eSHAPE_DEFINITION_REPRESENTATION])
+	case multipleShapeDefinitionRepresentations(Set<ap242.eSHAPE_DEFINITION_REPRESENTATION>)
 	
-	case multipleMappedItems([ap242.eMAPPED_ITEM])
+	case multipleMappedItems(Set<ap242.eMAPPED_ITEM>)
 	
-	case multiplePrecedingVersions([ap242.ePRODUCT_DEFINITION_FORMATION_RELATIONSHIP])
+	case multiplePrecedingVersions(Set<ap242.ePRODUCT_DEFINITION_FORMATION_RELATIONSHIP>)
 	
-	case multipleDocumentRepresentationTypes([ap242.eDOCUMENT_REPRESENTATION_TYPE])
+	case multipleDocumentRepresentationTypes(Set<ap242.eDOCUMENT_REPRESENTATION_TYPE>)
 	
-	case multipleAssignedVersions([ap242.eAPPLIED_IDENTIFICATION_ASSIGNMENT])
+	case multipleAssignedVersions(Set<ap242.eAPPLIED_IDENTIFICATION_ASSIGNMENT>)
 	
-	case multipleDocumentProductEquivalences([ap242.eDOCUMENT_PRODUCT_EQUIVALENCE])
+	case multipleDocumentProductEquivalences(Set<ap242.eDOCUMENT_PRODUCT_EQUIVALENCE>)
 	
-	case multipleActionRequestStatus([ap242.eACTION_REQUEST_STATUS])
+	case multipleActionRequestStatus(Set<ap242.eACTION_REQUEST_STATUS>)
 	
-	case multipleDirectedActions([ap242.eDIRECTED_ACTION])
+	case multipleDirectedActions(Set<ap242.eDIRECTED_ACTION>)
 
-	case multipleActionStatus([ap242.eACTION_STATUS])
+	case multipleActionStatus(Set<ap242.eACTION_STATUS>)
 
-	case multiplePropertyDefinitions([ap242.ePROPERTY_DEFINITION])
+	case multiplePropertyDefinitions(Set<ap242.ePROPERTY_DEFINITION>)
 }

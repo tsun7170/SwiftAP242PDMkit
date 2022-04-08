@@ -65,13 +65,13 @@ public func workOrders(for workRequest: ap242.eVERSIONED_ACTION_REQUEST?) -> Set
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func directedAction(for workOrder: ap242.eACTION_DIRECTIVE?) throws -> ap242.eDIRECTED_ACTION? {
-	let usedin = SDAI.USEDIN(
+	let usedin = Set(SDAI.USEDIN(
 		T: workOrder, 
-		ROLE: \ap242.eDIRECTED_ACTION.DIRECTIVE)
-	guard usedin.size <= 1 else {
-		throw PDMkitError.multipleDirectedActions(usedin.asSwiftType)
+		ROLE: \ap242.eDIRECTED_ACTION.DIRECTIVE))
+	guard usedin.count <= 1 else {
+		throw PDMkitError.multipleDirectedActions(usedin)
 	}
-	let action = usedin[1]
+	let action = usedin.first
 	return action
 }
 
@@ -130,13 +130,13 @@ public func affectedItems(by action: ap242.eACTION?) -> Set<ap242.eAPPLIED_ACTIO
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func status(for action: ap242.eEXECUTED_ACTION?) throws -> ap242.eACTION_STATUS? {
-	let usedin = SDAI.USEDIN(
+	let usedin = Set(SDAI.USEDIN(
 		T: action, 
-		ROLE: \ap242.eACTION_STATUS.ASSIGNED_ACTION) 
-	guard usedin.size <= 1 else {
-		throw PDMkitError.multipleActionStatus(usedin.asSwiftType)
+		ROLE: \ap242.eACTION_STATUS.ASSIGNED_ACTION) )
+	guard usedin.count <= 1 else {
+		throw PDMkitError.multipleActionStatus(usedin)
 	}
-	let status = usedin[1]
+	let status = usedin.first
 	return status
 }
 

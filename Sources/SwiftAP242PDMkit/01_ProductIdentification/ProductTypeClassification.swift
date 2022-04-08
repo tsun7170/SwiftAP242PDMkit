@@ -68,13 +68,13 @@ public func topLevelCategories(in domain: SDAIPopulationSchema.SchemaInstance) t
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func superCategory(of category: ap242.ePRODUCT_CATEGORY?) throws -> ap242.ePRODUCT_CATEGORY? {
-	let usedin = SDAI.USEDIN(
+	let usedin = Set(SDAI.USEDIN(
 		T: category, 
-		ROLE: \ap242.ePRODUCT_CATEGORY_RELATIONSHIP.SUB_CATEGORY) 
-		guard usedin.size <= 1 else {
-			throw PDMkitError.multipleSuperCategories(usedin.asSwiftType)
+		ROLE: \ap242.ePRODUCT_CATEGORY_RELATIONSHIP.SUB_CATEGORY)) 
+		guard usedin.count <= 1 else {
+			throw PDMkitError.multipleSuperCategories(usedin)
 		}
-		return usedin[1]?.CATEGORY
+	return usedin.first?.CATEGORY
 	}
 
 /// obtains all immediate sub categories of a given category

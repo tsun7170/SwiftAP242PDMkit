@@ -84,13 +84,13 @@ public func managedDocument(of documentReference: ap242.eAPPLIED_DOCUMENT_REFERE
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func managedDocument(of document: ap242.eDOCUMENT?) throws -> ap242.sPRODUCT_OR_FORMATION_OR_DEFINITION? {
-	let usedin = SDAI.USEDIN(
+	let usedin = Set(SDAI.USEDIN(
 		T: document, 
-		ROLE: \ap242.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATING_DOCUMENT)
-	guard usedin.size <= 1 else {
-		throw PDMkitError.multipleDocumentProductEquivalences(usedin.asSwiftType)
+		ROLE: \ap242.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATING_DOCUMENT))
+	guard usedin.count <= 1 else {
+		throw PDMkitError.multipleDocumentProductEquivalences(usedin)
 	}
-	let managedDoc = usedin[1]?.RELATED_PRODUCT
+	let managedDoc = usedin.first?.RELATED_PRODUCT
 	return managedDoc
 }
 

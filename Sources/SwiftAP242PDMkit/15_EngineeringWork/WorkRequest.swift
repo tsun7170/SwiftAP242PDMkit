@@ -123,13 +123,13 @@ public func assignedChangeItems(to workRequest: ap242.eVERSIONED_ACTION_REQUEST?
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum 
 public func status(of workRequest: ap242.eVERSIONED_ACTION_REQUEST?) throws -> ap242.eACTION_REQUEST_STATUS? {
-	let usedin = SDAI.USEDIN(
+	let usedin = Set(SDAI.USEDIN(
 		T: workRequest, 
-		ROLE: \ap242.eACTION_REQUEST_STATUS.ASSIGNED_REQUEST)
-	guard usedin.size <= 1 else {
-		throw PDMkitError.multipleActionRequestStatus(usedin.asSwiftType)
+		ROLE: \ap242.eACTION_REQUEST_STATUS.ASSIGNED_REQUEST))
+	guard usedin.count <= 1 else {
+		throw PDMkitError.multipleActionRequestStatus(usedin)
 	}
-	let status = usedin[1]
+	let status = usedin.first
 	return status
 }
 
