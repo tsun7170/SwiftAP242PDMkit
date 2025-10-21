@@ -4,8 +4,8 @@ PDM schema recommended practices implementation using AP242.
 
 by Tsutomu Yoshida, Minokamo Japan.
 
-This package implements major functionalities corresponding to [the PDM Schema Usage Guide](https://www.cax-if.org/cax/cax_recommPractice.php "CAx recommended practices") for the Swift programing language environments.
-It also implements the necessary functionarities related to [External References recommended practice](https://www.cax-if.org/cax/cax_recommPractice.php "CAx recommended practices").
+This package implements major functionalities corresponding to [the PDM Schema Usage Guide](https://www.mbx-if.org/home/cax/recpractices/ "CAx recommended practices") for the Swift programing language environments.
+It also implements the necessary functionalities related to [External References recommended practice](https://www.mbx-if.org/home/cax/recpractices/ "CAx recommended practices").
 This package utilizes the SwiftSDAIcore and SwiftSDAIap242 packages from the swift STEP code suite.
 
 
@@ -20,5 +20,5 @@ This package utilizes the SwiftSDAIcore and SwiftSDAIap242 packages from the swi
 
 
 ## Development environment
-* Xcode version 12.4
-* macOS Catalina version 10.15.7
+* Xcode version 26.0.1
+* macOS Tahoe 26.0.1

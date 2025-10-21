@@ -22,10 +22,14 @@ import SwiftSDAIap242
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func orgainizations(in domain: SDAIPopulationSchema.SchemaInstance) -> Set<ap242.eORGANIZATION> {
-	let instances = domain.entityExtent(type: ap242.eORGANIZATION.self)
-	return Set(instances)
+/// PDM Implementor Forum
+///
+public func orgainizations(
+	in domain: SDAIPopulationSchema.SchemaInstance
+) -> Set<apPDM.eORGANIZATION.PRef>
+{
+	let instances = domain.entityExtent(type: apPDM.eORGANIZATION.self)
+	return Set( instances.map{$0.pRef} )
 }
 
 
@@ -40,11 +44,15 @@ public func orgainizations(in domain: SDAIPopulationSchema.SchemaInstance) -> Se
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func items(assignedTo organization: ap242.eORGANIZATION?) -> Set<ap242.eAPPLIED_ORGANIZATION_ASSIGNMENT> {
+/// PDM Implementor Forum
+///
+public func items(
+	assignedTo organization: apPDM.eORGANIZATION.PRef?
+) -> Set<apPDM.eAPPLIED_ORGANIZATION_ASSIGNMENT.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: organization, 
-		ROLE: \ap242.eAPPLIED_ORGANIZATION_ASSIGNMENT.ASSIGNED_ORGANIZATION) 
+		ROLE: \apPDM.eAPPLIED_ORGANIZATION_ASSIGNMENT.ASSIGNED_ORGANIZATION) 
 	return Set(usedin)
 }
 
@@ -59,11 +67,15 @@ public func items(assignedTo organization: ap242.eORGANIZATION?) -> Set<ap242.eA
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func organizations(assignedTo item: ap242.sORGANIZATION_ITEM?) -> Set<ap242.eAPPLIED_ORGANIZATION_ASSIGNMENT> {
+/// PDM Implementor Forum
+///
+public func organizations(
+	assignedTo item: apPDM.sORGANIZATION_ITEM?
+) -> Set<apPDM.eAPPLIED_ORGANIZATION_ASSIGNMENT.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: item, 
-		ROLE: \ap242.eAPPLIED_ORGANIZATION_ASSIGNMENT.ITEMS)
+		ROLE: \apPDM.eAPPLIED_ORGANIZATION_ASSIGNMENT.ITEMS)
 	return Set(usedin)
 }
 

@@ -13,7 +13,7 @@ import SwiftSDAIap242
 //MARK: - Configuration Effectivity
 
 
-/// obtians the configuration effectivities associated with a given product configuration
+/// obtains the configuration effectivities associated with a given product configuration
 /// - Parameter productConfiguration: product configuration
 /// - Returns: configuration effectivities
 /// 
@@ -25,11 +25,15 @@ import SwiftSDAIap242
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func usageEffectivities(in productConfiguration: ap242.eCONFIGURATION_DESIGN?) -> Set<ap242.eCONFIGURATION_EFFECTIVITY> {
+/// PDM Implementor Forum
+///
+public func usageEffectivities(
+	in productConfiguration: apPDM.eCONFIGURATION_DESIGN.PRef?
+) -> Set<apPDM.eCONFIGURATION_EFFECTIVITY.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: productConfiguration, 
-		ROLE: \ap242.eCONFIGURATION_EFFECTIVITY.CONFIGURATION) 
+		ROLE: \apPDM.eCONFIGURATION_EFFECTIVITY.CONFIGURATION) 
 	return Set(usedin)
 }
 
@@ -47,11 +51,15 @@ public func usageEffectivities(in productConfiguration: ap242.eCONFIGURATION_DES
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func usageEffectivities(of subAssembly: ap242.ePRODUCT_DEFINITION_RELATIONSHIP?) -> Set<ap242.ePRODUCT_DEFINITION_EFFECTIVITY> {
+/// PDM Implementor Forum
+///
+public func usageEffectivities(
+	of subAssembly: apPDM.ePRODUCT_DEFINITION_RELATIONSHIP.PRef?
+) -> Set<apPDM.ePRODUCT_DEFINITION_EFFECTIVITY.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: subAssembly, 
-		ROLE: \ap242.ePRODUCT_DEFINITION_EFFECTIVITY.USAGE) 
+		ROLE: \apPDM.ePRODUCT_DEFINITION_EFFECTIVITY.USAGE) 
 	return Set(usedin)
 }
 
@@ -68,11 +76,15 @@ public func usageEffectivities(of subAssembly: ap242.ePRODUCT_DEFINITION_RELATIO
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func generalValidityEfectivities(for item:ap242.sEFFECTIVITY_ITEM?) -> Set<ap242.eAPPLIED_EFFECTIVITY_ASSIGNMENT> {
+/// PDM Implementor Forum
+///
+public func generalValidityEfectivities(
+	for item:apPDM.sEFFECTIVITY_ITEM?
+) -> Set<apPDM.eAPPLIED_EFFECTIVITY_ASSIGNMENT.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: item, 
-		ROLE: \ap242.eAPPLIED_EFFECTIVITY_ASSIGNMENT.ITEMS)
+		ROLE: \apPDM.eAPPLIED_EFFECTIVITY_ASSIGNMENT.ITEMS)
 	return Set(usedin)
 }
 
@@ -88,9 +100,13 @@ public func generalValidityEfectivities(for item:ap242.sEFFECTIVITY_ITEM?) -> Se
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func relatedEffectivities(of effectivity: ap242.eEFFECTIVITY?) -> Set<ap242.eEFFECTIVITY_RELATIONSHIP> {
-	let usedin = SDAI.USEDIN(T: effectivity, ROLE: \ap242.eEFFECTIVITY_RELATIONSHIP.RELATING_EFFECTIVITY) 
+/// PDM Implementor Forum
+///
+public func relatedEffectivities(
+	of effectivity: apPDM.eEFFECTIVITY.PRef?
+) -> Set<apPDM.eEFFECTIVITY_RELATIONSHIP.PRef>
+{
+	let usedin = SDAI.USEDIN(T: effectivity, ROLE: \apPDM.eEFFECTIVITY_RELATIONSHIP.RELATING_EFFECTIVITY)
 	return Set(usedin)
 }
 
@@ -103,9 +119,13 @@ public func relatedEffectivities(of effectivity: ap242.eEFFECTIVITY?) -> Set<ap2
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func relatingEffectivities(of effectivity: ap242.eEFFECTIVITY?) -> Set<ap242.eEFFECTIVITY_RELATIONSHIP> {
-	let usedin = SDAI.USEDIN(T: effectivity, ROLE: \ap242.eEFFECTIVITY_RELATIONSHIP.RELATED_EFFECTIVITY) 
+/// PDM Implementor Forum
+///
+public func relatingEffectivities(
+	of effectivity: apPDM.eEFFECTIVITY.PRef?
+) -> Set<apPDM.eEFFECTIVITY_RELATIONSHIP.PRef>
+{
+	let usedin = SDAI.USEDIN(T: effectivity, ROLE: \apPDM.eEFFECTIVITY_RELATIONSHIP.RELATED_EFFECTIVITY)
 	return Set(usedin)
 }
 

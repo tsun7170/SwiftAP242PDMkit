@@ -23,10 +23,14 @@ import SwiftSDAIap242
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func products(in domain: SDAIPopulationSchema.SchemaInstance) -> Set<ap242.ePRODUCT> {
-	let instances = domain.entityExtent(type: ap242.ePRODUCT.self)
-	return Set(instances)
+/// PDM Implementor Forum
+///
+public func products(
+	in domain: SDAIPopulationSchema.SchemaInstance
+) -> Set<apPDM.ePRODUCT.PRef>
+{
+	let instances = domain.entityExtent(type: apPDM.ePRODUCT.self)
+	return Set( instances.map{$0.pRef} )
 }
 
 /// obtains all product masters classified under the specified category and its sub categories
@@ -39,9 +43,13 @@ public func products(in domain: SDAIPopulationSchema.SchemaInstance) -> Set<ap24
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func products(under category: ap242.ePRODUCT_CATEGORY) -> Set<ap242.ePRODUCT> {
-	var result: Set<ap242.ePRODUCT> = []
+/// PDM Implementor Forum
+///
+public func products(
+	under category: apPDM.ePRODUCT_CATEGORY.PRef
+) -> Set<apPDM.ePRODUCT.PRef>
+{
+	var result: Set<apPDM.ePRODUCT.PRef> = []
 	if let productRelated = category.sub_ePRODUCT_RELATED_PRODUCT_CATEGORY {
 		result = productRelated.PRODUCTS.asSwiftType
 	}	
@@ -61,11 +69,15 @@ public func products(under category: ap242.ePRODUCT_CATEGORY) -> Set<ap242.ePROD
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func versions(of productMaster: ap242.ePRODUCT?) -> Set<ap242.ePRODUCT_DEFINITION_FORMATION> {
+/// PDM Implementor Forum
+///
+public func versions(
+	of productMaster: apPDM.ePRODUCT.PRef?
+) -> Set<apPDM.ePRODUCT_DEFINITION_FORMATION.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: productMaster, 
-		ROLE: \ap242.ePRODUCT_DEFINITION_FORMATION.OF_PRODUCT)
+		ROLE: \apPDM.ePRODUCT_DEFINITION_FORMATION.OF_PRODUCT)
 	return Set(usedin)
 }
 
@@ -81,11 +93,15 @@ public func versions(of productMaster: ap242.ePRODUCT?) -> Set<ap242.ePRODUCT_DE
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func views(of productVersion: ap242.ePRODUCT_DEFINITION_FORMATION?) -> Set<ap242.ePRODUCT_DEFINITION> {
+/// PDM Implementor Forum
+///
+public func views(
+	of productVersion: apPDM.ePRODUCT_DEFINITION_FORMATION.PRef?
+) -> Set<apPDM.ePRODUCT_DEFINITION.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: productVersion, 
-		ROLE: \ap242.ePRODUCT_DEFINITION.FORMATION)
+		ROLE: \apPDM.ePRODUCT_DEFINITION.FORMATION)
 	return Set(usedin)
 }
 
@@ -99,11 +115,15 @@ public func views(of productVersion: ap242.ePRODUCT_DEFINITION_FORMATION?) -> Se
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func documentViews(of documentProductVersion: ap242.ePRODUCT_DEFINITION_FORMATION?) -> Set<ap242.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS> {
+/// PDM Implementor Forum
+///
+public func documentViews(
+	of documentProductVersion: apPDM.ePRODUCT_DEFINITION_FORMATION.PRef?
+) -> Set<apPDM.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: documentProductVersion, 
-		ROLE: \ap242.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS.FORMATION)
+		ROLE: \apPDM.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS.FORMATION)
 	return Set(usedin)
 }
 
@@ -119,10 +139,14 @@ public func documentViews(of documentProductVersion: ap242.ePRODUCT_DEFINITION_F
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func masterBase(of productVersion: ap242.ePRODUCT_DEFINITION_FORMATION) -> ap242.ePRODUCT {
+/// PDM Implementor Forum
+///
+public func masterBase(
+	of productVersion: apPDM.ePRODUCT_DEFINITION_FORMATION.PRef
+) -> apPDM.ePRODUCT.PRef
+{
 	let master = productVersion.OF_PRODUCT
-	return master
+	return SDAI.UNWRAP(master)
 }
 
 //MARK: - product definition related
@@ -137,10 +161,14 @@ public func masterBase(of productVersion: ap242.ePRODUCT_DEFINITION_FORMATION) -
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func productDefinitions(in domain: SDAIPopulationSchema.SchemaInstance) -> Set<ap242.ePRODUCT_DEFINITION> {
-	let instances = domain.entityExtent(type: ap242.ePRODUCT_DEFINITION.self)
-	return Set(instances)
+/// PDM Implementor Forum
+///
+public func productDefinitions(
+	in domain: SDAIPopulationSchema.SchemaInstance
+) -> Set<apPDM.ePRODUCT_DEFINITION.PRef>
+{
+	let instances = domain.entityExtent(type: apPDM.ePRODUCT_DEFINITION.self)
+	return Set( instances.map{$0.pRef} )
 }
 
 
@@ -156,10 +184,14 @@ public func productDefinitions(in domain: SDAIPopulationSchema.SchemaInstance) -
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func documentProductDefinitions(in domain: SDAIPopulationSchema.SchemaInstance) -> Set<ap242.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS> {
-	let instances = domain.entityExtent(type: ap242.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS.self)
-	return Set(instances)
+/// PDM Implementor Forum
+///
+public func documentProductDefinitions(
+	in domain: SDAIPopulationSchema.SchemaInstance
+) -> Set<apPDM.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS.PRef>
+{
+	let instances = domain.entityExtent(type: apPDM.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS.self)
+	return Set( instances.map{$0.pRef} )
 }
 
 
@@ -173,8 +205,12 @@ public func documentProductDefinitions(in domain: SDAIPopulationSchema.SchemaIns
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func productDefinitions(under category: ap242.ePRODUCT_CATEGORY) -> Set<ap242.ePRODUCT_DEFINITION> {
+/// PDM Implementor Forum
+///
+public func productDefinitions(
+	under category: apPDM.ePRODUCT_CATEGORY.PRef
+) -> Set<apPDM.ePRODUCT_DEFINITION.PRef>
+{
 	let masters = products(under: category)
 	let pvers = Set(masters.lazy.flatMap { versions(of: $0) })
 	let pdefs = Set(pvers.lazy.flatMap{ views(of: $0) })
@@ -190,9 +226,13 @@ public func productDefinitions(under category: ap242.ePRODUCT_CATEGORY) -> Set<a
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func version(of productDefinition: ap242.ePRODUCT_DEFINITION) -> ap242.ePRODUCT_DEFINITION_FORMATION {
-	return productDefinition.FORMATION
+/// PDM Implementor Forum
+///
+public func version(
+	of productDefinition: apPDM.ePRODUCT_DEFINITION.PRef
+) -> apPDM.ePRODUCT_DEFINITION_FORMATION.PRef
+{
+	return SDAI.UNWRAP(productDefinition.FORMATION)
 }
 
 /// obtains a base product master associated with the product definition
@@ -204,8 +244,12 @@ public func version(of productDefinition: ap242.ePRODUCT_DEFINITION) -> ap242.eP
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func masterBase(of productDefinition: ap242.ePRODUCT_DEFINITION) -> ap242.ePRODUCT {
+/// PDM Implementor Forum
+///
+public func masterBase(
+	of productDefinition: apPDM.ePRODUCT_DEFINITION.PRef
+) -> apPDM.ePRODUCT.PRef
+{
 	let pver = version(of: productDefinition)
 	return masterBase(of: pver)
 }

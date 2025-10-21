@@ -24,10 +24,14 @@ import SwiftSDAIap242
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func productConcepts(in domain: SDAIPopulationSchema.SchemaInstance) -> Set<ap242.ePRODUCT_CONCEPT> {
-	let instances = domain.entityExtent(type: ap242.ePRODUCT_CONCEPT.self)
-	return Set(instances)
+/// PDM Implementor Forum
+///
+public func productConcepts(
+	in domain: SDAIPopulationSchema.SchemaInstance
+) -> Set<apPDM.ePRODUCT_CONCEPT.PRef>
+{
+	let instances = domain.entityExtent(type: apPDM.ePRODUCT_CONCEPT.self)
+	return Set( instances.map{$0.pRef} )
 }
 
 //MARK: - Product Concept Configuration Identification
@@ -43,11 +47,15 @@ public func productConcepts(in domain: SDAIPopulationSchema.SchemaInstance) -> S
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func productConfigurations(for productConcept: ap242.ePRODUCT_CONCEPT?) -> Set<ap242.eCONFIGURATION_ITEM> {
+/// PDM Implementor Forum
+///
+public func productConfigurations(
+	for productConcept: apPDM.ePRODUCT_CONCEPT.PRef?
+) -> Set<apPDM.eCONFIGURATION_ITEM.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: productConcept, 
-		ROLE: \ap242.eCONFIGURATION_ITEM.ITEM_CONCEPT) 
+		ROLE: \apPDM.eCONFIGURATION_ITEM.ITEM_CONCEPT) 
 	return Set(usedin)
 }
 
@@ -63,11 +71,15 @@ public func productConfigurations(for productConcept: ap242.ePRODUCT_CONCEPT?) -
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func configurationDesigns(for productConfiguration: ap242.eCONFIGURATION_ITEM?) -> Set<ap242.eCONFIGURATION_DESIGN> {
+/// PDM Implementor Forum
+///
+public func configurationDesigns(
+	for productConfiguration: apPDM.eCONFIGURATION_ITEM.PRef?
+) -> Set<apPDM.eCONFIGURATION_DESIGN.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: productConfiguration, 
-		ROLE: \ap242.eCONFIGURATION_DESIGN.CONFIGURATION) 
+		ROLE: \apPDM.eCONFIGURATION_DESIGN.CONFIGURATION) 
 	return Set(usedin)
 }
 

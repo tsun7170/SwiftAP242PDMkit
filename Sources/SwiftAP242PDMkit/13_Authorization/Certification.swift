@@ -22,15 +22,19 @@ import SwiftSDAIap242
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func certifications(in domain: SDAIPopulationSchema.SchemaInstance) -> Set<ap242.eCERTIFICATION> {
-	let instances = domain.entityExtent(type: ap242.eCERTIFICATION.self)
-	return Set(instances)
+/// PDM Implementor Forum
+///
+public func certifications(
+	in domain: SDAIPopulationSchema.SchemaInstance
+) -> Set<apPDM.eCERTIFICATION.PRef>
+{
+	let instances = domain.entityExtent(type: apPDM.eCERTIFICATION.self)
+	return Set( instances.map{$0.pRef} )
 }
 
 
 /// obtains items certified by a given certification
-/// - Parameter certificaiton: certification
+/// - Parameter certification: certification
 /// - Returns: certified items
 /// 
 /// # Reference
@@ -39,11 +43,15 @@ public func certifications(in domain: SDAIPopulationSchema.SchemaInstance) -> Se
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func certifiedItems(by certificaiton: ap242.eCERTIFICATION?) -> Set<ap242.eAPPLIED_CERTIFICATION_ASSIGNMENT> {
+/// PDM Implementor Forum
+///
+public func certifiedItems(
+	by certification: apPDM.eCERTIFICATION.PRef?
+) -> Set<apPDM.eAPPLIED_CERTIFICATION_ASSIGNMENT.PRef>
+{
 	let usedin = SDAI.USEDIN(
-		T: certificaiton, 
-		ROLE: \ap242.eAPPLIED_CERTIFICATION_ASSIGNMENT.ASSIGNED_CERTIFICATION) 
+		T: certification, 
+		ROLE: \apPDM.eAPPLIED_CERTIFICATION_ASSIGNMENT.ASSIGNED_CERTIFICATION) 
 	return Set(usedin)
 }
 
@@ -57,11 +65,15 @@ public func certifiedItems(by certificaiton: ap242.eCERTIFICATION?) -> Set<ap242
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func certifications(for item: ap242.sCERTIFIED_ITEM?) -> Set<ap242.eAPPLIED_CERTIFICATION_ASSIGNMENT> {
+/// PDM Implementor Forum
+///
+public func certifications(
+	for item: apPDM.sCERTIFIED_ITEM?
+) -> Set<apPDM.eAPPLIED_CERTIFICATION_ASSIGNMENT.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: item, 
-		ROLE: \ap242.eAPPLIED_CERTIFICATION_ASSIGNMENT.ITEMS) 
+		ROLE: \apPDM.eAPPLIED_CERTIFICATION_ASSIGNMENT.ITEMS) 
 	return Set(usedin)
 }
 

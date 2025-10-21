@@ -22,11 +22,15 @@ import SwiftSDAIap242
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func approvals(on item: ap242.sAPPROVAL_ITEM?) -> Set<ap242.eAPPLIED_APPROVAL_ASSIGNMENT> {
+/// PDM Implementor Forum
+///
+public func approvals(
+	on item: apPDM.sAPPROVAL_ITEM?
+) -> Set<apPDM.eAPPLIED_APPROVAL_ASSIGNMENT.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: item, 
-		ROLE: \ap242.eAPPLIED_APPROVAL_ASSIGNMENT.ITEMS) 
+		ROLE: \apPDM.eAPPLIED_APPROVAL_ASSIGNMENT.ITEMS) 
 	return Set(usedin)
 }
 
@@ -37,15 +41,19 @@ public func approvals(on item: ap242.sAPPROVAL_ITEM?) -> Set<ap242.eAPPLIED_APPR
 /// 
 /// # Reference
 /// 13.2.2 Approval Cycles and Multiple Sign-off Scenarios;
-/// 13.2.1.4 approval_persion_organizaion;
-/// 
+/// 13.2.1.4 approval_person_organization;
+///
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func responsibles(for approval: ap242.eAPPROVAL?) -> Set<ap242.eAPPROVAL_PERSON_ORGANIZATION> {
+/// PDM Implementor Forum
+///
+public func responsibles(
+	for approval: apPDM.eAPPROVAL.PRef?
+) -> Set<apPDM.eAPPROVAL_PERSON_ORGANIZATION.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: approval, 
-		ROLE: \ap242.eAPPROVAL_PERSON_ORGANIZATION.AUTHORIZED_APPROVAL) 
+		ROLE: \apPDM.eAPPROVAL_PERSON_ORGANIZATION.AUTHORIZED_APPROVAL) 
 	return Set(usedin)
 }
 
@@ -60,11 +68,15 @@ public func responsibles(for approval: ap242.eAPPROVAL?) -> Set<ap242.eAPPROVAL_
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func approvalDates(for approval: ap242.eAPPROVAL?) -> Set<ap242.eAPPROVAL_DATE_TIME> {
+/// PDM Implementor Forum
+///
+public func approvalDates(
+	for approval: apPDM.eAPPROVAL.PRef?
+) -> Set<apPDM.eAPPROVAL_DATE_TIME.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: approval, 
-		ROLE: \ap242.eAPPROVAL_DATE_TIME.DATED_APPROVAL) 
+		ROLE: \apPDM.eAPPROVAL_DATE_TIME.DATED_APPROVAL) 
 	return Set(usedin)
 }
 
@@ -79,9 +91,13 @@ public func approvalDates(for approval: ap242.eAPPROVAL?) -> Set<ap242.eAPPROVAL
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func relatedApprovals(to approval: ap242.eAPPROVAL?) -> Set<ap242.eAPPROVAL_RELATIONSHIP> {
-	let usedin = SDAI.USEDIN(T: approval, ROLE: \ap242.eAPPROVAL_RELATIONSHIP.RELATING_APPROVAL) 
+/// PDM Implementor Forum
+///
+public func relatedApprovals(
+	to approval: apPDM.eAPPROVAL.PRef?
+) -> Set<apPDM.eAPPROVAL_RELATIONSHIP.PRef>
+{
+	let usedin = SDAI.USEDIN(T: approval, ROLE: \apPDM.eAPPROVAL_RELATIONSHIP.RELATING_APPROVAL)
 	return Set(usedin)
 }
 
@@ -95,9 +111,13 @@ public func relatedApprovals(to approval: ap242.eAPPROVAL?) -> Set<ap242.eAPPROV
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func relatingApprovals(to approval: ap242.eAPPROVAL?) -> Set<ap242.eAPPROVAL_RELATIONSHIP> {
-	let usedin = SDAI.USEDIN(T: approval, ROLE: \ap242.eAPPROVAL_RELATIONSHIP.RELATED_APPROVAL) 
+/// PDM Implementor Forum
+///
+public func relatingApprovals(
+	to approval: apPDM.eAPPROVAL.PRef?
+) -> Set<apPDM.eAPPROVAL_RELATIONSHIP.PRef>
+{
+	let usedin = SDAI.USEDIN(T: approval, ROLE: \apPDM.eAPPROVAL_RELATIONSHIP.RELATED_APPROVAL)
 	return Set(usedin)
 }
 

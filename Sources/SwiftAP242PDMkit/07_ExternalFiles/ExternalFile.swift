@@ -21,10 +21,14 @@ import SwiftSDAIap242
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func documentFiles(in domain: SDAIPopulationSchema.SchemaInstance) -> Set<ap242.eDOCUMENT_FILE> {
-	let instances = domain.entityExtent(type: ap242.eDOCUMENT_FILE.self)
-	return Set(instances)
+/// PDM Implementor Forum
+///
+public func documentFiles(
+	in domain: SDAIPopulationSchema.SchemaInstance
+) -> Set<apPDM.eDOCUMENT_FILE.PRef>
+{
+	let instances = domain.entityExtent(type: apPDM.eDOCUMENT_FILE.self)
+	return Set( instances.map{$0.pRef} )
 }
 
 /// obtains document files associated with a given product definition
@@ -37,10 +41,15 @@ public func documentFiles(in domain: SDAIPopulationSchema.SchemaInstance) -> Set
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func documentFiles(for documentProductDefinition: ap242.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS) -> Set<ap242.eDOCUMENT_FILE> {
-	let documentIds = documentProductDefinition.DOCUMENTATION_IDS
-	let documentFiles = documentIds.compactMap{ ap242.eDOCUMENT_FILE.cast(from: $0) }
+/// PDM Implementor Forum
+///
+public func documentFiles(
+	for documentProductDefinition: apPDM.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS.PRef
+) -> Set<apPDM.eDOCUMENT_FILE.PRef>
+{
+	guard let documentIds = documentProductDefinition.DOCUMENTATION_IDS
+	else { return [] }
+	let documentFiles = documentIds.compactMap{ apPDM.eDOCUMENT_FILE.cast(from: $0)?.pRef }
 	return Set(documentFiles)
 }
 
@@ -59,11 +68,15 @@ public func documentFiles(for documentProductDefinition: ap242.ePRODUCT_DEFINITI
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func representationType(of documentFile: ap242.eDOCUMENT_FILE?) throws -> ap242.eDOCUMENT_REPRESENTATION_TYPE? {
+/// PDM Implementor Forum
+///
+public func representationType(
+	of documentFile: apPDM.eDOCUMENT_FILE.PRef?
+) throws -> apPDM.eDOCUMENT_REPRESENTATION_TYPE.PRef?
+{
 	let usedin = Set(SDAI.USEDIN(
 		T: documentFile, 
-		ROLE: \ap242.eDOCUMENT_REPRESENTATION_TYPE.REPRESENTED_DOCUMENT) )
+		ROLE: \apPDM.eDOCUMENT_REPRESENTATION_TYPE.REPRESENTED_DOCUMENT) )
 	guard usedin.count <= 1 else {
 		throw PDMkitError.multipleDocumentRepresentationTypes(usedin)
 	}
@@ -83,10 +96,14 @@ public func representationType(of documentFile: ap242.eDOCUMENT_FILE?) throws ->
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func type(of documentFile: ap242.eDOCUMENT_FILE) -> ap242.eDOCUMENT_TYPE {
+/// PDM Implementor Forum
+///
+public func type(
+	of documentFile: apPDM.eDOCUMENT_FILE.PRef
+) -> apPDM.eDOCUMENT_TYPE.PRef
+{
 	let type = documentFile.KIND
-	return type
+	return SDAI.UNWRAP(type)
 }
 
 
@@ -103,12 +120,15 @@ public func type(of documentFile: ap242.eDOCUMENT_FILE) -> ap242.eDOCUMENT_TYPE 
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func version(of documentFile: ap242.eDOCUMENT_FILE?) throws -> ap242.eAPPLIED_IDENTIFICATION_ASSIGNMENT? {
+/// PDM Implementor Forum
+///
+public func version(
+	of documentFile: apPDM.eDOCUMENT_FILE.PRef?
+) throws -> apPDM.eAPPLIED_IDENTIFICATION_ASSIGNMENT.PRef? {
 	let usedin = Set(SDAI.USEDIN(
 		T: documentFile, 
-		ROLE: \ap242.eAPPLIED_IDENTIFICATION_ASSIGNMENT.ITEMS) )
-	let versions = usedin.filter{ $0.ROLE.NAME == "version" }
+		ROLE: \apPDM.eAPPLIED_IDENTIFICATION_ASSIGNMENT.ITEMS) )
+	let versions = usedin.filter{ $0.ROLE?.NAME == "version" }
 	guard versions.count <= 1 else {
 		throw PDMkitError.multipleAssignedVersions(versions)
 	}

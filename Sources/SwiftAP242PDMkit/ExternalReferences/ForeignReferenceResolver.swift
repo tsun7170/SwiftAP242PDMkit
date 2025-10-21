@@ -17,7 +17,11 @@ extension ExternalReferenceLoader {
 			case referenceUnknown
 		}
 		
-		open func fixupExternalReference(_ externalReference: DocumentSourceProperty, parent: DocumentSourceProperty) -> DocumentSourceProperty {
+		open func fixupExternalReference(
+			_ externalReference: DocumentSourceProperty,
+			parent: DocumentSourceProperty
+		) -> DocumentSourceProperty
+		{
 			var result = externalReference
 			
 			result.path = parent.path
@@ -29,9 +33,14 @@ extension ExternalReferenceLoader {
 			return result
 		}
 		
-		open func disposition(of externalReference: DocumentSourceProperty) -> ExternalReferenceDisposition {
-			guard externalReference.mechanism == "URL" || externalReference.mechanism == "external document id and location" else { return .referenceUnknown }
-			
+		open func disposition(
+			of externalReference: DocumentSourceProperty
+		) -> ExternalReferenceDisposition
+		{
+			guard externalReference.mechanism == "URL" ||
+						externalReference.mechanism == "external document id and location"
+			else { return .referenceUnknown }
+
 			let url = URL(fileURLWithPath: (externalReference.path ?? ".") + "/" + externalReference.fileName)
 			let ext = url.pathExtension.uppercased()
 			guard (ext == "STP")||(ext == "P21") else { return .referenceUnknown }
@@ -39,10 +48,13 @@ extension ExternalReferenceLoader {
 			return .load
 		}
 		
-		open func characterSteam(from externalReference: DocumentSourceProperty) -> AnyCharacterStream? {
+		open func characterSteam(
+			from externalReference: DocumentSourceProperty
+		) -> AnyCharacterStream?
+		{
 			let url = URL(fileURLWithPath: (externalReference.path ?? ".") + "/" + externalReference.fileName)
 			do {
-				let source = try String(contentsOf: url)
+				let source = try String(contentsOf: url, encoding: .utf8)
 				let stream = source.makeIterator()
 				return AnyCharacterStream(stream)
 			}
@@ -53,3 +65,4 @@ extension ExternalReferenceLoader {
 		
 	}
 }
+

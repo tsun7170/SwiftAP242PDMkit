@@ -21,10 +21,14 @@ import SwiftSDAIap242
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func generalProperties(in domain: SDAIPopulationSchema.SchemaInstance) -> Set<ap242.eGENERAL_PROPERTY> {
-	let instances = domain.entityExtent(type: ap242.eGENERAL_PROPERTY.self)
-	return Set(instances)
+/// PDM Implementor Forum
+///
+public func generalProperties(
+	in domain: SDAIPopulationSchema.SchemaInstance
+) -> Set<apPDM.eGENERAL_PROPERTY.PRef>
+{
+	let instances = domain.entityExtent(type: apPDM.eGENERAL_PROPERTY.self)
+	return Set( instances.map{$0.pRef} )
 }
 
 
@@ -38,11 +42,15 @@ public func generalProperties(in domain: SDAIPopulationSchema.SchemaInstance) ->
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func associations(of generalPropertyType: ap242.eGENERAL_PROPERTY?) -> Set<ap242.eGENERAL_PROPERTY_ASSOCIATION> {
+/// PDM Implementor Forum
+///
+public func associations(
+	of generalPropertyType: apPDM.eGENERAL_PROPERTY.PRef?
+) -> Set<apPDM.eGENERAL_PROPERTY_ASSOCIATION.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: generalPropertyType, 
-		ROLE: \ap242.eGENERAL_PROPERTY_ASSOCIATION.BASE_DEFINITION) 
+		ROLE: \apPDM.eGENERAL_PROPERTY_ASSOCIATION.BASE_DEFINITION) 
 	return Set(usedin)
 }
 
@@ -57,10 +65,14 @@ public func associations(of generalPropertyType: ap242.eGENERAL_PROPERTY?) -> Se
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func propertyDefinition(of generalPropertyAssociation: ap242.eGENERAL_PROPERTY_ASSOCIATION) -> ap242.sDERIVED_PROPERTY_SELECT {
+/// PDM Implementor Forum
+///
+public func propertyDefinition(
+	of generalPropertyAssociation: apPDM.eGENERAL_PROPERTY_ASSOCIATION.PRef
+) -> apPDM.sDERIVED_PROPERTY_SELECT
+{
 	let propDef = generalPropertyAssociation.DERIVED_DEFINITION
-	return propDef
+	return SDAI.UNWRAP(propDef)
 }
 
 
@@ -74,11 +86,15 @@ public func propertyDefinition(of generalPropertyAssociation: ap242.eGENERAL_PRO
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func relatedGeneralProperties(of generalPropertyType: ap242.eGENERAL_PROPERTY?) -> Set<ap242.eGENERAL_PROPERTY_RELATIONSHIP> {
+/// PDM Implementor Forum
+///
+public func relatedGeneralProperties(
+	of generalPropertyType: apPDM.eGENERAL_PROPERTY.PRef?
+) -> Set<apPDM.eGENERAL_PROPERTY_RELATIONSHIP.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: generalPropertyType, 
-		ROLE: \ap242.eGENERAL_PROPERTY_RELATIONSHIP.RELATING_PROPERTY) 
+		ROLE: \apPDM.eGENERAL_PROPERTY_RELATIONSHIP.RELATING_PROPERTY) 
 	return Set(usedin)
 }
 
@@ -93,11 +109,15 @@ public func relatedGeneralProperties(of generalPropertyType: ap242.eGENERAL_PROP
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func relatingGeneralProperties(of generalPropertyType: ap242.eGENERAL_PROPERTY?) -> Set<ap242.eGENERAL_PROPERTY_RELATIONSHIP> {
+/// PDM Implementor Forum
+///
+public func relatingGeneralProperties(
+	of generalPropertyType: apPDM.eGENERAL_PROPERTY.PRef?
+) -> Set<apPDM.eGENERAL_PROPERTY_RELATIONSHIP.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: generalPropertyType, 
-		ROLE: \ap242.eGENERAL_PROPERTY_RELATIONSHIP.RELATED_PROPERTY)
+		ROLE: \apPDM.eGENERAL_PROPERTY_RELATIONSHIP.RELATED_PROPERTY)
 	return Set(usedin)
 }
 

@@ -22,10 +22,14 @@ import SwiftSDAIap242
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func contexts(of productMaster: ap242.ePRODUCT) -> Set<ap242.ePRODUCT_CONTEXT> {
+/// PDM Implementor Forum
+///
+public func contexts(
+	of productMaster: apPDM.ePRODUCT.PRef
+) -> Set<apPDM.ePRODUCT_CONTEXT.PRef>
+{
 	let contexts = productMaster.FRAME_OF_REFERENCE
-	return contexts.asSwiftType
+	return contexts?.asSwiftType ?? []
 }
 
 
@@ -39,10 +43,14 @@ public func contexts(of productMaster: ap242.ePRODUCT) -> Set<ap242.ePRODUCT_CON
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func applicationContext(of productContext: ap242.ePRODUCT_CONTEXT) -> ap242.eAPPLICATION_CONTEXT {
+/// PDM Implementor Forum
+///
+public func applicationContext(
+	of productContext: apPDM.ePRODUCT_CONTEXT.PRef
+) -> apPDM.eAPPLICATION_CONTEXT.PRef
+{
 	let appContext = productContext.FRAME_OF_REFERENCE
-	return appContext
+	return SDAI.UNWRAP(appContext)
 }
 
 
@@ -53,14 +61,18 @@ public func applicationContext(of productContext: ap242.ePRODUCT_CONTEXT) -> ap2
 /// # Reference
 /// 1.1.2.2 application_context;
 /// 1.1.2.4 product_definition_context;
-/// 1.1.2.5 product_deginition_context_association;
-/// 
+/// 1.1.2.5 product_definition_context_association;
+///
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func applicationContext(of productDefinitionContext: ap242.ePRODUCT_DEFINITION_CONTEXT) -> ap242.eAPPLICATION_CONTEXT {
+/// PDM Implementor Forum
+///
+public func applicationContext(
+	of productDefinitionContext: apPDM.ePRODUCT_DEFINITION_CONTEXT.PRef
+) -> apPDM.eAPPLICATION_CONTEXT.PRef
+{
 	let appContext = productDefinitionContext.FRAME_OF_REFERENCE
-	return appContext
+	return SDAI.UNWRAP(appContext)
 }
 
 
@@ -74,11 +86,15 @@ public func applicationContext(of productDefinitionContext: ap242.ePRODUCT_DEFIN
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func applicationProtocol(of applicationContext: ap242.eAPPLICATION_CONTEXT?) throws -> ap242.eAPPLICATION_PROTOCOL_DEFINITION? {
+/// PDM Implementor Forum
+///
+public func applicationProtocol(
+	of applicationContext: apPDM.eAPPLICATION_CONTEXT.PRef?
+) throws -> apPDM.eAPPLICATION_PROTOCOL_DEFINITION.PRef?
+{
 	let usedin = Set(SDAI.USEDIN(
 		T: applicationContext, 
-		ROLE: \ap242.eAPPLICATION_PROTOCOL_DEFINITION.APPLICATION)) 
+		ROLE: \apPDM.eAPPLICATION_PROTOCOL_DEFINITION.APPLICATION)) 
 	guard usedin.count <= 1 else {
 		throw PDMkitError.multipleApplicationProtocols(usedin)
 	}
@@ -97,10 +113,14 @@ public func applicationProtocol(of applicationContext: ap242.eAPPLICATION_CONTEX
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func primaryContext(of productDefinition: ap242.ePRODUCT_DEFINITION) -> ap242.ePRODUCT_DEFINITION_CONTEXT {
+/// PDM Implementor Forum
+///
+public func primaryContext(
+	of productDefinition: apPDM.ePRODUCT_DEFINITION.PRef
+) -> apPDM.ePRODUCT_DEFINITION_CONTEXT.PRef
+{
 	let prim = productDefinition.FRAME_OF_REFERENCE
-	return prim
+	return SDAI.UNWRAP(prim)
 }
 
 
@@ -110,15 +130,19 @@ public func primaryContext(of productDefinition: ap242.ePRODUCT_DEFINITION) -> a
 /// 
 /// # Reference
 /// 1.1.2.4 product_definition_context;
-/// 1.1.2.5 product_deginition_context_association;
+/// 1.1.2.5 product_definition_context_association;
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func additionalContexts(of productDefinition: ap242.ePRODUCT_DEFINITION?) -> Set<ap242.ePRODUCT_DEFINITION_CONTEXT_ASSOCIATION> {
+/// PDM Implementor Forum
+///
+public func additionalContexts(
+	of productDefinition: apPDM.ePRODUCT_DEFINITION.PRef?
+) -> Set<apPDM.ePRODUCT_DEFINITION_CONTEXT_ASSOCIATION.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: productDefinition, 
-		ROLE: \ap242.ePRODUCT_DEFINITION_CONTEXT_ASSOCIATION.DEFINITION)
+		ROLE: \apPDM.ePRODUCT_DEFINITION_CONTEXT_ASSOCIATION.DEFINITION)
 	let contexts = Set(usedin)
 	return contexts
 }

@@ -22,10 +22,14 @@ import SwiftSDAIap242
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func contracts(in domain: SDAIPopulationSchema.SchemaInstance) -> Set<ap242.eCONTRACT> {
-	let instances = domain.entityExtent(type: ap242.eCONTRACT.self)
-	return Set(instances)
+/// PDM Implementor Forum
+///
+public func contracts(
+	in domain: SDAIPopulationSchema.SchemaInstance
+) -> Set<apPDM.eCONTRACT.PRef>
+{
+	let instances = domain.entityExtent(type: apPDM.eCONTRACT.self)
+	return Set( instances.map{$0.pRef} )
 }
 
 
@@ -40,11 +44,15 @@ public func contracts(in domain: SDAIPopulationSchema.SchemaInstance) -> Set<ap2
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func contracts(binding item: ap242.sCONTRACT_ITEM?) -> Set<ap242.eAPPLIED_CONTRACT_ASSIGNMENT> {
+/// PDM Implementor Forum
+///
+public func contracts(
+	binding item: apPDM.sCONTRACT_ITEM?
+) -> Set<apPDM.eAPPLIED_CONTRACT_ASSIGNMENT.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: item, 
-		ROLE: \ap242.eAPPLIED_CONTRACT_ASSIGNMENT.ITEMS) 
+		ROLE: \apPDM.eAPPLIED_CONTRACT_ASSIGNMENT.ITEMS) 
 	return Set(usedin)
 }
 
@@ -63,9 +71,13 @@ public func contracts(binding item: ap242.sCONTRACT_ITEM?) -> Set<ap242.eAPPLIED
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func boundItems(by contract: ap242.eCONTRACT?) -> Set<ap242.eAPPLIED_CONTRACT_ASSIGNMENT> {
-	let usedin = SDAI.USEDIN(T: contract, ROLE: \ap242.eAPPLIED_CONTRACT_ASSIGNMENT.ASSIGNED_CONTRACT) 
+/// PDM Implementor Forum
+///
+public func boundItems(
+	by contract: apPDM.eCONTRACT.PRef?
+) -> Set<apPDM.eAPPLIED_CONTRACT_ASSIGNMENT.PRef>
+{
+	let usedin = SDAI.USEDIN(T: contract, ROLE: \apPDM.eAPPLIED_CONTRACT_ASSIGNMENT.ASSIGNED_CONTRACT)
 	return Set(usedin)
 }
 

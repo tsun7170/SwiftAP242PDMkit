@@ -19,53 +19,73 @@ public class ExternalReferenceLoader: SDAI.Object {
 	}
 	private var exchangeStructures: [String:P21Decode.ExchangeStructure] = [:]
 	
-	public var sdaiModels: AnySequence<SDAIPopulationSchema.SdaiModel> {
+	public var sdaiModels: some Collection<SDAIPopulationSchema.SdaiModel> {
 		let models = externalReferences.values.lazy.compactMap({$0.exchangeStructure?.sdaiModels}).joined()
-		return AnySequence(models)
+		return models
 	}
 	
 	private var decoder: P21Decode.Decoder
 	private var monitor: ActivityMonitor?
 	private var resolver: ForeignReferenceResolver
 
-	public init?(repository: SDAISessionSchema.SdaiRepository,
-							schemaList: P21Decode.SchemaList,
-							masterFile: URL,
-							monitor: ActivityMonitor?,
-							foreginReferenceResolver: ForeignReferenceResolver = ForeignReferenceResolver() 
-	) {
-		guard let decoder = P21Decode.Decoder(
-						output: repository, 
-						schemaList: schemaList,
-						monitor: monitor,
-						foreginReferenceResolver: foreginReferenceResolver) 
+	public init?(
+		repository: SDAISessionSchema.SdaiRepository,
+		schemaList: P21Decode.SchemaList,
+		masterFile: URL,
+		monitor: ActivityMonitor?,
+		foreignReferenceResolver: ForeignReferenceResolver = ForeignReferenceResolver()
+	)
+	{
+		guard let decoder =
+						P21Decode.Decoder(
+							output: repository,
+							schemaList: schemaList,
+							monitor: monitor,
+							foreignReferenceResolver: foreignReferenceResolver)
 		else { return nil }
 		self.decoder = decoder
 		self.monitor = monitor
-		self.resolver = foreginReferenceResolver
+		self.resolver = foreignReferenceResolver
 
 		let master = ExternalReference(asTopLevel: masterFile)
 		self.externalReferenceList.append(master)
-		
-		super.init()
 	}
 	
-	public func decode() {
+	/// decode a tree of P21 exchange data files starting from the masterFile
+	/// - Parameter transaction: RW transaction for SDAI-model construction
+	/// 
+	public func decode(
+		transaction: SDAISessionSchema.SdaiTransactionRW
+	)
+	{
 		var needToLoad = true
 		while needToLoad {
 			needToLoad = false
 			
-			for externalReference in externalReferences.values {
+			for externalReference in externalReferenceList {
 				if externalReference.status != .notLoadedYet { continue }
-				if load(externalReference: externalReference) {
-					needToLoad = true					
+				if load(
+					externalReference: externalReference,
+					transaction: transaction)
+				{
+					needToLoad = true
 				}
-			}
-			
-		}
+			}//for
+
+		}//while
 	}
 	
-	public func load(externalReference: ExternalReference) -> Bool {
+	/// load a specified external reference p21 data stream
+	/// - Parameters:
+	///   - externalReference: external reference to a p21 data stream
+	///   - transaction: RW transaction for decoding action
+	/// - Returns: true when child external reference is found
+	///
+	public func load(
+		externalReference: ExternalReference,
+		transaction: SDAISessionSchema.SdaiTransactionRW
+	) -> Bool
+	{
 		monitor?.startedLoading(externalReference: externalReference)
 		defer{ monitor?.completedLoading(externalReference: externalReference) }
 		
@@ -77,23 +97,42 @@ public class ExternalReferenceLoader: SDAI.Object {
 						return false
 					}
 					
-					guard let stream = resolver.characterSteam(from: sourceProperty) else {
+					guard let p21stream = resolver.characterSteam(from: sourceProperty)
+					else {
 						externalReference.status = .inError(.referenceNotFound(sourceProperty))
 						return false
 					}
-					guard let _ = decoder.decode(input: stream),
-								let exchange = decoder.exchangeStructrure else {
+					guard
+						let models = decoder.decode(input: p21stream, transaction: transaction),
+						let exchange = decoder.exchangeStructure
+					else {
 						externalReference.status = .inError(.decoderError(decoder.error))
 						return false
 					}
-					
+
+					guard let schemaInstance = transaction.createSchemaInstance(
+						repository: decoder.repository,
+						name: externalReference.name,
+						schema: apPDM.schemaDefinition)
+					else {
+						externalReference.status = .inError(.sdaiError(transaction.owningSession!.errors))
+						return false
+					}
+
+					for model in models {
+						let _ = transaction.addSdaiModel(
+							instance: schemaInstance, model: model)
+					}
+
 					exchangeStructures[externalReference.name] = exchange
 					externalReference.status = .loaded(exchange)
-					externalReference.sourceProperties = [sourceProperty]
-					let children = identifyExternalReferences(parent: externalReference)
-					externalReferenceList.append(contentsOf: children)
-					return true
-					
+
+					let children = identifyExternalReferences(
+						parent: externalReference,
+						parentInstance: schemaInstance)
+
+					return !children.isEmpty
+
 				case .suspendLoading:
 					externalReference.status = .loadPending
 					return false
@@ -106,25 +145,27 @@ public class ExternalReferenceLoader: SDAI.Object {
 		return false
 	}
 	
-	private func identifyExternalReferences(parent: ExternalReference) -> [ExternalReference] {
-		var result: [ExternalReference] = []
-		guard let models = parent.exchangeStructure?.sdaiModels else { return result }
-		
-		let repository = decoder.repository
-		let schemaInstance = repository.createSchemaInstance(
-			name: parent.name + ".TEMP", 
-			schema: ap242.schemaDefinition )
-		schemaInstance.add(models: models)
-		schemaInstance.mode = .readOnly
-		
-		for documentFile in documentFiles(in: schemaInstance) {
-			let child = ExternalReference(upStream: parent, documentFile: documentFile, resolver: resolver)
-			result.append(child)
+	private func identifyExternalReferences(
+		parent: ExternalReference,
+		parentInstance: SDAIPopulationSchema.SchemaInstance
+	) -> [ExternalReference]
+	{
+		var children: [ExternalReference] = []
+
+		for documentFile in documentFiles(in: parentInstance) {
+			let child = ExternalReference(
+				serial: externalReferenceList.count,
+				upStream: parent,
+				documentFile: documentFile,
+				resolver: resolver)
+
+			externalReferenceList.append(child)
+			children.append(child)
 		}
 		
-		repository.deleteSchemaInstance(instance: schemaInstance)
-		monitor?.identified(externalReferences: result, originatedFrom: parent)
-		return result
+		monitor?.identified(externalReferences: children, originatedFrom: parent)
+
+		return children
 	}
 
 }

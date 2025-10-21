@@ -21,9 +21,13 @@ import SwiftSDAIap242
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func relatedProductDefinitions(of productDefinition: ap242.ePRODUCT_DEFINITION?) -> Set<ap242.ePRODUCT_DEFINITION_RELATIONSHIP> {
-	let usedin = SDAI.USEDIN(T: productDefinition, ROLE: \ap242.ePRODUCT_DEFINITION_RELATIONSHIP.RELATING_PRODUCT_DEFINITION)
+/// PDM Implementor Forum
+///
+public func relatedProductDefinitions(
+	of productDefinition: apPDM.ePRODUCT_DEFINITION.PRef?
+) -> Set<apPDM.ePRODUCT_DEFINITION_RELATIONSHIP.PRef>
+{
+	let usedin = SDAI.USEDIN(T: productDefinition, ROLE: \apPDM.ePRODUCT_DEFINITION_RELATIONSHIP.RELATING_PRODUCT_DEFINITION)
 	return Set(usedin)
 }
 
@@ -37,8 +41,12 @@ public func relatedProductDefinitions(of productDefinition: ap242.ePRODUCT_DEFIN
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func relatingProductDefinitions(of productDefinition: ap242.ePRODUCT_DEFINITION?) -> Set<ap242.ePRODUCT_DEFINITION_RELATIONSHIP> {
-	let usedin = SDAI.USEDIN(T: productDefinition, ROLE: \ap242.ePRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION)
+/// PDM Implementor Forum
+///
+public func relatingProductDefinitions(
+	of productDefinition: apPDM.ePRODUCT_DEFINITION.PRef?
+) -> Set<apPDM.ePRODUCT_DEFINITION_RELATIONSHIP.PRef>
+{
+	let usedin = SDAI.USEDIN(T: productDefinition, ROLE: \apPDM.ePRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION)
 	return Set(usedin)
 }

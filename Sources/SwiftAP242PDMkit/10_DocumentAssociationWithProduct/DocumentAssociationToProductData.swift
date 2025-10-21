@@ -23,9 +23,13 @@ import SwiftSDAIap242
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func associatedDocuments(of productDefinition: ap242.ePRODUCT_DEFINITION?) -> Set<ap242.eAPPLIED_DOCUMENT_REFERENCE> {
-	if let item = ap242.sDOCUMENT_REFERENCE_ITEM(productDefinition) {
+/// PDM Implementor Forum
+///
+public func associatedDocuments(
+	of productDefinition: apPDM.ePRODUCT_DEFINITION.PRef?
+) -> Set<apPDM.eAPPLIED_DOCUMENT_REFERENCE.PRef>
+{
+	if let item = apPDM.sDOCUMENT_REFERENCE_ITEM(productDefinition) {
 		return associatedDocuments(of: item)
 	}
 	return []
@@ -41,30 +45,38 @@ public func associatedDocuments(of productDefinition: ap242.ePRODUCT_DEFINITION?
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func associatedDocuments(of item: ap242.sDOCUMENT_REFERENCE_ITEM?) -> Set<ap242.eAPPLIED_DOCUMENT_REFERENCE> {
+/// PDM Implementor Forum
+///
+public func associatedDocuments(
+	of item: apPDM.sDOCUMENT_REFERENCE_ITEM?
+) -> Set<apPDM.eAPPLIED_DOCUMENT_REFERENCE.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: item, 
-		ROLE: \ap242.eAPPLIED_DOCUMENT_REFERENCE.ITEMS) 
+		ROLE: \apPDM.eAPPLIED_DOCUMENT_REFERENCE.ITEMS) 
 	return Set(usedin)
 }
 
 
 /// obtains a managed document product for a given document reference
 /// - Parameter documentReference: document reference
-/// - Throws: multipledocumentProductEquivalences
+/// - Throws: multipleDocumentProductEquivalences
 /// - Returns: managed document product if associated
 /// 
 /// # Reference
 /// 10.1 Document Reference;
-/// 10.1.1 document_product_qeuqivalence;
+/// 10.1.1 document_product_equivalence;
 /// 10.1.2 document;
 /// 10.1.4 applied_document_reference;
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func managedDocument(of documentReference: ap242.eAPPLIED_DOCUMENT_REFERENCE) throws -> ap242.sPRODUCT_OR_FORMATION_OR_DEFINITION? {
+/// PDM Implementor Forum
+///
+public func managedDocument(
+	of documentReference: apPDM.eAPPLIED_DOCUMENT_REFERENCE.PRef
+) throws -> apPDM.sPRODUCT_OR_FORMATION_OR_DEFINITION?
+{
 	let document = documentReference.ASSIGNED_DOCUMENT
 	return try managedDocument(of: document)
 }
@@ -72,21 +84,25 @@ public func managedDocument(of documentReference: ap242.eAPPLIED_DOCUMENT_REFERE
 
 /// obtains a managed document product for a given document
 /// - Parameter document: document
-/// - Throws: multipledocumentProductEquivalences
+/// - Throws: multipleDocumentProductEquivalences
 /// - Returns: managed document product if associated
 /// 
 /// # Reference
 /// 10.1 Document Reference;
-/// 10.1.1 document_product_qeuqivalence;
+/// 10.1.1 document_product_equivalence;
 /// 10.1.2 document;
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func managedDocument(of document: ap242.eDOCUMENT?) throws -> ap242.sPRODUCT_OR_FORMATION_OR_DEFINITION? {
+/// PDM Implementor Forum
+///
+public func managedDocument(
+	of document: apPDM.eDOCUMENT.PRef?
+) throws -> apPDM.sPRODUCT_OR_FORMATION_OR_DEFINITION?
+{
 	let usedin = Set(SDAI.USEDIN(
 		T: document, 
-		ROLE: \ap242.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATING_DOCUMENT))
+		ROLE: \apPDM.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATING_DOCUMENT))
 	guard usedin.count <= 1 else {
 		throw PDMkitError.multipleDocumentProductEquivalences(usedin)
 	}
@@ -106,8 +122,12 @@ public func managedDocument(of document: ap242.eDOCUMENT?) throws -> ap242.sPROD
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func documentFile(of documentReference: ap242.eAPPLIED_DOCUMENT_REFERENCE) -> ap242.eDOCUMENT_FILE? {
+/// PDM Implementor Forum
+///
+public func documentFile(
+	of documentReference: apPDM.eAPPLIED_DOCUMENT_REFERENCE.PRef
+) -> apPDM.eDOCUMENT_FILE.PRef?
+{
 	let document = documentReference.ASSIGNED_DOCUMENT
 	return documentFile(as: document)
 }
@@ -123,10 +143,14 @@ public func documentFile(of documentReference: ap242.eAPPLIED_DOCUMENT_REFERENCE
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func documentFile(as document: ap242.eDOCUMENT) -> ap242.eDOCUMENT_FILE? {
-	let docFile = document.sub_eDOCUMENT_FILE
-	return docFile
+/// PDM Implementor Forum
+///
+public func documentFile(
+	as document: apPDM.eDOCUMENT.PRef?
+) -> apPDM.eDOCUMENT_FILE.PRef?
+{
+	let docFile = document?.sub_eDOCUMENT_FILE
+	return docFile?.pRef
 }
 
 
@@ -142,25 +166,33 @@ public func documentFile(as document: ap242.eDOCUMENT) -> ap242.eDOCUMENT_FILE? 
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func documentReferences(of documentFile: ap242.eDOCUMENT_FILE) -> Set<ap242.eDOCUMENT> {
-	var result:Set<ap242.eDOCUMENT> = [documentFile.super_eDOCUMENT]
-	
+/// PDM Implementor Forum
+///
+public func documentReferences(
+	of documentFile: apPDM.eDOCUMENT_FILE.PRef
+) -> Set<apPDM.eDOCUMENT.PRef>
+{
+	var result:Set<apPDM.eDOCUMENT.PRef> = [SDAI.UNWRAP(documentFile.super_eDOCUMENT?.pRef)]
+
 	let usedin = SDAI.USEDIN(
 		T: documentFile, 
-		ROLE: \ap242.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS.DOCUMENTATION_IDS) 
+		ROLE: \apPDM.ePRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS.DOCUMENTATION_IDS) 
 	
 	for definition in usedin {
-		let usedin = SDAI.USEDIN(
-			T: definition, 
-			ROLE: \ap242.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATED_PRODUCT).asSwiftType 
-			+ SDAI.USEDIN(
-				T: definition.FORMATION, 
-				ROLE: \ap242.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATED_PRODUCT).asSwiftType
-			+ SDAI.USEDIN(
-				T: definition.FORMATION.OF_PRODUCT, 
-				ROLE: \ap242.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATED_PRODUCT).asSwiftType
-		result.formUnion(usedin.map({$0.RELATING_DOCUMENT}))		
+		let usedin =
+		SDAI.USEDIN(
+			T: definition,
+			ROLE: \apPDM.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATED_PRODUCT).asSwiftType
+		+
+		SDAI.USEDIN(
+			T: definition.FORMATION,
+			ROLE: \apPDM.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATED_PRODUCT).asSwiftType
+		+
+		SDAI.USEDIN(
+			T: definition.FORMATION?.OF_PRODUCT,
+			ROLE: \apPDM.eDOCUMENT_PRODUCT_EQUIVALENCE.RELATED_PRODUCT).asSwiftType
+
+		result.formUnion(usedin.compactMap({$0.RELATING_DOCUMENT}))
 	}
 	return result
 }
@@ -176,15 +208,22 @@ public func documentReferences(of documentFile: ap242.eDOCUMENT_FILE) -> Set<ap2
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func applications(of documentReferences:Set<ap242.eDOCUMENT>) -> Set<ap242.eAPPLIED_DOCUMENT_REFERENCE> {
-	var result:Set<ap242.eAPPLIED_DOCUMENT_REFERENCE> = []
+/// PDM Implementor Forum
+///
+public func applications(
+	of documentReferences:Set<apPDM.eDOCUMENT.PRef>
+) -> Set<apPDM.eAPPLIED_DOCUMENT_REFERENCE.PRef>
+{
+	var result:Set<apPDM.eAPPLIED_DOCUMENT_REFERENCE.PRef> = []
+
 	for document in documentReferences {
 		let usedin = SDAI.USEDIN(
 			T: document, 
-			ROLE: \ap242.eAPPLIED_DOCUMENT_REFERENCE.ASSIGNED_DOCUMENT)
+			ROLE: \apPDM.eAPPLIED_DOCUMENT_REFERENCE.ASSIGNED_DOCUMENT)
+
 		result.formUnion(usedin)
 	}
+
 	return result
 }
 
@@ -193,23 +232,29 @@ public func applications(of documentReferences:Set<ap242.eDOCUMENT>) -> Set<ap24
 /// - Returns: all applications to shape representation property
 ///
 /// # Reference
-/// 3.2.3 Ralating Externally Defined Part Shape to an External File
-/// 
+/// 3.2.3 Relating Externally Defined Part Shape to an External File
+///
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func definitionalShapeApplications(of documentReferences:Set<ap242.eDOCUMENT>) -> Set<ap242.ePROPERTY_DEFINITION_REPRESENTATION> {
-	var result:Set<ap242.ePROPERTY_DEFINITION_REPRESENTATION> = []
+/// PDM Implementor Forum
+///
+public func definitionalShapeApplications(
+	of documentReferences:Set<apPDM.eDOCUMENT.PRef>
+) -> Set<apPDM.ePROPERTY_DEFINITION_REPRESENTATION.PRef>
+{
+	var result:Set<apPDM.ePROPERTY_DEFINITION_REPRESENTATION.PRef> = []
+
 	for document in documentReferences {
 		let usedin = SDAI.USEDIN(
 			T: document, 
-			ROLE: \ap242.ePROPERTY_DEFINITION.DEFINITION) 
+			ROLE: \apPDM.ePROPERTY_DEFINITION.DEFINITION) 
 		
-		for externalDefinition in usedin
-			.filter({ $0.NAME.asSwiftType == "external definition" }) {
+		for externalDefinition in
+					usedin.filter({ $0.NAME?.asSwiftType == "external definition" })
+		{
 			let usedin = SDAI.USEDIN(
-				T: externalDefinition, 
-				ROLE: \ap242.ePROPERTY_DEFINITION_REPRESENTATION.DEFINITION) 
+				T: externalDefinition,
+				ROLE: \apPDM.ePROPERTY_DEFINITION_REPRESENTATION.DEFINITION)
 			result.formUnion(usedin)
 		}
 	}
@@ -229,9 +274,13 @@ public func definitionalShapeApplications(of documentReferences:Set<ap242.eDOCUM
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func associatedDocumentPortions(of productDefinition: ap242.ePRODUCT_DEFINITION?) -> Set<ap242.eAPPLIED_DOCUMENT_USAGE_CONSTRAINT_ASSIGNMENT> {
-	if let item = ap242.sDOCUMENT_REFERENCE_ITEM(productDefinition) {
+/// PDM Implementor Forum
+///
+public func associatedDocumentPortions(
+	of productDefinition: apPDM.ePRODUCT_DEFINITION.PRef?
+) -> Set<apPDM.eAPPLIED_DOCUMENT_USAGE_CONSTRAINT_ASSIGNMENT.PRef>
+{
+	if let item = apPDM.sDOCUMENT_REFERENCE_ITEM(productDefinition) {
 		return associatedDocumentPortions(of: item)
 	}
 	return []
@@ -247,11 +296,15 @@ public func associatedDocumentPortions(of productDefinition: ap242.ePRODUCT_DEFI
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func associatedDocumentPortions(of item: ap242.sDOCUMENT_REFERENCE_ITEM?) -> Set<ap242.eAPPLIED_DOCUMENT_USAGE_CONSTRAINT_ASSIGNMENT> {
+/// PDM Implementor Forum
+///
+public func associatedDocumentPortions(
+	of item: apPDM.sDOCUMENT_REFERENCE_ITEM?
+) -> Set<apPDM.eAPPLIED_DOCUMENT_USAGE_CONSTRAINT_ASSIGNMENT.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: item, 
-		ROLE: \ap242.eAPPLIED_DOCUMENT_USAGE_CONSTRAINT_ASSIGNMENT.ITEMS)
+		ROLE: \apPDM.eAPPLIED_DOCUMENT_USAGE_CONSTRAINT_ASSIGNMENT.ITEMS)
 	return Set(usedin)
 }
 
@@ -268,8 +321,12 @@ public func associatedDocumentPortions(of item: ap242.sDOCUMENT_REFERENCE_ITEM?)
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func managedDocument(of documentUsageConstraint: ap242.eDOCUMENT_USAGE_CONSTRAINT) throws -> ap242.sPRODUCT_OR_FORMATION_OR_DEFINITION? {
+/// PDM Implementor Forum
+///
+public func managedDocument(
+	of documentUsageConstraint: apPDM.eDOCUMENT_USAGE_CONSTRAINT.PRef
+) throws -> apPDM.sPRODUCT_OR_FORMATION_OR_DEFINITION?
+{
 	let document = documentUsageConstraint.SOURCE
 	return try managedDocument(of: document)
 }
@@ -285,8 +342,12 @@ public func managedDocument(of documentUsageConstraint: ap242.eDOCUMENT_USAGE_CO
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func documentFile(of documentUsageConstraint: ap242.eDOCUMENT_USAGE_CONSTRAINT) -> ap242.eDOCUMENT_FILE? {
+/// PDM Implementor Forum
+///
+public func documentFile(
+	of documentUsageConstraint: apPDM.eDOCUMENT_USAGE_CONSTRAINT.PRef
+) -> apPDM.eDOCUMENT_FILE.PRef?
+{
 	let document = documentUsageConstraint.SOURCE
 	return documentFile(as: document)
 }

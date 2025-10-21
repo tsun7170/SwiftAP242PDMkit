@@ -20,11 +20,15 @@ import SwiftSDAIap242
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func properties(of productDefinition: ap242.ePRODUCT_DEFINITION?) -> Set<ap242.ePROPERTY_DEFINITION> {
+/// PDM Implementor Forum
+///
+public func properties(
+	of productDefinition: apPDM.ePRODUCT_DEFINITION.PRef?
+) -> Set<apPDM.ePROPERTY_DEFINITION.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: productDefinition, 
-		ROLE: \ap242.ePROPERTY_DEFINITION.DEFINITION) 
+		ROLE: \apPDM.ePROPERTY_DEFINITION.DEFINITION) 
 	return Set(usedin)
 }
 
@@ -38,11 +42,15 @@ public func properties(of productDefinition: ap242.ePRODUCT_DEFINITION?) -> Set<
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func properties(of documentFile: ap242.eDOCUMENT_FILE?) -> Set<ap242.ePROPERTY_DEFINITION> {
+/// PDM Implementor Forum
+///
+public func properties(
+	of documentFile: apPDM.eDOCUMENT_FILE.PRef?
+) -> Set<apPDM.ePROPERTY_DEFINITION.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: documentFile, 
-		ROLE: \ap242.ePROPERTY_DEFINITION.DEFINITION) 
+		ROLE: \apPDM.ePROPERTY_DEFINITION.DEFINITION) 
 	return Set(usedin)
 }
 
@@ -57,11 +65,15 @@ public func properties(of documentFile: ap242.eDOCUMENT_FILE?) -> Set<ap242.ePRO
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func representation(of propertyDefinition: ap242.ePROPERTY_DEFINITION?) throws -> ap242.eREPRESENTATION? {
+/// PDM Implementor Forum
+///
+public func representation(
+	of propertyDefinition: apPDM.ePROPERTY_DEFINITION.PRef?
+) throws -> apPDM.eREPRESENTATION.PRef?
+{
 	let usedin = Set(SDAI.USEDIN(
 		T: propertyDefinition, 
-		ROLE: \ap242.ePROPERTY_DEFINITION_REPRESENTATION.DEFINITION) )
+		ROLE: \apPDM.ePROPERTY_DEFINITION_REPRESENTATION.DEFINITION) )
 	guard usedin.count <= 1 else {
 		throw PDMkitError.multiplePropertyRepresentations(usedin)
 	}
@@ -79,10 +91,14 @@ public func representation(of propertyDefinition: ap242.ePROPERTY_DEFINITION?) t
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func context(of representation: ap242.eREPRESENTATION) -> ap242.eREPRESENTATION_CONTEXT {
+/// PDM Implementor Forum
+///
+public func context(
+	of representation: apPDM.eREPRESENTATION.PRef
+) -> apPDM.eREPRESENTATION_CONTEXT.PRef
+{
 	let context = representation.CONTEXT_OF_ITEMS
-	return context
+	return SDAI.UNWRAP(context)
 }
 
 
@@ -96,9 +112,13 @@ public func context(of representation: ap242.eREPRESENTATION) -> ap242.eREPRESEN
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func values(of representation: ap242.eREPRESENTATION) -> Set<ap242.eREPRESENTATION_ITEM> {
+/// PDM Implementor Forum
+///
+public func values(
+	of representation: apPDM.eREPRESENTATION.PRef
+) -> Set<apPDM.eREPRESENTATION_ITEM.PRef>
+{
 	let vals = representation.ITEMS
-	return vals.asSwiftType
+	return SDAI.UNWRAP(vals).asSwiftType
 }
 

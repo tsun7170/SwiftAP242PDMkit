@@ -12,8 +12,6 @@ import SwiftSDAIap242
 
 
 
-
-
 /// obtains all work order directives contained in a schema instance
 /// - Parameter domain: schema instance
 /// - Returns: all work order directives found
@@ -24,10 +22,14 @@ import SwiftSDAIap242
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func workOrders(in domain: SDAIPopulationSchema.SchemaInstance) -> Set<ap242.eACTION_DIRECTIVE> {
-	let instances = domain.entityExtent(type: ap242.eACTION_DIRECTIVE.self)
-	return Set(instances)
+/// PDM Implementor Forum
+///
+public func workOrders(
+	in domain: SDAIPopulationSchema.SchemaInstance
+) -> Set<apPDM.eACTION_DIRECTIVE.PRef>
+{
+	let instances = domain.entityExtent(type: apPDM.eACTION_DIRECTIVE.self)
+	return Set( instances.map{$0.pRef} )
 }
 
 /// obtains the work order directives addressing a given work request
@@ -40,11 +42,15 @@ public func workOrders(in domain: SDAIPopulationSchema.SchemaInstance) -> Set<ap
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func workOrders(for workRequest: ap242.eVERSIONED_ACTION_REQUEST?) -> Set<ap242.eACTION_DIRECTIVE> {
+/// PDM Implementor Forum
+///
+public func workOrders(
+	for workRequest: apPDM.eVERSIONED_ACTION_REQUEST.PRef?
+) -> Set<apPDM.eACTION_DIRECTIVE.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: workRequest, 
-		ROLE: \ap242.eACTION_DIRECTIVE.REQUESTS)
+		ROLE: \apPDM.eACTION_DIRECTIVE.REQUESTS)
 	return Set(usedin)
 }
 
@@ -63,11 +69,15 @@ public func workOrders(for workRequest: ap242.eVERSIONED_ACTION_REQUEST?) -> Set
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func directedAction(for workOrder: ap242.eACTION_DIRECTIVE?) throws -> ap242.eDIRECTED_ACTION? {
+/// PDM Implementor Forum
+///
+public func directedAction(
+	for workOrder: apPDM.eACTION_DIRECTIVE.PRef?
+) throws -> apPDM.eDIRECTED_ACTION.PRef?
+{
 	let usedin = Set(SDAI.USEDIN(
 		T: workOrder, 
-		ROLE: \ap242.eDIRECTED_ACTION.DIRECTIVE))
+		ROLE: \apPDM.eDIRECTED_ACTION.DIRECTIVE))
 	guard usedin.count <= 1 else {
 		throw PDMkitError.multipleDirectedActions(usedin)
 	}
@@ -86,11 +96,15 @@ public func directedAction(for workOrder: ap242.eACTION_DIRECTIVE?) throws -> ap
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func inputItems(for action: ap242.eACTION?) -> Set<ap242.eAPPLIED_ACTION_ASSIGNMENT> {
+/// PDM Implementor Forum
+///
+public func inputItems(
+	for action: apPDM.eACTION.PRef?
+) -> Set<apPDM.eAPPLIED_ACTION_ASSIGNMENT.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: action, 
-		ROLE: \ap242.eAPPLIED_ACTION_ASSIGNMENT.ASSIGNED_ACTION)
+		ROLE: \apPDM.eAPPLIED_ACTION_ASSIGNMENT.ASSIGNED_ACTION)
 	let inputs = Set(usedin.lazy.filter{ $0.ROLE?.NAME == "input" })
 	return inputs
 }
@@ -106,11 +120,15 @@ public func inputItems(for action: ap242.eACTION?) -> Set<ap242.eAPPLIED_ACTION_
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func affectedItems(by action: ap242.eACTION?) -> Set<ap242.eAPPLIED_ACTION_ASSIGNMENT> {
+/// PDM Implementor Forum
+///
+public func affectedItems(
+	by action: apPDM.eACTION.PRef?
+) -> Set<apPDM.eAPPLIED_ACTION_ASSIGNMENT.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: action, 
-		ROLE: \ap242.eAPPLIED_ACTION_ASSIGNMENT.ASSIGNED_ACTION) 
+		ROLE: \apPDM.eAPPLIED_ACTION_ASSIGNMENT.ASSIGNED_ACTION) 
 	let affected = Set(usedin.lazy.filter{ $0.ROLE?.NAME != "input" })
 	return affected
 }
@@ -128,11 +146,15 @@ public func affectedItems(by action: ap242.eACTION?) -> Set<ap242.eAPPLIED_ACTIO
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func status(for action: ap242.eEXECUTED_ACTION?) throws -> ap242.eACTION_STATUS? {
+/// PDM Implementor Forum
+///
+public func status(
+	for action: apPDM.eEXECUTED_ACTION.PRef?
+) throws -> apPDM.eACTION_STATUS.PRef?
+{
 	let usedin = Set(SDAI.USEDIN(
 		T: action, 
-		ROLE: \ap242.eACTION_STATUS.ASSIGNED_ACTION) )
+		ROLE: \apPDM.eACTION_STATUS.ASSIGNED_ACTION) )
 	guard usedin.count <= 1 else {
 		throw PDMkitError.multipleActionStatus(usedin)
 	}
@@ -152,11 +174,15 @@ public func status(for action: ap242.eEXECUTED_ACTION?) throws -> ap242.eACTION_
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func relatedActions(for action: ap242.eACTION?) -> Set<ap242.eACTION_RELATIONSHIP> {
+/// PDM Implementor Forum
+///
+public func relatedActions(
+	for action: apPDM.eACTION.PRef?
+) -> Set<apPDM.eACTION_RELATIONSHIP.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: action, 
-		ROLE: \ap242.eACTION_RELATIONSHIP.RELATING_ACTION) 
+		ROLE: \apPDM.eACTION_RELATIONSHIP.RELATING_ACTION) 
 	return Set(usedin)
 }
 
@@ -171,11 +197,15 @@ public func relatedActions(for action: ap242.eACTION?) -> Set<ap242.eACTION_RELA
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func relatingActions(for action: ap242.eACTION?) -> Set<ap242.eACTION_RELATIONSHIP> {
+/// PDM Implementor Forum
+///
+public func relatingActions(
+	for action: apPDM.eACTION.PRef?
+) -> Set<apPDM.eACTION_RELATIONSHIP.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: action, 
-		ROLE: \ap242.eACTION_RELATIONSHIP.RELATED_ACTION) 
+		ROLE: \apPDM.eACTION_RELATIONSHIP.RELATED_ACTION) 
 	return Set(usedin)
 }
 

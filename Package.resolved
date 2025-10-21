@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "SwiftSDAIap242",
+        "repositoryURL": "https://github.com/tsun7170/SwiftSDAIap242",
+        "state": {
+          "branch": null,
+          "revision": "d55ebf21abd4b85915a515aa8fa56dad7b5d059f",
+          "version": "1.1.0"
+        }
+      },
+      {
+        "package": "SwiftSDAIcore",
+        "repositoryURL": "https://github.com/tsun7170/SwiftSDAIcore",
+        "state": {
+          "branch": null,
+          "revision": "335267a76b026e353078d9de3572d6f54704298d",
+          "version": "1.1.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

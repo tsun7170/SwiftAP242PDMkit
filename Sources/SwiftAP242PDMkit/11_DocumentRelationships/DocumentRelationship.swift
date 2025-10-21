@@ -21,11 +21,15 @@ import SwiftSDAIap242
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func relatedDocuments(of document: ap242.eDOCUMENT?) -> Set<ap242.eDOCUMENT_RELATIONSHIP> {
+/// PDM Implementor Forum
+///
+public func relatedDocuments(
+	of document: apPDM.eDOCUMENT.PRef?
+) -> Set<apPDM.eDOCUMENT_RELATIONSHIP.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: document, 
-		ROLE: \ap242.eDOCUMENT_RELATIONSHIP.RELATING_DOCUMENT) 
+		ROLE: \apPDM.eDOCUMENT_RELATIONSHIP.RELATING_DOCUMENT) 
 	return Set(usedin)
 }
 
@@ -39,11 +43,15 @@ public func relatedDocuments(of document: ap242.eDOCUMENT?) -> Set<ap242.eDOCUME
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func relatingDocuments(of document: ap242.eDOCUMENT?) -> Set<ap242.eDOCUMENT_RELATIONSHIP> {
+/// PDM Implementor Forum
+///
+public func relatingDocuments(
+	of document: apPDM.eDOCUMENT.PRef?
+) -> Set<apPDM.eDOCUMENT_RELATIONSHIP.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: document, 
-		ROLE: \ap242.eDOCUMENT_RELATIONSHIP.RELATED_DOCUMENT)
+		ROLE: \apPDM.eDOCUMENT_RELATIONSHIP.RELATED_DOCUMENT)
 	return Set(usedin)
 }
 

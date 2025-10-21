@@ -11,39 +11,39 @@ import SwiftSDAIcore
 import SwiftSDAIap242
 
 public enum PDMkitError: Error {
-	case duplicatedCatrgoryName(ap242.ePRODUCT_CATEGORY, ap242.ePRODUCT_CATEGORY)
-	
-	case multipleSuperCategories(Set<ap242.ePRODUCT_CATEGORY_RELATIONSHIP>)
-	
-	case multipleApplicationProtocols(Set<ap242.eAPPLICATION_PROTOCOL_DEFINITION>)
-	
-	case multiplePropertyRepresentations(Set<ap242.ePROPERTY_DEFINITION_REPRESENTATION>)
-	
-	case multipleProductDefinitionShapes(Set<ap242.ePRODUCT_DEFINITION_SHAPE>)
-	
-	case multipleDefinitionalShapes(Set<ap242.ePROPERTY_DEFINITION_REPRESENTATION>)
-	
-	case noGeometricRepresentationContext(ap242.eSHAPE_REPRESENTATION)
-	
-	case multipleContextDependentShapeRepresentations(Set<ap242.eCONTEXT_DEPENDENT_SHAPE_REPRESENTATION>)
-	
-	case multipleShapeDefinitionRepresentations(Set<ap242.eSHAPE_DEFINITION_REPRESENTATION>)
-	
-	case multipleMappedItems(Set<ap242.eMAPPED_ITEM>)
-	
-	case multiplePrecedingVersions(Set<ap242.ePRODUCT_DEFINITION_FORMATION_RELATIONSHIP>)
-	
-	case multipleDocumentRepresentationTypes(Set<ap242.eDOCUMENT_REPRESENTATION_TYPE>)
-	
-	case multipleAssignedVersions(Set<ap242.eAPPLIED_IDENTIFICATION_ASSIGNMENT>)
-	
-	case multipleDocumentProductEquivalences(Set<ap242.eDOCUMENT_PRODUCT_EQUIVALENCE>)
-	
-	case multipleActionRequestStatus(Set<ap242.eACTION_REQUEST_STATUS>)
-	
-	case multipleDirectedActions(Set<ap242.eDIRECTED_ACTION>)
+	case duplicatedCategoryName(apPDM.ePRODUCT_CATEGORY.PRef, apPDM.ePRODUCT_CATEGORY.PRef)
 
-	case multipleActionStatus(Set<ap242.eACTION_STATUS>)
+	case multipleSuperCategories(Set<apPDM.ePRODUCT_CATEGORY_RELATIONSHIP.PRef>)
 
-	case multiplePropertyDefinitions(Set<ap242.ePROPERTY_DEFINITION>)
+	case multipleApplicationProtocols(Set<apPDM.eAPPLICATION_PROTOCOL_DEFINITION.PRef>)
+
+	case multiplePropertyRepresentations(Set<apPDM.ePROPERTY_DEFINITION_REPRESENTATION.PRef>)
+
+	case multipleProductDefinitionShapes(Set<apPDM.ePRODUCT_DEFINITION_SHAPE.PRef>)
+
+	case multipleDefinitionalShapes(Set<apPDM.ePROPERTY_DEFINITION_REPRESENTATION.PRef>)
+
+	case noGeometricRepresentationContext(apPDM.eSHAPE_REPRESENTATION.PRef)
+
+	case multipleContextDependentShapeRepresentations(Set<apPDM.eCONTEXT_DEPENDENT_SHAPE_REPRESENTATION.PRef>)
+
+	case multipleShapeDefinitionRepresentations(Set<apPDM.eSHAPE_DEFINITION_REPRESENTATION.PRef>)
+
+	case multipleMappedItems(Set<apPDM.eMAPPED_ITEM.PRef>)
+
+	case multiplePrecedingVersions(Set<apPDM.ePRODUCT_DEFINITION_FORMATION_RELATIONSHIP.PRef>)
+
+	case multipleDocumentRepresentationTypes(Set<apPDM.eDOCUMENT_REPRESENTATION_TYPE.PRef>)
+
+	case multipleAssignedVersions(Set<apPDM.eAPPLIED_IDENTIFICATION_ASSIGNMENT.PRef>)
+
+	case multipleDocumentProductEquivalences(Set<apPDM.eDOCUMENT_PRODUCT_EQUIVALENCE.PRef>)
+
+	case multipleActionRequestStatus(Set<apPDM.eACTION_REQUEST_STATUS.PRef>)
+
+	case multipleDirectedActions(Set<apPDM.eDIRECTED_ACTION.PRef>)
+
+	case multipleActionStatus(Set<apPDM.eACTION_STATUS.PRef>)
+
+	case multiplePropertyDefinitions(Set<apPDM.ePROPERTY_DEFINITION.PRef>)
 }

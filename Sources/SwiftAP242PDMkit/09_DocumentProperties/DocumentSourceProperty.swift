@@ -22,9 +22,13 @@ import SwiftSDAIap242
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func sourceProperties(of documentFile: ap242.eDOCUMENT_FILE?) -> Set<ap242.eAPPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT> {
-	if let extItem = ap242.sEXTERNAL_IDENTIFICATION_ITEM(documentFile) {
+/// PDM Implementor Forum
+///
+public func sourceProperties(
+	of documentFile: apPDM.eDOCUMENT_FILE.PRef?
+) -> Set<apPDM.eAPPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT.PRef>
+{
+	if let extItem = apPDM.sEXTERNAL_IDENTIFICATION_ITEM(documentFile) {
 		return sourceProperties(of: extItem)
 	}
 	return []
@@ -40,16 +44,20 @@ public func sourceProperties(of documentFile: ap242.eDOCUMENT_FILE?) -> Set<ap24
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func sourceProperties(of productDefinition: ap242.ePRODUCT_DEFINITION?)-> Set<ap242.eAPPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT> {
-	if let extItem = ap242.sEXTERNAL_IDENTIFICATION_ITEM(productDefinition) {
+/// PDM Implementor Forum
+///
+public func sourceProperties(
+	of productDefinition: apPDM.ePRODUCT_DEFINITION.PRef?
+)-> Set<apPDM.eAPPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT.PRef>
+{
+	if let extItem = apPDM.sEXTERNAL_IDENTIFICATION_ITEM(productDefinition) {
 		return sourceProperties(of: extItem)
 	}
 	return []
 }
 
 /// obtains the source properties of a generic external identification item
-/// - Parameter externalIdentificationItem: external identificatino item
+/// - Parameter externalIdentificationItem: external identification item
 /// - Returns: source properties
 /// 
 /// # Reference
@@ -58,11 +66,15 @@ public func sourceProperties(of productDefinition: ap242.ePRODUCT_DEFINITION?)->
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func sourceProperties(of externalIdentificationItem: ap242.sEXTERNAL_IDENTIFICATION_ITEM?)-> Set<ap242.eAPPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT> {
+/// PDM Implementor Forum
+///
+public func sourceProperties(
+	of externalIdentificationItem: apPDM.sEXTERNAL_IDENTIFICATION_ITEM?
+)-> Set<apPDM.eAPPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: externalIdentificationItem, 
-		ROLE: \ap242.eAPPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT.ITEMS) 
+		ROLE: \apPDM.eAPPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT.ITEMS) 
 	return Set(usedin)
 }
 
@@ -78,24 +90,29 @@ public func sourceProperties(of externalIdentificationItem: ap242.sEXTERNAL_IDEN
 /// Recommended Practices for External References; 
 /// with References to the PDM Schema Usage Guide; 
 /// Release 2.1, Jan. 19, 2005;
-/// PDM Implementor Forum 
-public func fileLocations(of documentFile: ap242.eDOCUMENT_FILE) -> [DocumentSourceProperty] {
+/// PDM Implementor Forum
+///
+public func fileLocations(
+	of documentFile: apPDM.eDOCUMENT_FILE.PRef
+) -> [DocumentSourceProperty]
+{
 	let AEIAs = sourceProperties(of: documentFile)
 	if !AEIAs.isEmpty {
 		var fileIds:[DocumentSourceProperty] = []
 		for AEIA in AEIAs {
+			guard let AEIA = AEIA.eval else { continue }
 			if AEIA.ASSIGNED_ID.asSwiftType == "" {
 				let fileId = DocumentSourceProperty(
-					fileName: AEIA.SOURCE.SOURCE_ID.stringValue?.asSwiftType ?? "", 
+					fileName: AEIA.SOURCE.SOURCE_ID?.stringValue?.asSwiftType ?? "", 
 					path: nil as String?, 
-					mechanism: AEIA.ROLE.NAME.asSwiftType)
+					mechanism: AEIA.ROLE.NAME?.asSwiftType)
 				fileIds.append(fileId)
 			}
 			else {
 				let fileId = DocumentSourceProperty(
 					fileName: AEIA.ASSIGNED_ID.asSwiftType, 
-					path: AEIA.SOURCE.SOURCE_ID.stringValue?.asSwiftType, 
-					mechanism: AEIA.ROLE.NAME.asSwiftType)
+					path: AEIA.SOURCE.SOURCE_ID?.stringValue?.asSwiftType, 
+					mechanism: AEIA.ROLE.NAME?.asSwiftType)
 				fileIds.append(fileId)
 			}
 		}
@@ -103,7 +120,7 @@ public func fileLocations(of documentFile: ap242.eDOCUMENT_FILE) -> [DocumentSou
 	}
 	else {
 		let fileId = DocumentSourceProperty(
-			fileName: documentFile.ID.asSwiftType, 
+			fileName: (documentFile.ID?.asSwiftType)!, 
 			path: nil, 
 			mechanism: nil)
 		return [fileId]
@@ -117,8 +134,10 @@ public func fileLocations(of documentFile: ap242.eDOCUMENT_FILE) -> [DocumentSou
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public struct DocumentSourceProperty: Equatable {
+/// PDM Implementor Forum
+///
+public struct DocumentSourceProperty: Equatable
+{
 	public var fileName: String
 	public var path: String?
 	public var mechanism: String?
@@ -148,8 +167,12 @@ public struct DocumentSourceProperty: Equatable {
 /// Recommended Practices for External References; 
 /// with References to the PDM Schema Usage Guide; 
 /// Release 2.1, Jan. 19, 2005;
-/// PDM Implementor Forum 
-public func documentFormat(of documentFile: ap242.eDOCUMENT_FILE?) throws -> ap242.eREPRESENTATION? {
+/// PDM Implementor Forum
+///
+public func documentFormat(
+	of documentFile: apPDM.eDOCUMENT_FILE.PRef?
+) throws -> apPDM.eREPRESENTATION.PRef?
+{
 	let documentProperties = properties(of: documentFile)
 		.filter{ $0.NAME == "document property" }
 	

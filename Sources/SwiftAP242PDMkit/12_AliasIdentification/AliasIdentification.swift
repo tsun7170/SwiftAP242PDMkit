@@ -11,7 +11,7 @@ import SwiftSDAIcore
 import SwiftSDAIap242
 
 
-/// obtains aliases assgined to a given item
+/// obtains aliases assigned to a given item
 /// - Parameter item: item
 /// - Returns: aliases
 /// 
@@ -21,11 +21,15 @@ import SwiftSDAIap242
 /// 
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
-/// PDM Implementor Forum 
-public func aliases(for item:ap242.sIDENTIFICATION_ITEM?) -> Set<ap242.eAPPLIED_IDENTIFICATION_ASSIGNMENT> {
+/// PDM Implementor Forum
+///
+public func aliases(
+	for item:apPDM.sIDENTIFICATION_ITEM?
+) -> Set<apPDM.eAPPLIED_IDENTIFICATION_ASSIGNMENT.PRef>
+{
 	let usedin = SDAI.USEDIN(
 		T: item, 
-		ROLE: \ap242.eAPPLIED_IDENTIFICATION_ASSIGNMENT.ITEMS) 
-	let aliaes = usedin.filter{ $0.ROLE.NAME == "alias" }
+		ROLE: \apPDM.eAPPLIED_IDENTIFICATION_ASSIGNMENT.ITEMS) 
+	let aliaes = usedin.filter{ $0.ROLE?.NAME == "alias" }
 	return Set(aliaes)
 }
