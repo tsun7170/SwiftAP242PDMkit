@@ -56,7 +56,7 @@ public class ExternalReferenceLoader: SDAI.Object {
 	/// 
 	public func decode(
 		transaction: SDAISessionSchema.SdaiTransactionRW
-	)
+	) async
 	{
 		var needToLoad = true
 		while needToLoad {
@@ -64,7 +64,7 @@ public class ExternalReferenceLoader: SDAI.Object {
 			
 			for externalReference in externalReferenceList {
 				if externalReference.status != .notLoadedYet { continue }
-				if load(
+        if await load(
 					externalReference: externalReference,
 					transaction: transaction)
 				{
@@ -84,7 +84,7 @@ public class ExternalReferenceLoader: SDAI.Object {
 	public func load(
 		externalReference: ExternalReference,
 		transaction: SDAISessionSchema.SdaiTransactionRW
-	) -> Bool
+	) async -> Bool
 	{
 		monitor?.startedLoading(externalReference: externalReference)
 		defer{ monitor?.completedLoading(externalReference: externalReference) }
@@ -120,7 +120,7 @@ public class ExternalReferenceLoader: SDAI.Object {
 					}
 
 					for model in models {
-						let _ = transaction.addSdaiModel(
+            let _ = await transaction.addSdaiModel(
 							instance: schemaInstance, model: model)
 					}
 

@@ -10,9 +10,14 @@ import Foundation
 import SwiftSDAIcore
 
 extension ExternalReferenceLoader {
-	open class ActivityMonitor: P21Decode.ActivityMonitor {
+	open class ActivityMonitor: P21Decode.ActivityMonitor, @unchecked Sendable
+	{
 		open func startedLoading(externalReference: ExternalReference) {}
+
 		open func completedLoading(externalReference: ExternalReference) {}
-		open func identified(externalReferences: [ExternalReference], originatedFrom upstream: ExternalReference) {}
+
+		open func identified(
+			externalReferences: [ExternalReference],
+			originatedFrom upstream: ExternalReference) {}
 	}
 }

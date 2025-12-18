@@ -69,11 +69,12 @@ extension ExternalReferenceLoader {
 			
 			guard let master = self.upStream,
 						let masterExchange = master.exchangeStructure,
-						let masterRepo = masterExchange.repository,
 						let detailExchange = self.exchangeStructure,
-						let detailRepo = detailExchange.repository,
 						let docFile = self.documentFile
 			else { return result }
+
+			let masterRepo = masterExchange.repository
+			let detailRepo = detailExchange.repository
 
 			let masterDomain = masterRepo.contents.findSchemaInstance(named: master.name)
 			let detailDomain = detailRepo.contents.findSchemaInstance(named: self.name)

@@ -10,7 +10,9 @@ import Foundation
 import SwiftSDAIcore
 
 extension ExternalReferenceLoader {
-	open class ForeignReferenceResolver: P21Decode.ForeignReferenceResolver {
+	open class ForeignReferenceResolver: P21Decode.ForeignReferenceResolver,
+                                       @unchecked Sendable
+	{
 		public enum ExternalReferenceDisposition {
 			case load
 			case suspendLoading
