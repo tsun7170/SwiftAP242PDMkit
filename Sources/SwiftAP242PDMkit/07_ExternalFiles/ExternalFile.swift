@@ -49,7 +49,7 @@ public func documentFiles(
 {
 	guard let documentIds = documentProductDefinition.DOCUMENTATION_IDS
 	else { return [] }
-	let documentFiles = documentIds.compactMap{ apPDM.eDOCUMENT_FILE.cast(from: $0)?.pRef }
+	let documentFiles = documentIds.compactMap{ apPDM.eDOCUMENT_FILE.convert(sibling: $0)?.pRef }
 	return Set(documentFiles)
 }
 

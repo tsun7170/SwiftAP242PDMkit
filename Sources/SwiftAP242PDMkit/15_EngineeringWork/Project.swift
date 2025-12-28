@@ -102,7 +102,7 @@ public func productConcepts(
 	let productConcepts = data.flatMap { projAssignment in
 		let items = projAssignment.ITEMS
 		let mapped = items?.compactMap { projItem in
-			apPDM.ePRODUCT_CONCEPT.cast(from: projItem.entityReference)?.pRef
+			apPDM.ePRODUCT_CONCEPT.convert(sibling: projItem.entityReference)?.pRef
 		} ?? []
 		return mapped
 	}

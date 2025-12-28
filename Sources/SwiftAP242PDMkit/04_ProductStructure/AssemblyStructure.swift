@@ -291,7 +291,7 @@ public func explicitShape(
 	if let shapeRep = try asAssembledShape(of: componentUsage),
 		 let items = shapeRep.ITEMS
 	{
-		let mappedItems = Set(items.lazy.compactMap{ apPDM.eMAPPED_ITEM.cast(from: $0)?.pRef })
+		let mappedItems = Set(items.lazy.compactMap{ apPDM.eMAPPED_ITEM.convert(sibling: $0)?.pRef })
 		guard mappedItems.count <= 1 else {
 			throw PDMkitError.multipleMappedItems(mappedItems)
 		}

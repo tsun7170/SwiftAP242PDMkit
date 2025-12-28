@@ -29,7 +29,7 @@ public func externalFiles(
 ) -> Set<apPDM.eDOCUMENT_FILE.PRef>
 {
 	guard let docFiles = documentProductDefinition.DOCUMENTATION_IDS?.lazy
-		.compactMap({ apPDM.eDOCUMENT_FILE.cast(from: $0)?.pRef })
+		.compactMap({ apPDM.eDOCUMENT_FILE.convert(sibling: $0)?.pRef })
 	else { return Set() }
 	return Set(docFiles)
 }
