@@ -136,12 +136,12 @@ public func fileLocations(
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum
 ///
-public struct DocumentSourceProperty: Equatable
+public struct DocumentSourceProperty: Equatable, Sendable
 {
-	public var fileName: String
-	public var path: String?
-	public var mechanism: String?
-	
+	public let fileName: String
+	public let path: String?
+	public let mechanism: String?
+
 	public init(fileName: String, path: String?, mechanism: String?) {
 		self.fileName = fileName
 		self.path = path

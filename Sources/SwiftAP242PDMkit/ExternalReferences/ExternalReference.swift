@@ -14,17 +14,21 @@ import SwiftSDAIap242
 extension ExternalReferenceLoader {
 
 	//MARK: - ExternalReference
-	public class ExternalReference: SDAI.Object {
+	public final class ExternalReference: SDAI.Object, Sendable
+  {
 		public let documentFile: apPDM.eDOCUMENT_FILE.PRef?
 		public let sourceProperties: [DocumentSourceProperty]
 		public let level: Int
 		public let serial: Int
 		public let upStream: ExternalReference?
-		public var status: LoadingStatus = .notLoadedYet
-		
-		public private(set) lazy var name: String = {
-			"\(self.serial).\(self.sourceProperties[0].fileName)"
-		}()
+
+    nonisolated(unsafe)
+		public internal(set) var status: LoadingStatus = .notLoadedYet
+
+		public let name: String
+//    = {
+//			"\(self.serial).\(self.sourceProperties[0].fileName)"
+//		}()
 		
 		public var exchangeStructure: P21Decode.ExchangeStructure? {
 			switch self.status {
@@ -42,10 +46,11 @@ extension ExternalReferenceLoader {
 		
 		public init(asTopLevel url: URL) {
 			self.sourceProperties = [DocumentSourceProperty(url: url)]
-			level = 0
-			serial = 0
+      self.level = 0
+      self.serial = 0
 			self.documentFile = nil
 			self.upStream = nil
+      self.name = "\(self.serial).\(self.sourceProperties[0].fileName)"
 		}
 		
 		public init(
@@ -62,21 +67,23 @@ extension ExternalReferenceLoader {
 				.map{ resolver.fixupExternalReference($0, parent: parentSource) }
 			self.upStream = upStream
 			self.level = upStream.level + 1
+      self.name = "\(self.serial).\(self.sourceProperties[0].fileName)"
 		}
 		
-		public lazy var externalShapeDefinitionLinkages: Set<ExternalShapeDefinitionLinkage> = {
+		public var externalShapeDefinitionLinkages: Set<ExternalShapeDefinitionLinkage> {
 			var result: Set<ExternalShapeDefinitionLinkage> = []
 			
-			guard let master = self.upStream,
-						let masterExchange = master.exchangeStructure,
-						let detailExchange = self.exchangeStructure,
-						let docFile = self.documentFile
+      guard
+//        let master = self.upStream,
+//				let masterExchange = master.exchangeStructure,
+        let detailExchange = self.exchangeStructure,
+        let docFile = self.documentFile
 			else { return result }
 
-			let masterRepo = masterExchange.repository
+//			let masterRepo = masterExchange.repository
 			let detailRepo = detailExchange.repository
 
-			let masterDomain = masterRepo.contents.findSchemaInstance(named: master.name)
+//			let masterDomain = masterRepo.contents.findSchemaInstance(named: master.name)
 			let detailDomain = detailRepo.contents.findSchemaInstance(named: self.name)
 
 			let documentRefs = documentReferences(of: docFile)
@@ -110,7 +117,7 @@ extension ExternalReferenceLoader {
 			}//for
 
 			return result		
-		}()
+		}
 		
 		private func _findDetailShapeRep(
 			for masterShapeRep: apPDM.eSHAPE_DEFINITION_REPRESENTATION.PRef,
