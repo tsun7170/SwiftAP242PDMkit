@@ -24,15 +24,22 @@ extension ExternalReferenceLoader {
 			parent: DocumentSourceProperty
 		) -> DocumentSourceProperty
 		{
-			var result = externalReference
-			
-			result.path = parent.path
-			
-			if (result.mechanism ?? "") == "" {
-				result.mechanism = parent.mechanism
+      let fileName = externalReference.fileName
+
+			let path = parent.path
+
+      let mechanism: String?
+			if (externalReference.mechanism ?? "") == "" {
+				mechanism = parent.mechanism
 			}
-			
-			return result
+      else {
+        mechanism = externalReference.mechanism
+      }
+
+			return DocumentSourceProperty(
+        fileName: fileName,
+        path: path,
+        mechanism: mechanism)
 		}
 		
 		open func disposition(

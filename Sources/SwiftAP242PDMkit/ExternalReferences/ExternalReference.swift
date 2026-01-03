@@ -26,10 +26,7 @@ extension ExternalReferenceLoader {
 		public internal(set) var status: LoadingStatus = .notLoadedYet
 
 		public let name: String
-//    = {
-//			"\(self.serial).\(self.sourceProperties[0].fileName)"
-//		}()
-		
+
 		public var exchangeStructure: P21Decode.ExchangeStructure? {
 			switch self.status {
 				case .loaded(let exchange):
@@ -74,16 +71,12 @@ extension ExternalReferenceLoader {
 			var result: Set<ExternalShapeDefinitionLinkage> = []
 			
       guard
-//        let master = self.upStream,
-//				let masterExchange = master.exchangeStructure,
         let detailExchange = self.exchangeStructure,
         let docFile = self.documentFile
 			else { return result }
 
-//			let masterRepo = masterExchange.repository
 			let detailRepo = detailExchange.repository
 
-//			let masterDomain = masterRepo.contents.findSchemaInstance(named: master.name)
 			let detailDomain = detailRepo.contents.findSchemaInstance(named: self.name)
 
 			let documentRefs = documentReferences(of: docFile)
