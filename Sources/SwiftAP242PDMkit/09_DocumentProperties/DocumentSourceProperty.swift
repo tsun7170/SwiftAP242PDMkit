@@ -136,7 +136,7 @@ public func fileLocations(
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum
 ///
-public struct DocumentSourceProperty: Equatable, Sendable
+public struct DocumentSourceProperty: Hashable, Sendable
 {
 	public let fileName: String
 	public let path: String?

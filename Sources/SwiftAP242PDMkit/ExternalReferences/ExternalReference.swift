@@ -41,10 +41,10 @@ extension ExternalReferenceLoader {
 			return Array(exchange.sdaiModels)
 		}
 		
-		public init(asTopLevel url: URL) {
+		public init(asTopLevel url: URL, serial: Int) {
 			self.sourceProperties = [DocumentSourceProperty(url: url)]
       self.level = 0
-      self.serial = 0
+      self.serial = serial
 			self.documentFile = nil
 			self.upStream = nil
       self.name = "\(self.serial).\(self.sourceProperties[0].fileName)"

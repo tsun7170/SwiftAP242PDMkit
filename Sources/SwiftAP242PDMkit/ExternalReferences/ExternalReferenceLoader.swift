@@ -10,8 +10,8 @@ import Foundation
 import SwiftSDAIcore
 import SwiftSDAIap242
 
-public class ExternalReferenceLoader: SDAI.Object {
-	
+public actor ExternalReferenceLoader: SDAI.Object {
+
 	public var externalReferenceList: [ExternalReference] = []
 	public var externalReferences: [String:ExternalReference] {
 		let pairs = zip(externalReferenceList.map{$0.name}, externalReferenceList)
@@ -19,34 +19,43 @@ public class ExternalReferenceLoader: SDAI.Object {
 	}
 
 	public var sdaiModels: some Collection<SDAIPopulationSchema.SdaiModel> {
-		let models = externalReferences.values.lazy.compactMap({$0.exchangeStructure?.sdaiModels}).joined()
+		let models = externalReferences.values
+      .lazy.compactMap({$0.exchangeStructure?.sdaiModels})
+      .joined()
 		return models
 	}
 	
-	private var decoder: P21Decode.Decoder
-	private var monitor: ActivityMonitor?
+  private let repository: SDAISessionSchema.SdaiRepository
+  private let schemaList: P21Decode.SchemaList
+  private var monitorType: ActivityMonitor.Type?
 	private var resolver: ForeignReferenceResolver
+  private var serial: Int
+
+  private func issueSerial() -> Int {
+    serial += 1
+    return serial
+  }
 
 	public init?(
 		repository: SDAISessionSchema.SdaiRepository,
 		schemaList: P21Decode.SchemaList,
 		masterFile: URL,
-		monitor: ActivityMonitor?,
+    monitorType: ActivityMonitor.Type?,
 		foreignReferenceResolver: ForeignReferenceResolver = ForeignReferenceResolver()
 	)
 	{
-		guard let decoder =
-						P21Decode.Decoder(
-							output: repository,
-							schemaList: schemaList,
-							monitor: monitor,
-							foreignReferenceResolver: foreignReferenceResolver)
-		else { return nil }
-		self.decoder = decoder
-		self.monitor = monitor
+    self.repository = repository
+    self.schemaList = schemaList
+		self.monitorType = monitorType
 		self.resolver = foreignReferenceResolver
 
-		let master = ExternalReference(asTopLevel: masterFile)
+    let serial0 = 0
+    self.serial = serial0
+
+    let master = ExternalReference(
+      asTopLevel: masterFile,
+      serial: serial0)
+
 		self.externalReferenceList.append(master)
 	}
 	
@@ -56,35 +65,121 @@ public class ExternalReferenceLoader: SDAI.Object {
 	public func decode(
 		transaction: SDAISessionSchema.SdaiTransactionRW
 	) async
-	{
-		var needToLoad = true
-		while needToLoad {
-			needToLoad = false
-			
-			for externalReference in externalReferenceList {
-				if externalReference.status != .notLoadedYet { continue }
-        if await load(
-					externalReference: externalReference,
-					transaction: transaction)
-				{
-					needToLoad = true
-				}
-			}//for
+  {
+    let monitor = monitorType?.init(for: externalReferenceList.first!, concurrently: false)
 
-		}//while
-	}
+    guard let decoder =
+            P21Decode.Decoder(
+              output: repository,
+              schemaList: schemaList,
+              monitor: monitor,
+              foreignReferenceResolver: resolver)
+    else {
+      SDAI.raiseErrorAndContinue(.SY_ERR, detail: "failed to create P21Decode.Decoder")
+      return
+    }
 
+    var needToLoad = true
+    while needToLoad {
+      needToLoad = false
+
+      for externalReference in externalReferenceList {
+        if externalReference.status != .notLoadedYet { continue }
+
+        let children = await load(
+          externalReference: externalReference,
+          transaction: transaction,
+          monitor: monitor,
+          resolver: resolver,
+          decoder: decoder)
+
+        if !children.isEmpty {
+          self.externalReferenceList += children
+          needToLoad = true
+        }
+      }//for
+
+    }//while
+  }
+
+  public func decodeConcurrently(
+    transaction: SDAISessionSchema.SdaiTransactionRW
+  ) async
+  {
+    let repository = self.repository
+    let schemaList = self.schemaList
+    let monitorType = self.monitorType
+    let resolver = self.resolver
+
+    await withTaskGroup(of: [ExternalReference].self) { taskGroup in
+      for externalReference in externalReferenceList {
+        if externalReference.status != .notLoadedYet { continue }
+
+        addTask(externalReference: externalReference)
+
+        for await children in taskGroup {
+          self.externalReferenceList += children
+          for child in children {
+            addTask(externalReference: child)
+          }
+        }
+      }
+
+      func addTask(externalReference: ExternalReference) {
+        taskGroup.addTask {
+          let monitor = monitorType?.init(for: externalReference, concurrently: true)
+
+          guard let decoder =
+                  P21Decode.Decoder(
+                    output: repository,
+                    schemaList: schemaList,
+                    monitor: monitor,
+                    foreignReferenceResolver: resolver)
+          else {
+            SDAI.raiseErrorAndContinue(.SY_ERR, detail: "failed to create P21Decode.Decoder")
+            return []
+          }
+
+          let children = await self.load(
+            externalReference: externalReference,
+            transaction: transaction,
+            monitor: monitor,
+            resolver: resolver,
+            decoder: decoder)
+          return children
+        }
+      }//func
+    }//withTaskGroup
+  }
+
+  private var exchangeStructures: [DocumentSourceProperty:P21Decode.ExchangeStructure] = [:]
+
+  private func register(
+    exchange: P21Decode.ExchangeStructure,
+    for key:DocumentSourceProperty
+  ) -> P21Decode.ExchangeStructure?
+  {
+    if let registered = exchangeStructures[key] {
+      return registered
+    }
+    exchangeStructures[key] = exchange
+    return nil
+  }
 
 	/// load a specified external reference p21 data stream
 	/// - Parameters:
 	///   - externalReference: external reference to a p21 data stream
 	///   - transaction: RW transaction for decoding action
-	/// - Returns: true when child external reference is found
+	/// - Returns: array of ExternalReferences containing the found child data references.
 	///
+  nonisolated(nonsending)
 	public func load(
 		externalReference: ExternalReference,
-		transaction: SDAISessionSchema.SdaiTransactionRW
-	) async -> Bool
+		transaction: SDAISessionSchema.SdaiTransactionRW,
+    monitor: ActivityMonitor?,
+    resolver: ForeignReferenceResolver,
+    decoder: P21Decode.Decoder
+  ) async -> [ExternalReference]
 	{
 		monitor?.startedLoading(externalReference: externalReference)
 		defer{ monitor?.completedLoading(externalReference: externalReference) }
@@ -92,45 +187,60 @@ public class ExternalReferenceLoader: SDAI.Object {
 		for sourceProperty in externalReference.sourceProperties {
 			switch resolver.disposition(of: sourceProperty) {
 				case .load:
-         let (status,schemaInstance) =
+          if let exchange = await exchangeStructures[sourceProperty] {
+            let status = LoadingStatus.loaded(exchange)
+            externalReference.status = status
+            return []
+          }
+
+          let (status,schemaInstance) =
           await self.decodeExchangeStructure(
             from: sourceProperty,
             as: externalReference.name,
-            transaction: transaction)
+            transaction: transaction,
+            resolver: resolver,
+            decoder: decoder)
 
           externalReference.status = status
 
-          guard case .loaded = status,
+          guard case .loaded(let exchange) = status,
                 let schemaInstance
-          else { return false }
+          else { return [] }
 
+          if let registered = await self.register(exchange: exchange, for: sourceProperty) {
+            externalReference.status = .loaded(registered)
+          }
 
-          let children = identifyExternalReferences(
+          let children = await identifyExternalReferences(
             parent: externalReference,
-            parentInstance: schemaInstance)
+            parentInstance: schemaInstance,
+            monitor: monitor,
+            resolver: resolver)
 
-          self.externalReferenceList += children
-
-					return !children.isEmpty
+          return children
 
 				case .suspendLoading:
-					externalReference.status = .loadPending
-					return false
-					
+					let status = LoadingStatus.loadPending
+          externalReference.status = status
+					return []
+
 				case .referenceUnknown:
 					continue
 			}
 		}
-		externalReference.status = .foreignReference
-		return false
+		let status = LoadingStatus.foreignReference
+    externalReference.status = status
+		return []
 	}
 
 
-
+  nonisolated(nonsending)
   private func decodeExchangeStructure(
     from sourceProperty: DocumentSourceProperty,
     as schemaInstanceName: String,
-    transaction: SDAISessionSchema.SdaiTransactionRW
+    transaction: SDAISessionSchema.SdaiTransactionRW,
+    resolver: ForeignReferenceResolver,
+    decoder: P21Decode.Decoder
   ) async -> (status:LoadingStatus,
         schemaInstance:SDAIPopulationSchema.SchemaInstance?)
   {
@@ -165,16 +275,19 @@ public class ExternalReferenceLoader: SDAI.Object {
     return (status, schemaInstance)
   }
 
+  nonisolated(nonsending)
 	private func identifyExternalReferences(
 		parent: ExternalReference,
-		parentInstance: SDAIPopulationSchema.SchemaInstance
-	) -> [ExternalReference]
+		parentInstance: SDAIPopulationSchema.SchemaInstance,
+    monitor: ActivityMonitor?,
+    resolver: ForeignReferenceResolver
+	) async -> [ExternalReference]
 	{
 		var children: [ExternalReference] = []
 
 		for documentFile in documentFiles(in: parentInstance) {
 			let child = ExternalReference(
-        serial: externalReferenceList.count + children.count,
+        serial: await issueSerial(),
 				upStream: parent,
 				documentFile: documentFile,
 				resolver: resolver)
@@ -182,7 +295,7 @@ public class ExternalReferenceLoader: SDAI.Object {
 			children.append(child)
 		}
 		
-		monitor?.identified(externalReferences: children, originatedFrom: parent)
+    monitor?.identified(children: children, originatedFrom: parent)
 
 		return children
 	}
