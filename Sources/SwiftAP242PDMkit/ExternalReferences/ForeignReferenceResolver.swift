@@ -59,13 +59,13 @@ extension ExternalReferenceLoader {
 		
 		open func characterSteam(
 			from externalReference: DocumentSourceProperty
-		) -> AnyCharacterStream?
+    ) -> P21Decode.AnyCharacterStream?
 		{
 			let url = URL(fileURLWithPath: (externalReference.path ?? ".") + "/" + externalReference.fileName)
 			do {
 				let source = try String(contentsOf: url, encoding: .utf8)
 				let stream = source.makeIterator()
-				return AnyCharacterStream(stream)
+        return P21Decode.AnyCharacterStream(stream)
 			}
 			catch {
 				return nil
