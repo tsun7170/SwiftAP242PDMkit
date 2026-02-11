@@ -12,7 +12,7 @@ import SwiftSDAIap242
 
 
 
-/// obtains all work order directives contained in a schema instance
+/// obtains all work order directives contained in a schema instance (15.2.1.1)
 /// - Parameter domain: schema instance
 /// - Returns: all work order directives found
 /// 
@@ -32,7 +32,7 @@ public func workOrders(
 	return Set( instances.map{$0.pRef} )
 }
 
-/// obtains the work order directives addressing a given work request
+/// obtains the work order directives addressing a given work request (15.2.1.1)
 /// - Parameter workRequest: work request
 /// - Returns: work order directives
 /// 
@@ -57,7 +57,7 @@ public func workOrders(
 
 
 
-/// obtains the work order action controlled by a given work order directive
+/// obtains the work order action controlled by a given work order directive (15.2.1.1-2)
 /// - Parameter workOrder: work order directive
 /// - Throws: multipleDirectedActions
 /// - Returns: work order action
@@ -86,7 +86,7 @@ public func directedAction(
 }
 
 
-/// obtains input items for a given work order action
+/// obtains input items for a given work order action (15.2.1.3)
 /// - Parameter action: work order action
 /// - Returns: input items
 /// 
@@ -110,7 +110,7 @@ public func inputItems(
 }
 
 
-/// obtains affected items by a given work order action
+/// obtains affected items by a given work order action (15.2.1.3)
 /// - Parameter action: work order action
 /// - Returns: affected items
 /// 
@@ -134,7 +134,7 @@ public func affectedItems(
 }
 
 
-/// obtain the status for a given work order action
+/// obtain the status for a given work order action (15.2.2.2)
 /// - Parameter action: work order action
 /// - Throws: multipleActionStatus
 /// - Returns: status
@@ -163,7 +163,7 @@ public func status(
 }
 
 
-/// obtains the related actions for a given work order action
+/// obtains the related actions for a given work order action (15.2.2.3)
 /// - Parameter action: work order action
 /// - Returns: related actions
 /// 
@@ -186,7 +186,7 @@ public func relatedActions(
 	return Set(usedin)
 }
 
-/// obtains the relating actions for a given work order action
+/// obtains the relating actions for a given work order action (15.2.2.3)
 /// - Parameter action: work order action
 /// - Returns: relating actions
 /// 

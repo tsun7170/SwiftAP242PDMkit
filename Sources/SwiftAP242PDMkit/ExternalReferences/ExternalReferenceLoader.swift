@@ -10,14 +10,86 @@ import Foundation
 import SwiftSDAIcore
 import SwiftSDAIap242
 
+/// An actor responsible for loading and resolving external references to STEP P21 exchange data files,
+/// building a collection of external references and managing decoding across potentially multiple files.
+///
+/// `ExternalReferenceLoader` coordinates the import of external resources, mapping their models into the
+/// repository, handling dependencies between files, and facilitating concurrent or sequential decoding.
+///
+/// - Responsibilities:
+///   - Maintains a list of external references and provides efficient lookup by name.
+///   - Decodes a tree of P21 exchange data files, recursively discovering and registering child references.
+///   - Supports both sequential and concurrent decoding of referenced files.
+///   - Manages association of exchange structures and schema instances with their corresponding source documents.
+///   - Coordinates progress monitoring and error reporting through an optional `ActivityMonitor`.
+///
+/// - Usage:
+///   Initialize with a repository, schema list, master file URL, and (optionally) an activity monitor type
+///   and a custom reference resolver. Call `decode(transaction:)` or `decodeConcurrently(transaction:)`
+///   to import the referenced data streams into the repository.
+///
+/// - Thread Safety:
+///   As an `actor`, all mutable state is safely isolated. Some methods are marked as `nonisolated` for
+///   performance or architectural reasons (e.g., when interacting with shared or external resources).
+///
+/// - SeeAlso:
+///   - `ExternalReference`
+///   - `P21Decode/ExchangeStructure`
+///   - `ActivityMonitor`
+///   - `ForeignReferenceResolver`
+///   - `SDAISessionSchema/SdaiRepository`
+///   - `SDAIPopulationSchema/SchemaInstance`
+///
 public actor ExternalReferenceLoader: SDAI.Object {
 
+  /// An ordered collection of all currently recognized external references within the import session.
+  ///
+  /// This array contains every `ExternalReference` discovered or registered by the loader, including the master
+  /// file and any recursively identified child references. The order reflects the sequence in which references
+  /// are recognized and appended, starting with the top-level reference.
+  ///
+  /// Each entry represents a distinct external data source (e.g., a STEP P21 file or dependent resource)
+  /// whose presence may affect the decoding process and model population. The loader consults this list
+  /// to determine which files still require loading, to manage dependencies, and to facilitate lookup or
+  /// reporting tasks.
+  ///
+  /// - SeeAlso: `ExternalReference`, `externalReferences`
 	public var externalReferenceList: [ExternalReference] = []
+
+  /// A dictionary providing efficient lookup of all currently recognized external references by name.
+  ///
+  /// The keys are the unique names of external references (e.g., file or resource identifiers),
+  /// and the values are the corresponding `ExternalReference` objects discovered or registered
+  /// during the import session. The dictionary is constructed from the `externalReferenceList`,
+  /// preserving only the first occurrence of each reference name.
+  ///
+  /// Use this property to quickly retrieve a specific external reference by name, or to enumerate
+  /// all known references as a keyed collection. This facilitates dependency resolution,
+  /// reporting, and model association tasks.
+  ///
+  /// - Note: The order of the dictionary does not reflect the chronological order of discovery.
+  ///   For sequential ordering, use `externalReferenceList`.
+  ///
+  /// - SeeAlso: `externalReferenceList`, `ExternalReference`
 	public var externalReferences: [String:ExternalReference] {
 		let pairs = zip(externalReferenceList.map{$0.name}, externalReferenceList)
 		return Dictionary(pairs) { (v1,v2) in return v1 }
 	}
 
+  /// A collection view aggregating all SDAI models discovered among the loaded external references.
+  ///
+  /// This computed property collects every `SDAIPopulationSchema.SdaiModel` present in the currently
+  /// loaded external references, as recognized by the loader. For each `ExternalReference` that has
+  /// completed loading and possesses an associated exchange structure, all of its SDAI models are
+  /// extracted and returned as a single, lazily-evaluated collection.
+  ///
+  /// Use this property to iterate through all available models within the import session, regardless
+  /// of their source file or hierarchical position. This is useful for broad queries, reporting,
+  /// repository management, or any operation requiring access to all decoded models in the session.
+  ///
+  /// - Returns: A collection containing all `SDAIPopulationSchema.SdaiModel` instances loaded from
+  ///            the referenced external structures, in an unspecified order.
+  /// - SeeAlso: `externalReferences`, `ExternalReference.exchangeStructure`
 	public var sdaiModels: some Collection<SDAIPopulationSchema.SdaiModel> {
 		let models = externalReferences.values
       .lazy.compactMap({$0.exchangeStructure?.sdaiModels})
@@ -36,6 +108,20 @@ public actor ExternalReferenceLoader: SDAI.Object {
     return serial
   }
 
+  /// Initializes a new `ExternalReferenceLoader` to manage the loading and resolution of external references
+  /// from a STEP P21 master file, mapping the data into the specified repository using the provided schema list.
+  ///
+  /// - Parameters:
+  ///   - repository: The `SdaiRepository` into which decoded models and schema instances will be imported.
+  ///   - schemaList: The list of STEP schemas available for validation and decoding.
+  ///   - masterFile: The URL of the top-level (master) P21 exchange data file to import.
+  ///   - monitorType: An optional `ActivityMonitor.Type` for reporting progress and status during decoding.
+  ///   - foreignReferenceResolver: An optional custom `ForeignReferenceResolver` to resolve file/document references.
+  ///
+  /// This initializer creates the root `ExternalReference` for the master file, prepares the loader's state,
+  /// and configures the actor for subsequent decoding operations. Returns `nil` if initialization fails.
+  ///
+  /// - SeeAlso: `ExternalReference`, `SdaiRepository`, `ForeignReferenceResolver`, `ActivityMonitor`
 	public init?(
 		repository: SDAISessionSchema.SdaiRepository,
 		schemaList: P21Decode.SchemaList,
@@ -59,9 +145,18 @@ public actor ExternalReferenceLoader: SDAI.Object {
 		self.externalReferenceList.append(master)
 	}
 	
-	/// decode a tree of P21 exchange data files starting from the masterFile
-	/// - Parameter transaction: RW transaction for SDAI-model construction
-	/// 
+  /// Decodes a hierarchy of STEP P21 exchange data files starting from the master file, recursively discovering and loading all external references into the repository.
+  /// 
+  /// This method walks the tree of external references, beginning with the master file, loading and decoding each referenced file in sequence. As each file is processed,
+  /// any additional external references discovered within it are appended to the loader's reference list and are themselves subsequently loaded and decoded.
+  /// 
+  /// The decoding operation is performed sequentially (not concurrently) and is suitable for use cases that require strict ordering or simplified error handling.
+  /// During the process, progress and status notifications are sent to the optional activity monitor, if present.
+  /// 
+  /// - Parameter transaction: The read-write (`SdaiTransactionRW`) transaction in which models and schema instances will be constructed and imported.
+  /// 
+  /// - Note: To perform decoding in parallel for improved performance, use `decodeConcurrently(transaction:)`.
+  /// - SeeAlso: `decodeConcurrently(transaction:)`, `ExternalReference`, `ActivityMonitor`
 	public func decode(
 		transaction: SDAISessionSchema.SdaiTransactionRW
 	) async
@@ -102,6 +197,17 @@ public actor ExternalReferenceLoader: SDAI.Object {
     }//while
   }
 
+  /// Decodes a hierarchy of STEP P21 exchange data files starting from the master file, recursively discovering and loading all external references into the repository, using concurrent tasks.
+  ///
+  /// This method traverses the tree of external references, beginning with the master file, and loads and decodes each referenced file concurrently using a Swift task group. As each file is processed, any additional external references discovered within it are appended to the loader's reference list and are subsequently loaded and decoded in parallel.
+  ///
+  /// Concurrent decoding can significantly improve performance when importing large or complex dependency graphs, as multiple files and their dependencies are processed simultaneously. This method is suitable for use cases where maximum throughput is desired and strict sequential ordering is not required.
+  ///
+  /// During processing, progress and status notifications are sent to the optional activity monitor, if present.
+  ///
+  /// - Parameter transaction: The read-write (`SdaiTransactionRW`) transaction in which models and schema instances will be constructed and imported.
+  /// - Note: This operation is performed concurrently; for strict sequential decoding, use ``decode(transaction:)``.
+  /// - SeeAlso: ``decode(transaction:)``, ``ExternalReference``, ``ActivityMonitor``
   public func decodeConcurrently(
     transaction: SDAISessionSchema.SdaiTransactionRW
   ) async

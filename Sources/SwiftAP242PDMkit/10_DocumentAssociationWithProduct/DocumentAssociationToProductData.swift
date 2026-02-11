@@ -13,7 +13,7 @@ import SwiftSDAIap242
 //MARK: - Document Reference
 
 
-/// obtains associated documents for a given product definition
+/// obtains associated documents for a given product definition (10.1.4)
 /// - Parameter productDefinition: product definition
 /// - Returns: document references
 /// 
@@ -35,7 +35,7 @@ public func associatedDocuments(
 	return []
 }
 
-/// obtains associated documents for a given generic item
+/// obtains associated documents for a given generic item (10.1.4)
 /// - Parameter item: generic item
 /// - Returns: document references
 /// 
@@ -58,7 +58,7 @@ public func associatedDocuments(
 }
 
 
-/// obtains a managed document product for a given document reference
+/// obtains a managed document product for a given document reference (10.1.1-2,.4)
 /// - Parameter documentReference: document reference
 /// - Throws: multipleDocumentProductEquivalences
 /// - Returns: managed document product if associated
@@ -82,7 +82,7 @@ public func managedDocument(
 }
 
 
-/// obtains a managed document product for a given document
+/// obtains a managed document product for a given document (10.1.1-2)
 /// - Parameter document: document
 /// - Throws: multipleDocumentProductEquivalences
 /// - Returns: managed document product if associated
@@ -111,7 +111,7 @@ public func managedDocument(
 }
 
 
-/// obtains a unmanaged document file for a given document reference
+/// obtains a unmanaged document file for a given document reference (10.2)(10.1.4)(7.1.1)
 /// - Parameter documentReference: document reference
 /// - Returns: document file if associated
 /// 
@@ -133,7 +133,7 @@ public func documentFile(
 }
 
 
-/// obtains a unmanaged document file from a given document
+/// obtains a unmanaged document file from a given document (10.2)(7.1.1)
 /// - Parameter document: document
 /// - Returns: equivalent document file if possible
 /// 
@@ -154,7 +154,7 @@ public func documentFile(
 }
 
 
-/// obtains the gateway document references equivalenced to document products from a given document file
+/// obtains the gateway document references equivalenced to document products from a given document file (8.1)(10.1.1)(10.2)
 /// - Parameter documentFile: document file
 /// - Returns: gateway document references
 /// 
@@ -198,7 +198,7 @@ public func documentReferences(
 }
 
 
-/// obtains applications of given document references
+/// obtains applications of given document references (10.1.4)
 /// - Parameter documentReferences: document references
 /// - Returns: all applications
 /// 
@@ -227,7 +227,7 @@ public func applications(
 	return result
 }
 
-/// obtains applications as the externally defined definitional shape of parts of given document references
+/// obtains applications as the externally defined definitional shape of parts of given document references (3.2.3)
 /// - Parameter documentReferences: document references
 /// - Returns: all applications to shape representation property
 ///
@@ -264,7 +264,7 @@ public func definitionalShapeApplications(
 //MARK: - Constrained Document or File Reference
 
 
-/// obtains portions of documents associated with a given product definition
+/// obtains portions of documents associated with a given product definition (10.3.2)
 /// - Parameter productDefinition: product definition
 /// - Returns: portions of documents
 /// 
@@ -286,7 +286,7 @@ public func associatedDocumentPortions(
 	return []
 }
 
-/// obtains portions of documents associated with a generic item
+/// obtains portions of documents associated with a generic item (10.3.2)
 /// - Parameter item: generic item
 /// - Returns: portions of documents
 /// 
@@ -309,7 +309,7 @@ public func associatedDocumentPortions(
 }
 
 
-/// obtains a managed document product for a given portion of document usage
+/// obtains a managed document product for a given portion of document usage (10.3.1-2)
 /// - Parameter documentUsageConstraint: portion of document usage
 /// - Throws: multipleDocumentProductEquivalences
 /// - Returns: managed document product if associated
@@ -331,7 +331,7 @@ public func managedDocument(
 	return try managedDocument(of: document)
 }
 
-/// obtains a unmanaged document file for a given portion of document usage
+/// obtains a unmanaged document file for a given portion of document usage (10.3.1-2)
 /// - Parameter documentUsageConstraint: portion of document usage
 /// - Returns: unmanaged document file
 /// 

@@ -14,6 +14,38 @@ import SwiftSDAIap242
 extension ExternalReferenceLoader {
 
 	//MARK: - ExternalReference
+  /// A representation of an external reference to a document and its associated product definitions,
+  /// enabling structured navigation and access to nested external resources in a reference chain.
+  /// 
+  /// `ExternalReference` is typically used when loading or managing external STEP or PDM documents,
+  /// enabling the association of source properties, hierarchical relationships, and loaded exchange structures.
+  /// 
+  /// Instances track their origin, associated document file, referencing parent (if any), and the
+  /// exchange structure and loaded SDAI models when resolved. They also provide access to linkages between
+  /// master and detail shape definitions across external references.
+  /// 
+  /// - Properties:
+  ///   - documentFile: The referenced eDOCUMENT_FILE, if resolved.
+  ///   - sourceProperties: An array of `DocumentSourceProperty` instances describing the reference sources.
+  ///   - level: The depth in the external reference hierarchy.
+  ///   - serial: A unique serial number in the loading context.
+  ///   - upStream: The parent or upstream `ExternalReference` in the chain, if any.
+  ///   - status: The current loading status of the reference.
+  ///   - name: Unique, human-readable name for the reference, often based on serial and filename.
+  ///   - exchangeStructure: The loaded `P21Decode.ExchangeStructure` if resolved, otherwise nil.
+  ///   - sdaiModels: The list of associated `SDAIPopulationSchema.SdaiModel` instances if loaded.
+  ///   - externalShapeDefinitionLinkages: The set of master-detail shape definition linkages found
+  ///     between this document and external references.
+  ///
+  /// - Usage:
+  ///   - Use `ExternalReference` to encapsulate a document reference, manage hierarchical relationships
+  ///     as nested references are loaded, and resolve associated product/shape definitions.
+  ///   - Supports chaining and recursive lookup via the `upStream` property and `level`.
+  ///   - Integrates with external reference loading, status tracking, and resolved SDAI model access.
+  ///
+  /// - Thread Safety:
+  ///   - Conforms to `Sendable`. Loading status is accessible as a `nonisolated(unsafe)` property.
+  ///
 	public final class ExternalReference: SDAI.Object, Sendable
   {
 		public let documentFile: apPDM.eDOCUMENT_FILE.PRef?

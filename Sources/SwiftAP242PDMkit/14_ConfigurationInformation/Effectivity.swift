@@ -13,7 +13,7 @@ import SwiftSDAIap242
 //MARK: - Configuration Effectivity
 
 
-/// obtains the configuration effectivities associated with a given product configuration
+/// obtains the configuration effectivities associated with a given product configuration (14.2.1.1-3)
 /// - Parameter productConfiguration: product configuration
 /// - Returns: configuration effectivities
 /// 
@@ -40,7 +40,7 @@ public func usageEffectivities(
 //MARK: - Product Definition Effectivity
 
 
-/// obtains the usage effectivities associated with a given sub-assembly
+/// obtains the usage effectivities associated with a given sub-assembly (14.2.1.1-2)
 /// - Parameter subAssembly: sub-assembly
 /// - Returns: usage effectivities
 /// 
@@ -66,7 +66,7 @@ public func usageEffectivities(
 //MARK: - General Validity Period Efectivity
 
 
-/// obtains the general validity periods associated with a given product data item
+/// obtains the general validity periods associated with a given product data item  (14.2.1.3)
 /// - Parameter item: product data item
 /// - Returns: general validity periods
 /// 
@@ -91,7 +91,7 @@ public func generalValidityEfectivities(
 //MARK: - Effectivity Relationship
 
 
-/// obtains related effectivity objects to a given effectivity object
+/// obtains related effectivity objects to a given effectivity object (14.2.1.2)
 /// - Parameter effectivity: effectivity object
 /// - Returns: related effectivity objects
 /// 
@@ -110,7 +110,7 @@ public func relatedEffectivities(
 	return Set(usedin)
 }
 
-/// obtains relating effectivity objects to a given effectivity object
+/// obtains relating effectivity objects to a given effectivity object (14.2.1.2)
 /// - Parameter effectivity: effectivity object
 /// - Returns: relating effectivity objects
 /// 

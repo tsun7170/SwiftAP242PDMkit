@@ -13,7 +13,7 @@ import SwiftSDAIap242
 
 //MARK: - product related
 
-/// obtains all product masters contained in a schema instance
+/// obtains all product masters contained in a schema instance (1.1.1.1)
 /// - Parameter domain: schema instance
 /// - Returns: all product masters found
 /// 
@@ -33,7 +33,7 @@ public func products(
 	return Set( instances.map{$0.pRef} )
 }
 
-/// obtains all product masters classified under the specified category and its sub categories
+/// obtains all product masters classified under the specified category and its sub categories (1.1.1)(1.1.3)
 /// - Parameter category: product category
 /// - Returns: all product masters found
 /// 
@@ -59,7 +59,7 @@ public func products(
 	return result
 }
 
-/// all versions of the base product master
+/// all versions of the base product master (1.1.1.2)
 /// - Parameter productMaster: base product master
 /// - Returns: all product definition formations associated
 /// 
@@ -83,7 +83,7 @@ public func versions(
 
 //MARK: - product definition formation related
 
-/// obtains all views on a version of a product
+/// obtains all views on a version of a product (1.1.1.4)
 /// - Parameter productVersion: product version
 /// - Returns: all views associated with a product version
 /// 
@@ -105,7 +105,7 @@ public func views(
 	return Set(usedin)
 }
 
-/// obtains all views of a version of a document product
+/// obtains all views of a version of a document product (8.1.1)
 /// - Parameter documentProductVersion: document product version
 /// - Returns: all document views associated with a document product version
 /// 
@@ -129,7 +129,7 @@ public func documentViews(
 
 
 
-/// obtains a base product master associated with the product version
+/// obtains a base product master associated with the product version (1.1.1.2)
 /// - Parameter productVersion: product version
 /// - Returns: product master associated with the product version
 /// 
@@ -151,7 +151,7 @@ public func masterBase(
 
 //MARK: - product definition related
 
-/// obtains all product definitions contained in a schema instance
+/// obtains all product definitions contained in a schema instance (1.1.1.4)
 /// - Parameter domain: schema instance
 /// - Returns: all product definitions found
 /// 
@@ -174,7 +174,7 @@ public func productDefinitions(
 
 
 
-/// obtains all document product definitions contained in a schema instance
+/// obtains all document product definitions contained in a schema instance (8.1.1)
 /// - Parameter domain: schema instance
 /// - Returns: all document product definition found
 /// 
@@ -195,7 +195,7 @@ public func documentProductDefinitions(
 }
 
 
-/// obtains all product definitions belonged under specified category and its sub-categories
+/// obtains all product definitions belonged under specified category and its sub-categories (1.1.1)(1.1.3)
 /// - Parameter category: product category
 /// - Returns: product definitions found
 /// 
@@ -217,7 +217,7 @@ public func productDefinitions(
 	return pdefs
 }
 
-/// obtains a product version associated with the product definition
+/// obtains a product version associated with the product definition (1.1.1)
 /// - Parameter productDefinition: product definition
 /// - Returns: product version associated with the product definition
 /// 
@@ -235,7 +235,7 @@ public func version(
 	return SDAI.UNWRAP(productDefinition.FORMATION)
 }
 
-/// obtains a base product master associated with the product definition
+/// obtains a base product master associated with the product definition (1.1.1)
 /// - Parameter productDefinition: product definition
 /// - Returns: product master associated with the product definition
 /// 

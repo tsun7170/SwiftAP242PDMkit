@@ -11,7 +11,7 @@ import SwiftSDAIcore
 import SwiftSDAIap242
 
 
-/// obtains document files contained in a given schema instance
+/// obtains document files contained in a given schema instance (7.1.1)
 /// - Parameter domain: schema instance
 /// - Returns: all document files found
 /// 
@@ -31,7 +31,7 @@ public func documentFiles(
 	return Set( instances.map{$0.pRef} )
 }
 
-/// obtains document files associated with a given product definition
+/// obtains document files associated with a given product definition (8.1.1)
 /// - Parameter documentProductDefinition: document product definition
 /// - Returns: document files
 /// 
@@ -56,7 +56,7 @@ public func documentFiles(
 
 
 
-/// obtains the representation type of a given document file
+/// obtains the representation type of a given document file (7.1.1-2)
 /// - Parameter documentFile: document file
 /// - Throws: multipleDocumentRepresentationTypes
 /// - Returns: representation type
@@ -85,7 +85,7 @@ public func representationType(
 
 
 
-/// obtains the type of a given document file
+/// obtains the type of a given document file (7.1.1,.3)
 /// - Parameter documentFile: document file
 /// - Returns: document type
 /// 
@@ -107,7 +107,7 @@ public func type(
 }
 
 
-/// obtains the version of a given document file
+/// obtains the version of a given document file (7.1.1,.3-4)
 /// - Parameter documentFile: document file
 /// - Throws: multipleAssignedVersions
 /// - Returns: version identification

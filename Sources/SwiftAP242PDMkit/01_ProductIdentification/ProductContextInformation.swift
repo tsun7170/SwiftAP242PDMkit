@@ -11,7 +11,7 @@ import SwiftSDAIcore
 import SwiftSDAIap242
 
 
-/// obtains all the product contexts associated with a given product master
+/// obtains all the product contexts associated with a given product master (1.1.2.3)(5.1.2)
 /// - Parameter productMaster: product master
 /// - Returns: associated product contexts
 /// 
@@ -33,7 +33,7 @@ public func contexts(
 }
 
 
-/// obtains an application context associated with a given product context
+/// obtains an application context associated with a given product context (1.1.2.2-3)
 /// - Parameter productContext: product context
 /// - Returns: associated application context
 /// 
@@ -54,7 +54,7 @@ public func applicationContext(
 }
 
 
-/// obtains an application context associated with a given product definition context
+/// obtains an application context associated with a given product definition context (1.1.2.2-5)
 /// - Parameter productDefinitionContext: product definition context
 /// - Returns: associated application context
 /// 
@@ -76,7 +76,7 @@ public func applicationContext(
 }
 
 
-/// obtains an application protocol identification optionally associated with a given application context
+/// obtains an application protocol identification optionally associated with a given application context (1.1.2.1)
 /// - Parameter applicationContext: application context
 /// - Throws: multipleApplicationProtocols
 /// - Returns: associated application protocol identification
@@ -103,7 +103,7 @@ public func applicationProtocol(
 }
 
 
-/// obtains a single primary context associated with a given product definition
+/// obtains a single primary context associated with a given product definition (1.1.2.4)(5.1.2.2)
 /// - Parameter productDefinition: product definition
 /// - Returns: associated primary product definition context
 /// 
@@ -124,7 +124,7 @@ public func primaryContext(
 }
 
 
-/// obtains additional contexts assigned to a given product definition
+/// obtains additional contexts assigned to a given product definition (1.1.2.4-5)
 /// - Parameter productDefinition: product definition
 /// - Returns: set of assigned product definition context associations
 /// 

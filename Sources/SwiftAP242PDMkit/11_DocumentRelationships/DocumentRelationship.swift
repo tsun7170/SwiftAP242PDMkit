@@ -11,7 +11,7 @@ import SwiftSDAIcore
 import SwiftSDAIap242
 
 
-/// obtains related documents for a given document
+/// obtains related documents for a given document (11.3.1)
 /// - Parameter document: document
 /// - Returns: related documents
 /// 
@@ -33,7 +33,7 @@ public func relatedDocuments(
 	return Set(usedin)
 }
 
-/// obtains relating documents for a gicen document
+/// obtains relating documents for a given document (11.3.1)
 /// - Parameter document: document
 /// - Returns: relating documents
 /// 

@@ -11,7 +11,7 @@ import SwiftSDAIcore
 import SwiftSDAIap242
 
 
-/// obtains all certifications in the schema instance
+/// obtains all certifications in the schema instance (13.5.1.1-2)
 /// - Parameter domain: schema instance
 /// - Returns: certifications
 /// 
@@ -33,7 +33,7 @@ public func certifications(
 }
 
 
-/// obtains items certified by a given certification
+/// obtains items certified by a given certification (13.5.1.2)
 /// - Parameter certification: certification
 /// - Returns: certified items
 /// 
@@ -55,7 +55,7 @@ public func certifiedItems(
 	return Set(usedin)
 }
 
-/// obtains certifications given to an certified item
+/// obtains certifications given to an certified item (13.5.1.2)
 /// - Parameter item: certified item
 /// - Returns: certifications
 /// 

@@ -11,7 +11,7 @@ import SwiftSDAIcore
 import SwiftSDAIap242
 
 
-/// obtains aliases assigned to a given item
+/// obtains aliases assigned to a given item (12.1.1.1)
 /// - Parameter item: item
 /// - Returns: aliases
 /// 

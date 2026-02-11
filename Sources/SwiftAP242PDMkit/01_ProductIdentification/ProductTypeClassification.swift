@@ -10,7 +10,7 @@ import Foundation
 import SwiftSDAIcore
 import SwiftSDAIap242
 
-/// obtains all product categories contained in the schema instance
+/// obtains all product categories contained in the schema instance (1.1.3)(2)
 /// - Parameter domain: schema instance
 /// - Throws: duplicated category name error when multiple categories have the same NAME value
 /// - Returns: dictionary of product categories keyed with category name
@@ -38,7 +38,7 @@ public func categories(
 	return dict
 }
 
-/// obtains all top level product categories in the schema instance
+/// obtains all top level product categories in the schema instance (1.1.3.2)(2)
 /// - Parameter domain: schema instance
 /// - Throws: duplicated category name error when multiple categories have the same NAME value
 /// - Returns: dictionary of top level product categories keyed with category name
@@ -66,7 +66,7 @@ public func topLevelCategories(
 	return dict
 }
 
-/// obtains a immediate super category of a given category if exist
+/// obtains a immediate super category of a given category if exist (1.1.3.2)(2)
 /// - Parameter category: product category
 /// - Throws: multiple super categories error
 /// - Returns: immediate super category of a given category if exist
@@ -93,7 +93,7 @@ public func superCategory(
 	return usedin.first?.CATEGORY
 }
 
-/// obtains all immediate sub categories of a given category
+/// obtains all immediate sub categories of a given category (1.1.3.2)(2)
 /// - Parameter category: product category
 /// - Returns: immediate sub categories of a given category
 ///
@@ -119,7 +119,7 @@ public func subCategories(
 public typealias HierarchyLevel = Int
 public let topLevel: HierarchyLevel = 0
 
-/// obtains a hierarchy level of a given category in category tree
+/// obtains a hierarchy level of a given category in category tree (1.1.3.2)(2)
 /// - Parameter category: product category
 /// - Throws: multiple super categories error
 /// - Returns: hierarchy level of a given category
@@ -147,7 +147,7 @@ public func categoryLevel(
 	}
 }
 
-/// obtains all the categories to which a given product belongs to
+/// obtains all the categories to which a given product belongs to (1.1.3.2)(2)
 /// - Parameter productMaster: product master
 /// - Returns: all the categories to which a given product belongs to
 ///
@@ -170,7 +170,7 @@ public func categories(
 	return Set(usedin)
 }
 
-/// check to see if a given product master belongs to a category
+/// check to see if a given product master belongs to a category (1.1.3.2)(2)
 /// - Parameters:
 ///   - productMaster: product master
 ///   - category: category in question

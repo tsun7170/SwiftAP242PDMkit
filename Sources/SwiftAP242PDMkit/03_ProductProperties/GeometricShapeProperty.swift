@@ -10,7 +10,7 @@ import Foundation
 import SwiftSDAIcore
 import SwiftSDAIap242
 
-/// obtains all shape definition representations in a schema instance
+/// obtains all shape definition representations in a schema instance (3.2.1.2)
 /// - Parameter domain: schema instance
 /// - Returns: all shape definition representations found
 ///
@@ -31,7 +31,7 @@ public func shapeDefinitionRepresentations(
 	return Set( instances.map{$0.pRef} )
 }
 
-/// obtains the shape of a given product definition
+/// obtains the shape of a given product definition (3.2.1.1)
 /// - Parameter productDefinition: product definition
 /// - Throws: multipleProductDefinitionShapes
 /// - Returns: shape of product
@@ -59,7 +59,7 @@ public func shape(
 }
 
 
-/// obtains the representations product definition shape
+/// obtains the representations product definition shape (3.2.1.2-3)
 /// - Parameter productDefinitionShape: product definition shape
 /// - Returns: shape definition representations
 /// 
@@ -82,7 +82,7 @@ public func representations(
 	return Set(usedin)
 }
 
-/// obtains the shape definition representation of a given shape representation
+/// obtains the shape definition representation of a given shape representation (3.2.1.2-3)
 /// - Parameter shapeRepresentation: shape representation
 /// - Throws: multipleShapeDefinitionRepresentations
 /// - Returns: shape definition representation
@@ -108,7 +108,7 @@ public func shapeDefinition(
 	return shapedef
 }
 
-/// obtains the product_definition which owns a given shape representation
+/// obtains the product_definition which owns a given shape representation (3.2.1)
 /// - Parameter shapeRepresentation: shape representation
 /// - Throws: multipleShapeDefinitionRepresentations
 /// - Returns: product definition owning the given shape representation
@@ -131,7 +131,7 @@ public func productDefinition(
 }
 
 
-/// obtains the geometric context of a given shape representation
+/// obtains the geometric context of a given shape representation (3.2.1.3-4)
 /// - Parameter shapeRepresentation: shape representation
 /// - Throws: noGeometricRepresentationContext
 /// - Returns: geometric context
@@ -157,7 +157,7 @@ public func context(
 }
 
 
-/// obtains the geometric representation items for a given shape representation
+/// obtains the geometric representation items for a given shape representation (3.2.1.3,.5)
 /// - Parameter shapeRepresentation: shape representation
 /// - Returns: geometric representation items
 /// 
@@ -184,7 +184,7 @@ public func geometricItems(
 //MARK: - portions of the part shape
 
 
-/// obtains the portions of product definition shape 
+/// obtains the portions of product definition shape (3.2.2.1)
 /// - Parameter productDefinitionShape: product definition shape
 /// - Returns: portions of a product definition shape
 /// 
@@ -208,7 +208,7 @@ public func shapeAspects(
 }
 
 
-/// obtains the representations of a portion of product definition shape
+/// obtains the representations of a portion of product definition shape (3.2.2.1)
 /// - Parameter shapeAspect: a portion of product definition shape
 /// - Returns: shape definition representations
 /// 
@@ -238,7 +238,7 @@ public func representations(
 
 //MARK: - Relating Part Shape
 
-/// obtains all shape_representation_relationship contained in a shcema instance
+/// obtains all shape_representation_relationship contained in a schema instance (3.3.1.1)
 /// - Parameter domain: schema instance
 /// - Returns: all shape_representation_relationship found
 /// 
@@ -258,7 +258,7 @@ public func shapeRepresentationRelationships(
 	return Set( instances.map{$0.pRef} )
 }
 
-/// obtains the shape representations related as rep1 to a given rep2 shape representation
+/// obtains the shape representations related as rep1 to a given rep2 shape  representation (3.3.1.1)
 /// - Parameter shapeRep2: rep2 shape representation
 /// - Returns: shape representation relationships which contain related rep1 shape representations
 /// 
@@ -281,7 +281,7 @@ public func relatedShapeRep1s(
 	return rep1s
 }
 
-/// obtains the shape representations related as rep2 to a given rep1 shape representation
+/// obtains the shape representations related as rep2 to a given rep1 shape representation (3.3.1.1)
 /// - Parameter shapeRep1: rep1 shape representation
 /// - Returns: shape representation relationships which contain related rep2 shape representations
 /// 
@@ -309,7 +309,7 @@ public func relatedShapeRep2s(
 //MARK: - definitional shape of the part externally defined
 
 
-/// obtains the external geometric model file containing the definitional shape of the product
+/// obtains the external geometric model file containing the definitional shape of the product (3.2.3)
 /// - Parameter shapeRepresentation: shape representation of a product
 /// - Throws: multipleDefinitionalShapes
 /// - Returns: document file for external geometric model
@@ -318,8 +318,8 @@ public func relatedShapeRep2s(
 /// It is recommended that applied_document_reference be used, in general, to relate an external file representing the CAD model to the product_definition of a part identification (see Section 10).
 /// 
 /// # Reference
-/// 3.2.3 Ralating Externally Defined Part Shape to an External File
-/// 
+/// 3.2.3 Relating Externally Defined Part Shape to an External File
+///
 /// Usage Guide for the STEP PDM Schema V1.2;
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum

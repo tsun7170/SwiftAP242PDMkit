@@ -12,7 +12,7 @@ import SwiftSDAIap242
 
 
 
-/// obtains all contracts contained in a schema instance
+/// obtains all contracts contained in a schema instance (15.4.1.1)
 /// - Parameter domain: schema instance
 /// - Returns: all contracts found
 /// 
@@ -33,7 +33,7 @@ public func contracts(
 }
 
 
-/// obtains the contracts binding a given item
+/// obtains the contracts binding a given item (15.4.1.1,.3)
 /// - Parameter item: item
 /// - Returns: contract bindings
 /// 
@@ -56,11 +56,8 @@ public func contracts(
 	return Set(usedin)
 }
 
-/// 15.4 Contract Identification;
-/// 15.4.1.1 contract;
-/// 15.4.1.3 applied_contract_assignment;
 
-/// obtains items bound by a given contract
+/// obtains items bound by a given contract (15.4.1.1,.3)
 /// - Parameter contract: contract
 /// - Returns: bound items
 /// 

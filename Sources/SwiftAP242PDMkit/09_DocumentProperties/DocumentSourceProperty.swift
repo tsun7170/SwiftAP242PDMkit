@@ -12,7 +12,7 @@ import SwiftSDAIap242
 
 
 
-/// obtains the source properties of a given document file
+/// obtains the source properties of a given document file (9.6.2)
 /// - Parameter documentFile: document file
 /// - Returns: source properties
 /// 
@@ -34,7 +34,7 @@ public func sourceProperties(
 	return []
 }
 
-/// obtains the source properties of a given product definition
+/// obtains the source properties of a given product definition (9.6.2)
 /// - Parameter productDefinition: product definition
 /// - Returns: source properties
 /// 
@@ -56,7 +56,7 @@ public func sourceProperties(
 	return []
 }
 
-/// obtains the source properties of a generic external identification item
+/// obtains the source properties of a generic external identification item (9.6.2)
 /// - Parameter externalIdentificationItem: external identification item
 /// - Returns: source properties
 /// 
@@ -80,7 +80,7 @@ public func sourceProperties(
 
 
 
-/// obtains the file location info of a given document file, according to the recommended practice
+/// obtains the file location info of a given document file, according to the recommended practice (RPER 2.1)
 /// - Parameter documentFile: document file
 /// - Returns: file location info
 /// 
@@ -127,8 +127,8 @@ public func fileLocations(
 	}
 }
 
-/// specification of location of a document object
-/// 
+/// specification of location of a document object (9.6)
+///
 /// # Reference
 /// 9.6 Document source property;
 /// 
@@ -156,7 +156,7 @@ public struct DocumentSourceProperty: Hashable, Sendable
 }
 
 
-/// obtains the document format of a given document file
+/// obtains the document format of a given document file (RPER 2.3)
 /// - Parameter documentFile: document file
 /// - Throws: multiplePropertyDefinitions, multiplePropertyRepresentations
 /// - Returns: document format property representation

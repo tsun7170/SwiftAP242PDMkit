@@ -11,7 +11,7 @@ import SwiftSDAIcore
 import SwiftSDAIap242
 
 
-/// obtains related product definitions
+/// obtains related product definitions (11.2.1)
 /// - Parameter productDefinition: relating product definition
 /// - Returns: product definition relationships
 /// 
@@ -31,7 +31,7 @@ public func relatedProductDefinitions(
 	return Set(usedin)
 }
 
-/// obtains relating product definitions
+/// obtains relating product definitions (11.2.1)
 /// - Parameter productDefinition: related product definition
 /// - Returns: product definition relationships
 /// 

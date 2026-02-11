@@ -11,7 +11,7 @@ import SwiftSDAIcore
 import SwiftSDAIap242
 
 
-/// obtains approvals given to a specified item
+/// obtains approvals given to a specified item (13.2.1.3)
 /// - Parameter item: item
 /// - Returns: approvals
 /// 
@@ -35,7 +35,7 @@ public func approvals(
 }
 
 
-/// obtains the responsibles for a given approval
+/// obtains the responsibles for a given approval (13.2.2)(13.2.1.4)
 /// - Parameter approval: approval
 /// - Returns: responsibles
 /// 
@@ -58,7 +58,7 @@ public func responsibles(
 }
 
 
-/// obtains the related dates of a given approval
+/// obtains the related dates of a given approval (13.2.1.6)
 /// - Parameter approval: approval
 /// - Returns: dates
 /// 
@@ -81,7 +81,7 @@ public func approvalDates(
 }
 
 
-/// obtains the sub-approvals related to a given master approval
+/// obtains the sub-approvals related to a given master approval (13.2.2.1)
 /// - Parameter approval: master approval
 /// - Returns: sub-approvals
 /// 
@@ -101,7 +101,7 @@ public func relatedApprovals(
 	return Set(usedin)
 }
 
-/// obtains the master-approvals relating to a given sub-approval
+/// obtains the master-approvals relating to a given sub-approval (13.2.2.1)
 /// - Parameter approval: sub-approval
 /// - Returns: master-approvals
 /// 

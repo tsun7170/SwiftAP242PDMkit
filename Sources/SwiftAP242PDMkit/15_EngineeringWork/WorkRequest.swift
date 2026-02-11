@@ -11,7 +11,7 @@ import SwiftSDAIcore
 import SwiftSDAIap242
 
 
-/// obtains all work requests contained in a schema instance
+/// obtains all work requests contained in a schema instance (15.1.1.1)
 /// - Parameter domain: schema instance
 /// - Returns: all work requests found
 /// 
@@ -32,7 +32,7 @@ public func workRequests(
 }
 
 
-/// obtains all initial design work requests contained in a shcema instance
+/// obtains all initial design work requests contained in a schema instance (15.1.1.1)
 /// - Parameter domain: schema instance
 /// - Returns: all initial design work requests found
 ///
@@ -56,7 +56,7 @@ public func initialDesignWorkRequests(
 }
 
 
-/// obtains all design change work requests found in a schema instance
+/// obtains all design change work requests found in a schema instance (15.1.1.1,.3)
 /// - Parameter domain: schema instance
 /// - Returns: all design change work requests found
 /// 
@@ -78,13 +78,10 @@ public func designChangeWorkRequests(
 }
 
 
-/// obtains the potential solutions associated with a given work request
+/// obtains the potential solutions associated with a given work request (15.1.1.1,.4)
 /// - Parameter workRequest: work request
 /// - Returns: potential solutions
-/// obtains all design change work requests found in a schema instance
-/// - Parameter domain: schema instance
-/// - Returns: all design change work requests found
-/// 
+///
 /// # Reference
 /// 15.1 Request for Work;
 /// 15.1.1.1 versioned_action_request;
@@ -105,7 +102,7 @@ public func potentialSolutions(
 }
 
 
-/// obtains change items assigned to a given work request
+/// obtains change items assigned to a given work request (15.1.1.1,.3)
 /// - Parameter workRequest: work request
 /// - Returns: assigned change items
 /// 
@@ -129,7 +126,7 @@ public func assignedChangeItems(
 }
 
 
-/// obtains the status of a given work request
+/// obtains the status of a given work request (15.1.1.1-2)
 /// - Parameter workRequest: work request
 /// - Throws: multipleActionRequestStatus
 /// - Returns: work request status
@@ -158,7 +155,7 @@ public func status(
 }
 
 
-/// obtains work requests raised against a given item
+/// obtains work requests raised against a given item (15.1.1.1,.3)
 /// - Parameter item: item
 /// - Returns: work requests
 /// 

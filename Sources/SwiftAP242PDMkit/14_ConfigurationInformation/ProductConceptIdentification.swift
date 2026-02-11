@@ -13,7 +13,7 @@ import SwiftSDAIap242
 //MARK: - Configuration Identification
 
 
-/// obtains all product concepts contained in a schema instance
+/// obtains all product concepts contained in a schema instance (14.1.1.1)
 /// - Parameter domain: schema instance
 /// - Returns: all product concepts found
 /// 
@@ -37,7 +37,7 @@ public func productConcepts(
 //MARK: - Product Concept Configuration Identification
 
 
-/// obtains configurations for a given product concept
+/// obtains configurations for a given product concept (14.1.2.1)
 /// - Parameter productConcept: product concept
 /// - Returns: product configurations
 /// 
@@ -60,7 +60,7 @@ public func productConfigurations(
 }
 
 
-/// obtains the designs for a given product configuration
+/// obtains the designs for a given product configuration (14.1.2.1-2)
 /// - Parameter productConfiguration: product configuration
 /// - Returns: configuration designs
 /// 

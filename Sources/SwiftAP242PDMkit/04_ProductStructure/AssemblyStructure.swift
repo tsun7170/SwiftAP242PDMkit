@@ -11,7 +11,7 @@ import SwiftSDAIcore
 import SwiftSDAIap242
 
 
-/// obtains parent assemblies of a given product definition
+/// obtains parent assemblies of a given product definition (4.1.1.1-2)
 /// - Parameter productDefinition: product definition
 /// - Returns: parent assemblies
 /// 
@@ -34,7 +34,7 @@ public func parentAssemblies(
 	return Set(usedin)
 }
 
-/// obtains direct sub-assembly components of a given assenbly product definition
+/// obtains direct sub-assembly components of a given assembly product definition (4.1.1.1-2)
 /// - Parameter productDefinition: assembly product definition
 /// - Returns: sub-assemblies
 /// 
@@ -57,7 +57,7 @@ public func subComponents(
 	return Set(usedin)
 }
 
-/// obtains all top level assemblies contained in a given schema instance
+/// obtains all top level assemblies contained in a given schema instance (4.1.1.1-2)
 /// - Parameter domain: schema instance
 /// - Returns: top level assembly product definitions
 /// 
@@ -82,7 +82,7 @@ public func topLevelProducts(
 //MARK: - Promissory Component Usage
 
 
-/// obtains the higher-level assemblies that promissory using a given product
+/// obtains the higher-level assemblies that promissory using a given product (4.1.4.1)
 /// - Parameter productDefinition: product definition
 /// - Returns: higher-level assemblies that promissory using the product
 /// 
@@ -104,7 +104,7 @@ public func promissoryUsingAssemblies(
 	return Set(usedin)
 }
 
-/// obtains all the promissory usages of a given assembly product
+/// obtains all the promissory usages of a given assembly product (4.1.4.1)
 /// - Parameter productDefinition: assembly product
 /// - Returns: promissory usages
 /// 
@@ -129,7 +129,7 @@ public func promissoryUsedComponents(
 
 //MARK: - Multi-Level Assembly Digital Mock Up
 
-/// obtains all specified higher usages associated with a given product definition
+/// obtains all specified higher usages associated with a given product definition (4.2.1.1)
 /// - Parameter productDefinition: product definition
 /// - Returns: specified higher usages
 /// 
@@ -151,7 +151,7 @@ public func specificHigherUsages(
 	return Set(usedin)
 }
 
-/// obtains all specified higher usages under a given assembly product
+/// obtains all specified higher usages under a given assembly product (4.2.1.1)
 /// - Parameter higherLevelAssembly: assembly product
 /// - Returns: specified higher usages under given assembly
 /// 
@@ -173,7 +173,7 @@ public func specificUseOccurrences(
 	return Set(usedin)
 }
 
-/// obtains all specified higher usages associated with a given component usage
+/// obtains all specified higher usages associated with a given component usage (4.2.1.1)
 /// - Parameter componentUsage: component usage
 /// - Returns: specified higher usages
 /// 
@@ -198,7 +198,7 @@ public func specificUsages(
 
 //MARK: - Context Dependent Shape Representation
 
-/// obtains the geometric shape transformation relationship of component and its assembly
+/// obtains the geometric shape transformation relationship of component and its assembly (4.4.2)
 /// - Parameter componentUsage: component usage
 /// - Throws: multipleProductDefinitionShapes,multipleContextDependentShapeRepresentations
 /// - Returns: geometry transformation relationship
@@ -234,7 +234,7 @@ public func assemblyComponentTransformationRelationship(
 	return nil
 }
 
-/// obtains the as assembled specific shape of a given component usage
+/// obtains the as assembled specific shape of a given component usage (4.4.2)
 /// - Parameter componentUsage: component usage
 /// - Throws: multipleProductDefinitionShapes,multipleShapeDefinitionRepresentations
 /// - Returns: assembly specific shape of a component
@@ -271,7 +271,7 @@ public func asAssembledShape(
 }
 
 
-/// obtains the explicit shape representation of a component usage
+/// obtains the explicit shape representation of a component usage  (4.4.1)
 /// - Parameter componentUsage: component usage
 /// - Throws: multipleProductDefinitionShapes,multipleShapeDefinitionRepresentations,multipleMappedItems
 /// - Returns: mapped shape representation
@@ -303,7 +303,7 @@ public func explicitShape(
 
 //MARK: - Alternate Parts
 
-/// obtains alternate parts of a given part product master
+/// obtains alternate parts of a given part product master (4.5.1.1)
 /// - Parameter primaryBaseProductMaster: part product master
 /// - Returns: alternate parts
 /// 
@@ -328,7 +328,7 @@ public func alternateProducts(
 
 //MARK: - Substitute Components in an Assembly
 
-/// obtains substitute components for a given component usage
+/// obtains substitute components for a given component usage (4.5.2.1)
 /// - Parameter primaryBaseComponentUsage: component usage
 /// - Returns: substitute component usages
 /// 
@@ -353,7 +353,7 @@ public func substituteComponents(
 
 //MARK: - Make From Relationships
 
-/// obtains make-from source parts of a given resultant part
+/// obtains make-from source parts of a given resultant part  (4.5.3.1)
 /// - Parameter resultantProduct: resultant part definition
 /// - Returns: make-from relationships
 /// 
@@ -378,7 +378,7 @@ public func makeFroms(
 //MARK: - Supplied Part Identification
 
 
-/// obtains vender part identifications for a given internal part
+/// obtains vender part identifications for a given internal part  (4.5.4.1)
 /// - Parameter internalPartVersion: internal part version
 /// - Returns: internal part/vender part relationships
 /// 
@@ -401,7 +401,7 @@ public func venderPartIdentifications(
 	return Set(suppliedItems)
 }
 
-/// obtains internal part identifications for a given vender part
+/// obtains internal part identifications for a given vender part (4.5.4.1)
 /// - Parameter venderPartVersion: vender part version
 /// - Returns: internal part/vender part relationships
 /// 
@@ -427,8 +427,8 @@ public func internalPartIdentifications(
 //MARK: - Version History Relationship
 
 
-/// obtains successor versions of a given product version
-/// - Parameter productVersions: product version
+/// obtains successor versions of a given product version (4.5.5.1)
+/// - Parameter productVersion: product version
 /// - Returns: successor product versions
 /// 
 /// # Reference
@@ -450,7 +450,7 @@ public func successorVersions(
 	return Set(successors)
 }
 
-/// obtains the preceding version of a given product version
+/// obtains the preceding version of a given product version (4.5.5.1)
 /// - Parameter productVersion: product version
 /// - Throws: multiplePrecedingVersions
 /// - Returns: preceding part version

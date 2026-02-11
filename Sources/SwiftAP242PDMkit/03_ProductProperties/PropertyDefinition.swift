@@ -11,7 +11,7 @@ import SwiftSDAIcore
 import SwiftSDAIap242
 
 
-/// obtains properties associated with a given product definition
+/// obtains properties associated with a given product definition (3.1.1)
 /// - Parameter productDefinition: product definition
 /// - Returns: all associated properties
 /// 
@@ -33,7 +33,7 @@ public func properties(
 }
 
 
-/// obtains properties associated with a given document file
+/// obtains properties associated with a given document file (9)
 /// - Parameter documentFile: document file
 /// - Returns: all associated properties
 /// 
@@ -55,7 +55,7 @@ public func properties(
 }
 
 
-/// obtains the representation associated with a given property
+/// obtains the representation associated with a given property (3.1.1.2)
 /// - Parameter propertyDefinition: property
 /// - Throws: multiplePropertyRepresentations
 /// - Returns: associated representation
@@ -82,7 +82,7 @@ public func representation(
 }
 
 
-/// obtains the context of interpretation for the values of a given representation
+/// obtains the context of interpretation for the values of a given representation (3.1.1.3)
 /// - Parameter representation: representation
 /// - Returns: context information
 /// 
@@ -102,7 +102,7 @@ public func context(
 }
 
 
-/// obtains the values in a given representation
+/// obtains the values in a given representation (3.1.1.3)(9.1.3)
 /// - Parameter representation: representation
 /// - Returns: values of a representation
 /// 

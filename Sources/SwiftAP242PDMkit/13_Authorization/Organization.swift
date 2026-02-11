@@ -11,7 +11,7 @@ import SwiftSDAIcore
 import SwiftSDAIap242
 
 
-/// obtains all organizations contained in a schema instance
+/// obtains all organizations contained in a schema instance (13.1.1.1)
 /// - Parameter domain: schema instance
 /// - Returns: all organizations found
 /// 
@@ -24,7 +24,7 @@ import SwiftSDAIap242
 /// Release 4.3, Jan. 2002;
 /// PDM Implementor Forum
 ///
-public func orgainizations(
+public func organizations(
 	in domain: SDAIPopulationSchema.SchemaInstance
 ) -> Set<apPDM.eORGANIZATION.PRef>
 {
@@ -33,7 +33,7 @@ public func orgainizations(
 }
 
 
-/// obtains items assigned to a given origanization
+/// obtains items assigned to a given organization (13.1.1.2)
 /// - Parameter organization: organization
 /// - Returns: assigned items
 /// 
@@ -56,7 +56,7 @@ public func items(
 	return Set(usedin)
 }
 
-/// obtains organizations assigned to a given item
+/// obtains organizations assigned to a given item (13.1.1.2)
 /// - Parameter item: item
 /// - Returns: assigned organizations
 /// 

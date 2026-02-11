@@ -12,7 +12,7 @@ import SwiftSDAIap242
 
 
 
-/// obtains all projects contained in a schema instance
+/// obtains all projects contained in a schema instance (15.3.1.1)
 /// - Parameter domain: schema instance
 /// - Returns: all projects found
 /// 
@@ -33,7 +33,7 @@ public func projects(
 }
 
 
-/// obtains the projects assigned to a given product concept
+/// obtains the projects assigned to a given product concept (15.3.1.1-2)
 /// - Parameter productConcept: product concept
 /// - Returns: project assignments
 /// 
@@ -56,7 +56,7 @@ public func projects(
 	return []
 }
 
-/// obtains the projects assigned to a given item
+/// obtains the projects assigned to a given item (15.3.1.1-2)
 /// - Parameter item: item
 /// - Returns: project assignments
 /// 
@@ -81,7 +81,7 @@ public func projects(
 
 
 
-/// obtains the product concepts related to a gicen project
+/// obtains the product concepts related to a given project (15.3.1.1-2)
 /// - Parameter project: project
 /// - Returns: product concepts
 /// 
@@ -109,7 +109,7 @@ public func productConcepts(
 	return Set( productConcepts )
 }
 
-/// obtains the product data related to a given project
+/// obtains the product data related to a given project (15.3.1.1-2)
 /// - Parameter project: project
 /// - Returns: related product data assignments
 /// 
@@ -133,7 +133,7 @@ public func productData(
 }
 
 
-/// obtains projects related to a given project
+/// obtains projects related to a given project (15.3.1.1,.4)
 /// - Parameter project: project
 /// - Returns: related projects
 /// 
@@ -156,7 +156,7 @@ public func relatedProjects(
 	return Set(usedin)
 }
 
-/// obtains projects relating to a given project
+/// obtains projects relating to a given project (15.3.1.1,.4)
 /// - Parameter project: project
 /// - Returns: relating projects
 /// 
@@ -181,7 +181,7 @@ public func relatingProjects(
 
 
 
-/// obtains the activities assigned to a given project
+/// obtains the activities assigned to a given project (15.3.2.1)
 /// - Parameter project: project
 /// - Returns: assigned activities
 /// 
@@ -202,7 +202,7 @@ public func activities(
 }
 
 
-/// obtains date events associated to a given project
+/// obtains date events associated to a given project (15.3.3.2)
 /// - Parameter project: project
 /// - Returns: associated date events
 /// 
@@ -225,7 +225,7 @@ public func definedDateEvents(
 	return []
 }
 
-/// obtains the date events associated with a given item
+/// obtains the date events associated with a given item (15.3.3.2)
 /// - Parameter item: item
 /// - Returns: associated date events
 /// 
@@ -249,7 +249,7 @@ public func definedDateEvents(
 }
 
 
-/// obtains the date and time events associated with a given project
+/// obtains the date and time events associated with a given project (15.3.3.4)
 /// - Parameter project: project
 /// - Returns: associated date and time events
 /// 
@@ -272,7 +272,7 @@ public func definedDateTimeEvents(
 	return []
 }
 
-/// obtains the date and time events associated with a given item
+/// obtains the date and time events associated with a given item (15.3.3.4)
 /// - Parameter item: item
 /// - Returns: associated date and time events
 /// 

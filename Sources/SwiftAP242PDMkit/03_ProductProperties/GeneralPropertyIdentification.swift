@@ -11,7 +11,7 @@ import SwiftSDAIcore
 import SwiftSDAIap242
 
 
-/// obtains all general property types in the schema instance
+/// obtains all general property types in the schema instance (3.1.2.1)
 /// - Parameter domain: schema instance
 /// - Returns: all general property types found
 /// 
@@ -32,7 +32,7 @@ public func generalProperties(
 }
 
 
-/// obtains all property definitions associated with a given general property type
+/// obtains all property definitions associated with a given general property type (3.1.2.2)
 /// - Parameter generalPropertyType: general property type
 /// - Returns: all property associations
 /// 
@@ -55,7 +55,7 @@ public func associations(
 }
 
 
-/// obtains the property definition assigned to a given property association
+/// obtains the property definition assigned to a given property association (3.1.2.2)
 /// - Parameter generalPropertyAssociation: property association
 /// - Returns: property definition
 /// 
@@ -76,7 +76,7 @@ public func propertyDefinition(
 }
 
 
-/// obtains all related general property types of a relating general property type
+/// obtains all related general property types of a relating general property type (3.1.2.3)
 /// - Parameter generalPropertyType: relating general property type
 /// - Returns: all related general property types
 /// 
@@ -99,7 +99,7 @@ public func relatedGeneralProperties(
 }
 
 
-/// obtains all relating general property types of a related general property type
+/// obtains all relating general property types of a related general property type (3.1.2.3)
 /// - Parameter generalPropertyType: related general property type
 /// - Returns: all relating general property types
 /// 
