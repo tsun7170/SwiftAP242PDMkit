@@ -20,5 +20,5 @@ This package utilizes the SwiftSDAIcore and SwiftSDAIap242 packages from the swi
 
 
 ## Development environment
-* Xcode version 26.0.1
-* macOS Tahoe 26.0.1
+* Xcode version 26.2
+* macOS Tahoe 26.2
