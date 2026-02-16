@@ -11,12 +11,12 @@ This package utilizes the SwiftSDAIcore and SwiftSDAIap242 packages from the swi
 
 
 ## swift STEP code suite
-* [SwiftSDAIcore](https://github.com/tsun7170/SwiftSDAIcore)
-* [SwiftSDAIap242](https://github.com/tsun7170/SwiftSDAIap242)
-* [SwiftAP242PDMkit](https://github.com/tsun7170/SwiftAP242PDMkit)
-* [simpleP21ReadSample](https://github.com/tsun7170/simpleP21ReadSample)
-* [multipleP21ReadsSample](https://github.com/tsun7170/multipleP21ReadsSample)
-* [STEPswiftcode/exp2swift](https://github.com/tsun7170/STEPswiftcode)
+* [SwiftSDAIcore](https://github.com/tsun7170/SwiftSDAIcore) Swift SDAI runtime environment
+* [SwiftSDAIap242](https://github.com/tsun7170/SwiftSDAIap242) Swift translated AP242 schema definition (ed2)
+* **[SwiftAP242PDMkit](https://github.com/tsun7170/SwiftAP242PDMkit) Swift implementation of PDM schema usage guide**
+* [simpleP21ReadSample](https://github.com/tsun7170/simpleP21ReadSample) Single P21 file reading and validation sample code
+* [multipleP21ReadsSample](https://github.com/tsun7170/multipleP21ReadsSample) Tree of P21 files reading and validation sample code
+* [STEPswiftcode/exp2swift](https://github.com/tsun7170/STEPswiftcode) EXPRESS to Swift translator
 
 
 ## Development environment

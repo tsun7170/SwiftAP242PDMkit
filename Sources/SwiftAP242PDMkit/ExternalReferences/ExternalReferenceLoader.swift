@@ -272,12 +272,30 @@ public actor ExternalReferenceLoader: SDAI.Object {
     return nil
   }
 
-	/// load a specified external reference p21 data stream
-	/// - Parameters:
-	///   - externalReference: external reference to a p21 data stream
-	///   - transaction: RW transaction for decoding action
-	/// - Returns: array of ExternalReferences containing the found child data references.
-	///
+  /// Loads and decodes the specified external reference STEP P21 data stream, and discovers any child references.
+  ///
+  /// This asynchronous method attempts to load, decode, and register the external data specified by the given
+  /// `externalReference`, using the provided transaction, activity monitor, reference resolver, and decoder.
+  ///
+  /// For each source property referenced by the external reference, the resolver determines whether it should be loaded,
+  /// suspended, or marked as unknown. If loading is required, the method decodes the corresponding exchange structure,
+  /// updates the external reference's status, and registers the exchange structure to avoid redundant decoding.
+  /// Upon successful decoding, any child references discovered within the decoded instance are identified and returned.
+  ///
+  /// Progress and completion events are reported to the `monitor` if available. The method supports nonisolated invocation,
+  /// enabling efficient concurrent or sequential import scenarios.
+  ///
+  /// - Parameters:
+  ///   - externalReference: The external reference to load and decode, representing a STEP P21 data stream or resource.
+  ///   - transaction: The read-write transaction in which decoded schema instances and models are constructed and imported.
+  ///   - monitor: An optional activity monitor for reporting loading progress and completion events.
+  ///   - resolver: The foreign reference resolver used to resolve document or file references.
+  ///   - decoder: The decoder responsible for decoding the P21 exchange structure from the resolved data stream.
+  ///
+  /// - Returns: An array containing any child `ExternalReference`s discovered within the loaded data, or an empty array if none are found or if loading is not performed.
+  ///
+  /// - Note: This method is intended to be called internally by the loader during recursive or concurrent import operations.
+  ///         It is typically not invoked directly by external clients.
   nonisolated(nonsending)
 	public func load(
 		externalReference: ExternalReference,

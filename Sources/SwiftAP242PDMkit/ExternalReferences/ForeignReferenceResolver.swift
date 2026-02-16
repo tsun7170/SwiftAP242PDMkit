@@ -31,12 +31,29 @@ extension ExternalReferenceLoader {
 	open class ForeignReferenceResolver: P21Decode.ForeignReferenceResolver,
                                        @unchecked Sendable
 	{
+    /// An enumeration describing the disposition or handling recommendation
+    /// for a given external reference encountered during Part 21 decoding.
+    ///
+    /// - `load`:            Indicates that the external reference is recognized and should be loaded.
+    /// - `suspendLoading`:  Indicates that loading the external reference should be deferred or suspended.
+    /// - `referenceUnknown`:Indicates that the external reference is unrecognized, unsupported, or cannot be processed.
+    ///
+    /// This enumeration is used by the foreign reference resolver to determine how to handle
+    /// different types of external references, based on their mechanism and content.
 		public enum ExternalReferenceDisposition {
 			case load
 			case suspendLoading
 			case referenceUnknown
 		}
 		
+    /// Fixes up or normalizes a given external reference, potentially inheriting
+    /// information from a parent reference.
+    ///
+    /// - Parameters:
+    ///   - externalReference: The external reference to be fixed up or normalized. This may contain incomplete or partial information.
+    ///   - parent: A parent reference which may provide default or inherited values for missing fields in the external reference.
+    /// - Returns: A new `DocumentSourceProperty` where fields such as `mechanism` and `path` are inherited from the parent if not specified in the external reference.
+    /// - Note: The default implementation copies the `fileName` from the external reference and inherits `path` and `mechanism` from the parent if they are not present in the external reference.
 		open func fixupExternalReference(
 			_ externalReference: DocumentSourceProperty,
 			parent: DocumentSourceProperty
@@ -60,6 +77,18 @@ extension ExternalReferenceLoader {
         mechanism: mechanism)
 		}
 		
+    /// Determines the disposition of a given external reference, indicating
+    /// whether it should be loaded, suspended, or is unknown.
+    ///
+    /// - Parameter externalReference: The external reference to evaluate.
+    /// - Returns: An `ExternalReferenceDisposition` value indicating the recommended action:
+    ///   - `.load`: The reference should be loaded (supported mechanisms with recognized file extensions).
+    ///   - `.suspendLoading`: Loading should be suspended (not used in the default implementation).
+    ///   - `.referenceUnknown`: The reference mechanism or file type is unrecognized.
+    ///
+    /// The default implementation recognizes external references with mechanisms "URL"
+    /// or "external document id and location", and only files with ".STP" or ".P21"
+    /// (case-insensitive) extensions. Other references are treated as unknown.
 		open func disposition(
 			of externalReference: DocumentSourceProperty
 		) -> ExternalReferenceDisposition
@@ -75,6 +104,18 @@ extension ExternalReferenceLoader {
 			return .load
 		}
 		
+    /// Loads a character stream from the specified external reference.
+    ///
+    /// - Parameter externalReference: The external reference describing the resource to load.
+    /// - Returns: An optional `P21Decode.AnyCharacterStream` obtained from the referenced file using UTF-8 decoding,
+    ///            or `nil` if the file cannot be loaded or opened.
+    ///
+    /// The default implementation attempts to load the file specified by the path and file name
+    /// in the `externalReference`, expecting it to be encoded in UTF-8. If the operation is successful,
+    /// it returns a character stream suitable for use in Part 21 decoding; otherwise, it returns `nil`.
+    ///
+    /// - Note: Subclasses can override this method to implement custom loading logic,
+    ///         such as supporting different encodings or alternate resource locations.
 		open func characterSteam(
 			from externalReference: DocumentSourceProperty
     ) -> P21Decode.AnyCharacterStream?
