@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftSDAIcore
-import SwiftSDAIap242
+
 
 
 /// obtains parent assemblies of a given product definition (4.1.1.1-2)

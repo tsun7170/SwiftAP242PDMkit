@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftSDAIcore
-import SwiftSDAIap242
+
 
 
 /// obtains properties associated with a given product definition (3.1.1)

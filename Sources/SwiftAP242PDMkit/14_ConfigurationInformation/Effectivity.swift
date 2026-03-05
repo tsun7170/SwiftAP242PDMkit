@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftSDAIcore
-import SwiftSDAIap242
+
 
 //MARK: - Configuration Effectivity
 

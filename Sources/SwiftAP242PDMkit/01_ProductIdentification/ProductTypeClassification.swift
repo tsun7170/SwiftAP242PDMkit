@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftSDAIcore
-import SwiftSDAIap242
+
 
 /// obtains all product categories contained in the schema instance (1.1.3)(2)
 /// - Parameter domain: schema instance

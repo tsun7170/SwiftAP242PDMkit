@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftSDAIcore
-import SwiftSDAIap242
+
 
 
 /// obtains approvals given to a specified item (13.2.1.3)

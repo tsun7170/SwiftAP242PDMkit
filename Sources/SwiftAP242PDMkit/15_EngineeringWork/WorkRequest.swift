@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftSDAIcore
-import SwiftSDAIap242
+
 
 
 /// obtains all work requests contained in a schema instance (15.1.1.1)

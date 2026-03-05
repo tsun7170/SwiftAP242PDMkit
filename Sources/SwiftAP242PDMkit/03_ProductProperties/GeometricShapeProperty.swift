@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftSDAIcore
-import SwiftSDAIap242
+
 
 /// obtains all shape definition representations in a schema instance (3.2.1.2)
 /// - Parameter domain: schema instance

@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftSDAIcore
-import SwiftSDAIap242
+
 
 
 /// obtains the security classifications assigned to a given item (13.4.1.3)

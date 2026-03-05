@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftSDAIcore
-import SwiftSDAIap242
+
 
 /// An actor responsible for loading and resolving external references to STEP P21 exchange data files,
 /// building a collection of external references and managing decoding across potentially multiple files.

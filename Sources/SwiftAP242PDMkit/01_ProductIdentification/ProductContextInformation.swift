@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftSDAIcore
-import SwiftSDAIap242
+
 
 
 /// obtains all the product contexts associated with a given product master (1.1.2.3)(5.1.2)
