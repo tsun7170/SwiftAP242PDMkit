@@ -65,9 +65,9 @@ extension ExternalReferenceLoader {
     ///   or as the resolved document file entity for downstream/nested references.
     ///
     /// - SeeAlso:
-    ///   - ``apPDM.eDOCUMENT_FILE``
-    ///   - ``apPDM.eDOCUMENT_FILE.PRef``
-    ///   - ``ExternalReferenceLoader.ExternalReference.init(serial:upStream:documentFile:resolver:)``
+    ///   - ``apPDM/eDOCUMENT_FILE``
+    ///   - ``apPDM/eDOCUMENT_FILE/PRef``
+    ///   - ``ExternalReferenceLoader/ExternalReference/init(serial:upStream:documentFile:resolver:)``
 		public let documentFile: apPDM.eDOCUMENT_FILE.PRef?
     /// An array of `DocumentSourceProperty` instances describing the origins or source locations
     /// for the referenced external document.
@@ -119,8 +119,8 @@ extension ExternalReferenceLoader {
     ///   references assigned incrementing serial values as they are discovered and constructed.
     ///
     /// - SeeAlso:
-    ///   - ``ExternalReferenceLoader.ExternalReference.name``
-    ///   - ``ExternalReferenceLoader.ExternalReference.level``
+    ///   - ``ExternalReferenceLoader/ExternalReference/name``
+    ///   - ``ExternalReferenceLoader/ExternalReference/level``
 		public let serial: Int
     /// The parent (upstream) `ExternalReference` in the external reference chain, if any.
     ///
@@ -166,8 +166,8 @@ extension ExternalReferenceLoader {
     ///   It is intended for status monitoring and should not be directly modified by external clients.
     ///
     /// - SeeAlso:
-    ///   - ``ExternalReferenceLoader.LoadingStatus``
-    ///   - ``ExternalReferenceLoader.ExternalReference.exchangeStructure``
+    ///   - ``ExternalReferenceLoader/LoadingStatus``
+    ///   - ``ExternalReferenceLoader/ExternalReference/exchangeStructure``
     nonisolated(unsafe)
 		public internal(set) var status: LoadingStatus = .notLoadedYet
 
@@ -209,8 +209,8 @@ extension ExternalReferenceLoader {
     ///   - Accessing this property does not trigger loading; it is purely a reflection of the current status.
     ///
     /// - SeeAlso:
-    ///   - ``ExternalReferenceLoader.ExternalReference.status``
-    ///   - ``P21Decode.ExchangeStructure``
+    ///   - ``ExternalReferenceLoader/ExternalReference/status``
+    ///   - ``P21Decode/ExchangeStructure``
 		public var exchangeStructure: P21Decode.ExchangeStructure? {
 			switch self.status {
 				case .loaded(let exchange):
@@ -239,8 +239,8 @@ extension ExternalReferenceLoader {
     ///     as relevant to each external document.
     ///
     /// - SeeAlso:
-    ///   - ``ExternalReferenceLoader.ExternalReference.exchangeStructure``
-    ///   - ``SDAIPopulationSchema.SdaiModel``
+    ///   - ``ExternalReferenceLoader/ExternalReference/exchangeStructure``
+    ///   - ``SDAIPopulationSchema/SdaiModel``
 		public var sdaiModels: [SDAIPopulationSchema.SdaiModel] {
 			guard let exchange = self.exchangeStructure else { return [] }
 			return Array(exchange.sdaiModels)
@@ -327,8 +327,8 @@ extension ExternalReferenceLoader {
     ///   - Requires that the external reference is resolved and loaded; otherwise, the set will be empty.
     ///
     /// - SeeAlso:
-    ///   - ``ExternalReferenceLoader.ExternalReference.ExternalShapeDefinitionLinkage``
-    ///   - ``ExternalReferenceLoader.ExternalReference.exchangeStructure``
+    ///   - ``ExternalReferenceLoader/ExternalReference/ExternalShapeDefinitionLinkage``
+    ///   - ``ExternalReferenceLoader/ExternalReference/exchangeStructure``
 		public var externalShapeDefinitionLinkages: Set<ExternalShapeDefinitionLinkage> {
 			var result: Set<ExternalShapeDefinitionLinkage> = []
 			

@@ -17,23 +17,23 @@ units within the PDM Schema.
 ## topics   
 
 ### 16.1 Measure with unit specification
-- ``apPDM.eMEASURE_WITH_UNIT``
+- ``apPDM/eMEASURE_WITH_UNIT``
 
 ### 16.2 Unit definition
 ### 16.2.1 Simple and predefined units
-- ``apPDM.eNAMED_UNIT``
-- ``apPDM.eDIMENSIONAL_EXPONENTS``
-- ``apPDM.eSI_UNIT``
+- ``apPDM/eNAMED_UNIT``
+- ``apPDM/eDIMENSIONAL_EXPONENTS``
+- ``apPDM/eSI_UNIT``
 
 
 ### 16.2.2 Converted units
-- ``apPDM.eCONVERSION_BASED_UNIT``
+- ``apPDM/eCONVERSION_BASED_UNIT``
 
 
 ### 16.2.3 Derived units
-- ``apPDM.eDERIVED_UNIT``
-- ``apPDM.eDERIVED_UNIT_ELEMENT``
+- ``apPDM/eDERIVED_UNIT``
+- ``apPDM/eDERIVED_UNIT_ELEMENT``
 
 ### 16.2.4 User defined units
-- ``apPDM.eCONTEXT_DEPENDENT_UNIT``
+- ``apPDM/eCONTEXT_DEPENDENT_UNIT``
 
