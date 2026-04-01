@@ -345,7 +345,7 @@ extension ExternalReferenceLoader {
 			
 			let documentApplications = applications(of: documentRefs).lazy
 				.compactMap{$0.ITEMS}.joined()
-			for productDef in documentApplications.compactMap({$0.super_ePRODUCT_DEFINITION})
+			for productDef in documentApplications.compactMap({$0.underlying_ePRODUCT_DEFINITION})
 			{
 				guard let productDefinitionShape = try? shape(of: productDef) else { continue }
 
@@ -380,7 +380,7 @@ extension ExternalReferenceLoader {
 		) -> apPDM.eSHAPE_DEFINITION_REPRESENTATION.PRef?
 		{
 			guard let masterProduct = masterShapeRep.DEFINITION?	// product_definition_shape
-				.DEFINITION?.super_ePRODUCT_DEFINITION			// product_definition
+				.DEFINITION?.underlying_ePRODUCT_DEFINITION?			// product_definition
 				.FORMATION?.OF_PRODUCT 											// product
 			else { return nil }
 			
@@ -390,7 +390,7 @@ extension ExternalReferenceLoader {
 				if SDAI.IS_FALSE(detailShapeRep.USED_REPRESENTATION?.ID .==. masterShapeRep.USED_REPRESENTATION?.ID) { continue }
 
 				guard let detailProduct = detailShapeRep.DEFINITION?
-								.DEFINITION?.super_ePRODUCT_DEFINITION
+								.DEFINITION?.underlying_ePRODUCT_DEFINITION?
 					.FORMATION?.OF_PRODUCT
 				else { continue }
 				

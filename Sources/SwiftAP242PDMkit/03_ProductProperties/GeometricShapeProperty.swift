@@ -126,7 +126,7 @@ public func productDefinition(
 {
 	guard let shapeDefinitionRepresentation = try shapeDefinition(of: shapeRepresentation) else { return nil }
 	let productDefinitionShape = shapeDefinitionRepresentation.DEFINITION
-	let productDefinition = productDefinitionShape?.DEFINITION?.super_ePRODUCT_DEFINITION
+	let productDefinition = productDefinitionShape?.DEFINITION?.underlying_ePRODUCT_DEFINITION
 	return productDefinition
 }
 
