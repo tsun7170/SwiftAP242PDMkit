@@ -90,13 +90,15 @@ public actor ExternalReferenceLoader: SDAI.Object {
   /// - Returns: A collection containing all `SDAIPopulationSchema.SdaiModel` instances loaded from
   ///            the referenced external structures, in an unspecified order.
   /// - SeeAlso: `externalReferences`, `ExternalReference.exchangeStructure`
-	public var sdaiModels: some Collection<SDAIPopulationSchema.SdaiModel> {
+	public var sdaiModels: some (Collection<SDAIPopulationSchema.SdaiModel> & Sendable) {
 		let models = externalReferences.values
       .lazy.compactMap({$0.exchangeStructure?.sdaiModels})
       .joined()
-		return models
+		return Array(models)
 	}
-	
+
+  public let umbrellaFolder: URL
+
   private let repository: SDAISessionSchema.SdaiRepository
   private let schemaList: P21Decode.SchemaList
   private var monitorType: ActivityMonitor.Type?
@@ -126,22 +128,24 @@ public actor ExternalReferenceLoader: SDAI.Object {
 		repository: SDAISessionSchema.SdaiRepository,
 		schemaList: P21Decode.SchemaList,
 		masterFile: URL,
+    umbrellaFolder: URL,
     monitorType: ActivityMonitor.Type?,
 		foreignReferenceResolver: ForeignReferenceResolver = ForeignReferenceResolver()
 	)
 	{
+    let serial0 = 0
+    guard let master = ExternalReference(
+      asTopLevel: masterFile,
+      serial: serial0,
+      base: umbrellaFolder)
+    else { return nil }
+
     self.repository = repository
     self.schemaList = schemaList
-		self.monitorType = monitorType
-		self.resolver = foreignReferenceResolver
-
-    let serial0 = 0
+    self.umbrellaFolder = umbrellaFolder
+    self.monitorType = monitorType
+    self.resolver = foreignReferenceResolver
     self.serial = serial0
-
-    let master = ExternalReference(
-      asTopLevel: masterFile,
-      serial: serial0)
-
 		self.externalReferenceList.append(master)
 	}
 	
@@ -410,11 +414,13 @@ public actor ExternalReferenceLoader: SDAI.Object {
 		var children: [ExternalReference] = []
 
 		for documentFile in documentFiles(in: parentInstance) {
-			let child = ExternalReference(
+			guard let child = ExternalReference(
         serial: await issueSerial(),
 				upStream: parent,
-				documentFile: documentFile,
+        documentFile: documentFile,
+        base: self.umbrellaFolder,
 				resolver: resolver)
+      else { continue }
 
 			children.append(child)
 		}

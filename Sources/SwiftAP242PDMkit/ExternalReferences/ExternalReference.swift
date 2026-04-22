@@ -69,6 +69,7 @@ extension ExternalReferenceLoader {
     ///   - ``apPDM/eDOCUMENT_FILE/PRef``
     ///   - ``ExternalReferenceLoader/ExternalReference/init(serial:upStream:documentFile:resolver:)``
 		public let documentFile: apPDM.eDOCUMENT_FILE.PRef?
+
     /// An array of `DocumentSourceProperty` instances describing the origins or source locations
     /// for the referenced external document.
     ///
@@ -88,6 +89,7 @@ extension ExternalReferenceLoader {
     ///   - ``DocumentSourceProperty``
     ///   - ``ForeignReferenceResolver``
 		public let sourceProperties: [DocumentSourceProperty]
+
     /// The depth of this external reference in the reference hierarchy, starting from zero for the top-level reference.
     ///
     /// - Discussion:
@@ -103,6 +105,7 @@ extension ExternalReferenceLoader {
     ///   - A document referenced directly from the root will have `level == 1`.
     ///   - A document referenced from that secondary document will have `level == 2`, and so on.
 		public let level: Int
+
     /// A unique serial number assigned to this external reference instance within the loading context.
     ///
     /// - Discussion:
@@ -122,6 +125,7 @@ extension ExternalReferenceLoader {
     ///   - ``ExternalReferenceLoader/ExternalReference/name``
     ///   - ``ExternalReferenceLoader/ExternalReference/level``
 		public let serial: Int
+
     /// The parent (upstream) `ExternalReference` in the external reference chain, if any.
     ///
     /// - Discussion:
@@ -261,13 +265,21 @@ extension ExternalReferenceLoader {
     ///
     /// - Note: This initializer is intended for use when initially loading or managing the main external document,
     /// prior to resolving any nested or downstream references.
-		public init(asTopLevel url: URL, serial: Int) {
-			self.sourceProperties = [DocumentSourceProperty(url: url)]
+		public init?(
+      asTopLevel url: URL,
+      serial: Int,
+      base: URL)
+    {
+      let docSource = DocumentSourceProperty(url: url, base: base)
+      guard docSource.targetURL != nil
+      else { return nil }
+
+      self.sourceProperties = [docSource]
       self.level = 0
       self.serial = serial
 			self.documentFile = nil
 			self.upStream = nil
-      self.name = "\(self.serial).\(self.sourceProperties[0].fileName)"
+      self.name = "\(self.serial).\(docSource.fileName)"
 		}
 		
     /// Initializes a new downstream `ExternalReference` representing a nested or child reference within the external reference hierarchy.
@@ -287,21 +299,31 @@ extension ExternalReferenceLoader {
     ///
     /// - Note: This initializer is intended for use when loading or managing nested external document references discovered during
     ///         traversal of a parent document's external reference relationships.
-		public init(
+		public init?(
 			serial: Int,
 			upStream: ExternalReference,
-			documentFile: apPDM.eDOCUMENT_FILE.PRef,
+			documentFile: apPDM.eDOCUMENT_FILE.PRef?,
+      base: URL,
 			resolver: ForeignReferenceResolver)
 		{
-			self.serial = serial
-			self.documentFile = documentFile
-			let docSources = fileLocations(of: documentFile)
-			let parentSource = upStream.sourceProperties[0]
+      guard let parentSource = upStream.sourceProperties.first
+      else { return nil }
+
+      let docSources = fileLocations(
+        of: documentFile,
+        base: base,
+        parent: parentSource,
+        resolver: resolver)
+      guard let fileName = docSources.first?.fileName
+      else { return nil }
+
+      self.serial = serial
+      self.documentFile = documentFile
+
 			self.sourceProperties = docSources
-				.map{ resolver.fixupExternalReference($0, parent: parentSource) }
 			self.upStream = upStream
 			self.level = upStream.level + 1
-      self.name = "\(self.serial).\(self.sourceProperties[0].fileName)"
+      self.name = "\(self.serial).\(fileName)"
 		}
 		
     /// The set of shape definition linkages connecting "master" and "detail" shape representations across external references.

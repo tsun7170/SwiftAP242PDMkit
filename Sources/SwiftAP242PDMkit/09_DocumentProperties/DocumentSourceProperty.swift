@@ -93,36 +93,92 @@ public func sourceProperties(
 /// PDM Implementor Forum
 ///
 public func fileLocations(
-	of documentFile: apPDM.eDOCUMENT_FILE.PRef
+	of documentFile: apPDM.eDOCUMENT_FILE.PRef?,
+  base: URL,
+  parent: DocumentSourceProperty,
+  resolver: ExternalReferenceLoader.ForeignReferenceResolver?
 ) -> [DocumentSourceProperty]
 {
 	let AEIAs = sourceProperties(of: documentFile)
 	if !AEIAs.isEmpty {
 		var fileIds:[DocumentSourceProperty] = []
 		for AEIA in AEIAs {
-			guard let AEIA = AEIA.eval else { continue }
-			if AEIA.ASSIGNED_ID.asSwiftType == "" {
-				let fileId = DocumentSourceProperty(
-					fileName: AEIA.SOURCE.SOURCE_ID?.stringValue?.asSwiftType ?? "", 
-					path: nil as String?, 
-					mechanism: AEIA.ROLE.NAME?.asSwiftType)
-				fileIds.append(fileId)
+			guard let AEIA_ = AEIA.eval else { continue }
+
+      let fileId: DocumentSourceProperty
+
+      if AEIA_.ASSIGNED_ID.asSwiftType.isEmpty {
+        guard let fileName = AEIA_.SOURCE.SOURCE_ID?.stringValue?.asSwiftType
+        else { continue }
+        let mechanism = AEIA_.ROLE.NAME?.asSwiftType
+
+        if let resolver {
+          fileId = resolver.resolveExternalReference(
+            fileName: fileName,
+            path: nil,
+            mechanism: mechanism,
+            base: base,
+            parent: parent)
+        }
+        else {
+          fileId = DocumentSourceProperty(
+            fileName: fileName,
+            path: nil,
+            mechanism: mechanism,
+            base: base)
+        }
+
+//        fileIds.append(fileId)
 			}
 			else {
-				let fileId = DocumentSourceProperty(
-					fileName: AEIA.ASSIGNED_ID.asSwiftType, 
-					path: AEIA.SOURCE.SOURCE_ID?.stringValue?.asSwiftType, 
-					mechanism: AEIA.ROLE.NAME?.asSwiftType)
-				fileIds.append(fileId)
-			}
+        let fileName = AEIA_.ASSIGNED_ID.asSwiftType
+        let path = AEIA_.SOURCE.SOURCE_ID?.stringValue?.asSwiftType
+        let mechanism = AEIA_.ROLE.NAME?.asSwiftType
+
+//        let fileId: DocumentSourceProperty
+        if let resolver {
+          fileId = resolver.resolveExternalReference(
+            fileName: fileName,
+            path: path,
+            mechanism: mechanism,
+            base: base,
+            parent: parent)
+        }
+        else {
+          fileId = DocumentSourceProperty(
+            fileName: fileName,
+            path: path,
+            mechanism: mechanism,
+            base: base)
+        }
+
+      }
+      guard fileId.targetURL != nil else { continue }
+      fileIds.append(fileId)
 		}
 		return fileIds
 	}
 	else {
-		let fileId = DocumentSourceProperty(
-			fileName: (documentFile.ID?.asSwiftType)!, 
-			path: nil, 
-			mechanism: nil)
+    guard let fileName = documentFile?.ID?.asSwiftType
+    else { return [] }
+
+    let fileId: DocumentSourceProperty
+    if let resolver {
+      fileId = resolver.resolveExternalReference(
+        fileName: fileName,
+        path: nil,
+        mechanism: nil,
+        base: base,
+        parent: parent)
+    }
+    else {
+      fileId = DocumentSourceProperty(
+        fileName: fileName,
+        path: nil,
+        mechanism: nil,
+        base: base)
+    }
+    guard fileId.targetURL != nil else { return [] }
 		return [fileId]
 	}
 }
@@ -138,21 +194,43 @@ public func fileLocations(
 ///
 public struct DocumentSourceProperty: Hashable, Sendable
 {
+  public let baseURL: URL
+  public let targetURL: URL?
 	public let fileName: String
-	public let path: String?
+  public var path: String? {
+    targetURL?.deletingLastPathComponent().path
+  }
 	public let mechanism: String?
 
-	public init(fileName: String, path: String?, mechanism: String?) {
+  public init(
+    fileName: String,
+    path: String?,
+    mechanism: String?,
+    base: URL)
+  {
 		self.fileName = fileName
-		self.path = path
 		self.mechanism = mechanism
+    self.baseURL = base
+
+    if let path {
+      self.targetURL = URL(
+        string: path + "/" + fileName,
+        relativeTo: base)
+    }
+    else {
+      self.targetURL = base.appending(component: fileName, directoryHint: .notDirectory)
+    }
 	}
-	
-	public init(url: URL) {
-		self.fileName = url.lastPathComponent
-		self.path = url.deletingLastPathComponent().path
-		self.mechanism = "URL"
-	}
+  
+  public init(url: URL, base: URL) {
+    self.fileName = url.lastPathComponent
+    self.mechanism = "URL"
+    self.baseURL = base
+
+    self.targetURL = URL(string: url.path, relativeTo: base)
+
+  }
+
 }
 
 

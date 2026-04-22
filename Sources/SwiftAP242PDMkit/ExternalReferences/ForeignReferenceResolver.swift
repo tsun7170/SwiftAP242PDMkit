@@ -45,38 +45,45 @@ extension ExternalReferenceLoader {
 			case suspendLoading
 			case referenceUnknown
 		}
-		
-    /// Fixes up or normalizes a given external reference, potentially inheriting
-    /// information from a parent reference.
-    ///
-    /// - Parameters:
-    ///   - externalReference: The external reference to be fixed up or normalized. This may contain incomplete or partial information.
-    ///   - parent: A parent reference which may provide default or inherited values for missing fields in the external reference.
-    /// - Returns: A new `DocumentSourceProperty` where fields such as `mechanism` and `path` are inherited from the parent if not specified in the external reference.
-    /// - Note: The default implementation copies the `fileName` from the external reference and inherits `path` and `mechanism` from the parent if they are not present in the external reference.
-		open func fixupExternalReference(
-			_ externalReference: DocumentSourceProperty,
-			parent: DocumentSourceProperty
-		) -> DocumentSourceProperty
-		{
-      let fileName = externalReference.fileName
 
-			let path = parent.path
-
-      let mechanism: String?
-			if (externalReference.mechanism ?? "") == "" {
-				mechanism = parent.mechanism
-			}
+    open func resolveExternalReference(
+      fileName: String,
+      path: String?,
+      mechanism: String?,
+      base: URL,
+      parent: DocumentSourceProperty
+    ) -> DocumentSourceProperty
+    {
+      let resolvedPath: String?
+      if let path, !path.isEmpty {
+        resolvedPath = path
+      }
+      else if let path = parent.path {
+        resolvedPath = path
+      }
       else {
-        mechanism = externalReference.mechanism
+        resolvedPath = nil
       }
 
-			return DocumentSourceProperty(
+      let resolvedMechanism: String?
+      if let mechanism, !mechanism.isEmpty {
+        resolvedMechanism = mechanism
+      }
+      else if let mechanism = parent.mechanism {
+        resolvedMechanism = mechanism
+      }
+      else {
+        resolvedMechanism = nil
+      }
+
+      return DocumentSourceProperty(
         fileName: fileName,
-        path: path,
-        mechanism: mechanism)
-		}
-		
+        path: resolvedPath,
+        mechanism: resolvedMechanism,
+        base: base)
+    }
+
+
     /// Determines the disposition of a given external reference, indicating
     /// whether it should be loaded, suspended, or is unknown.
     ///
@@ -97,10 +104,6 @@ extension ExternalReferenceLoader {
 						externalReference.mechanism == "external document id and location"
 			else { return .referenceUnknown }
 
-			let url = URL(fileURLWithPath: (externalReference.path ?? ".") + "/" + externalReference.fileName)
-			let ext = url.pathExtension.uppercased()
-			guard (ext == "STP")||(ext == "P21") else { return .referenceUnknown }
-			
 			return .load
 		}
 		
@@ -120,13 +123,17 @@ extension ExternalReferenceLoader {
 			from externalReference: DocumentSourceProperty
     ) -> P21Decode.AnyCharacterStream?
 		{
-			let url = URL(fileURLWithPath: (externalReference.path ?? ".") + "/" + externalReference.fileName)
+      guard
+        let url = externalReference.targetURL
+      else { return nil }
+
 			do {
 				let source = try String(contentsOf: url, encoding: .utf8)
 				let stream = source.makeIterator()
         return P21Decode.AnyCharacterStream(stream)
 			}
 			catch {
+        SDAI.raiseErrorAndContinue(.SY_ERR, detail: "access denied on URL:\(url); error: \(error)")
 				return nil
 			}
 		}
