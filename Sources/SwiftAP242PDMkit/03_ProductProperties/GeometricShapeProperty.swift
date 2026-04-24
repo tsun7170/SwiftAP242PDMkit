@@ -31,6 +31,16 @@ public func shapeDefinitionRepresentations(
 	return Set( instances.map{$0.pRef} )
 }
 
+public func shapeRepresentations(
+  in domain: SDAIPopulationSchema.SchemaInstance?
+) -> Set<apPDM.eSHAPE_REPRESENTATION.PRef>
+{
+  guard let domain else { return [] }
+  let instances = domain.entityExtent(type: apPDM.eSHAPE_REPRESENTATION.self)
+  return Set( instances.map{$0.pRef} )
+}
+
+
 /// obtains the shape of a given product definition (3.2.1.1)
 /// - Parameter productDefinition: product definition
 /// - Throws: multipleProductDefinitionShapes
